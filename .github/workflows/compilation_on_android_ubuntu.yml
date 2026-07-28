@@ -100,13 +100,13 @@ jobs:
             llvm_cache_key: ${{ needs.build_llvm_libraries_on_ubuntu_2204.outputs.cache_key }}
     steps:
       - name: checkout
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.1
 
       # since jobs.id can't contain the dot character
       # it is hard to use `format` to assemble the cache key
       - name: Get LLVM libraries
         id: retrieve_llvm_libs
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ./core/deps/llvm/build/bin
@@ -271,13 +271,13 @@ jobs:
             extra_options: "-DWAMR_BUILD_SIMD=0"
     steps:
       - name: checkout
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.1
 
       # only download llvm cache when needed
       - name: Get LLVM libraries
         id: retrieve_llvm_libs
         if: endsWith(matrix.make_options_run_mode, '_JIT_BUILD_OPTIONS')
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ./core/deps/llvm/build/bin
@@ -322,13 +322,13 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.1
         with:
           submodules: recursive
 
       - name: Get LLVM libraries
         id: retrieve_llvm_libs
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ./core/deps/llvm/build/bin
@@ -381,11 +381,11 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.1
 
       - name: Get LLVM libraries
         id: retrieve_llvm_libs
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ./core/deps/llvm/build/bin
@@ -446,12 +446,12 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.1
 
       - name: Get LLVM libraries
         id: retrieve_llvm_libs
         if: (!endsWith(matrix.make_options, '_INTERP_BUILD_OPTIONS'))
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ./core/deps/llvm/build/bin
@@ -503,11 +503,11 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.1
 
       - name: Get LLVM libraries
         id: retrieve_llvm_libs
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ./core/deps/llvm/build/bin
@@ -697,7 +697,7 @@ jobs:
 
     steps:
       - name: checkout
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.1
 
       - name: Set-up OCaml
         uses: ocaml/setup-ocaml@v3
@@ -731,7 +731,7 @@ jobs:
       - name: Get LLVM libraries
         if: env.USE_LLVM == 'true'
         id: retrieve_llvm_libs
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ./core/deps/llvm/build/bin
