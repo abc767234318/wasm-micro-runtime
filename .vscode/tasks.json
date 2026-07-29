@@ -1,0 +1,179 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "WAMR: Configure Interpreter (Debug)",
+      "type": "process",
+      "command": "cmake",
+      "args": [
+        "-S",
+        "${workspaceFolder}/product-mini/platforms/darwin",
+        "-B",
+        "${workspaceFolder}/understand-build/interpreter",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DWAMR_BUILD_INTERP=1",
+        "-DWAMR_BUILD_FAST_INTERP=1",
+        "-DWAMR_BUILD_DEBUG_INTERP=0",
+        "-DWAMR_BUILD_AOT=0",
+        "-DWAMR_BUILD_JIT=0",
+        "-DWAMR_BUILD_FAST_JIT=0"
+      ],
+      "windows": {
+        "args": [
+          "-S",
+          "${workspaceFolder}/product-mini/platforms/windows",
+          "-B",
+          "${workspaceFolder}/understand-build/interpreter",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Debug",
+          "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+          "-DCMAKE_C_FLAGS_DEBUG:STRING=/Zi /Od /Ob0",
+          "-DWAMR_BUILD_INTERP=1",
+          "-DWAMR_BUILD_FAST_INTERP=1",
+          "-DWAMR_BUILD_DEBUG_INTERP=0",
+          "-DWAMR_BUILD_AOT=0",
+          "-DWAMR_BUILD_JIT=0",
+          "-DWAMR_BUILD_FAST_JIT=0"
+        ]
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "WAMR: Build Interpreter (Debug)",
+      "type": "process",
+      "command": "cmake",
+      "args": [
+        "--build",
+        "${workspaceFolder}/understand-build/interpreter",
+        "--target",
+        "iwasm",
+        "--parallel"
+      ],
+      "dependsOn": "WAMR: Configure Interpreter (Debug)",
+      "dependsOrder": "sequence",
+      "problemMatcher": "$gcc",
+      "windows": {
+        "problemMatcher": "$msCompile"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "WAMR: Configure Classic Interpreter (Learning)",
+      "type": "process",
+      "command": "cmake",
+      "args": [
+        "-S",
+        "${workspaceFolder}/product-mini/platforms/darwin",
+        "-B",
+        "${workspaceFolder}/understand-build/interpreter-classic-debug",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "-DCMAKE_C_FLAGS_DEBUG:STRING=-g -O0 -fno-omit-frame-pointer -fno-inline -DWASM_ENABLE_LABELS_AS_VALUES=0",
+        "-DWAMR_BUILD_INTERP=1",
+        "-DWAMR_BUILD_FAST_INTERP=0",
+        "-DWAMR_BUILD_DEBUG_INTERP=0",
+        "-DWAMR_BUILD_AOT=0",
+        "-DWAMR_BUILD_JIT=0",
+        "-DWAMR_BUILD_FAST_JIT=0",
+        "-DWAMR_BUILD_LIBC_BUILTIN=0",
+        "-DWAMR_BUILD_LIBC_WASI=0",
+        "-DWAMR_BUILD_THREAD_MGR=0",
+        "-DWAMR_BUILD_LIB_PTHREAD=0",
+        "-DWAMR_BUILD_LIB_WASI_THREADS=0",
+        "-DWAMR_BUILD_MULTI_MODULE=0",
+        "-DWAMR_BUILD_SHARED_MEMORY=0",
+        "-DWAMR_BUILD_SHARED_HEAP=0",
+        "-DWAMR_BUILD_GC=0",
+        "-DWAMR_BUILD_REF_TYPES=0",
+        "-DWAMR_BUILD_TAIL_CALL=0",
+        "-DWAMR_BUILD_SIMD=0",
+        "-DWAMR_BUILD_MEMORY_PROFILING=0",
+        "-DWAMR_BUILD_PERF_PROFILING=0",
+        "-DWAMR_BUILD_LOAD_CUSTOM_SECTION=0",
+        "-DWAMR_BUILD_SHRUNK_MEMORY=0",
+        "-DWAMR_DISABLE_WAKEUP_BLOCKING_OP=1",
+        "-DWAMR_BUILD_BRANCH_HINTS=0",
+        "-DWAMR_BUILD_BULK_MEMORY=0",
+        "-DWAMR_BUILD_EXTENDED_CONST_EXPR=0"
+      ],
+      "windows": {
+        "args": [
+          "-S",
+          "${workspaceFolder}/product-mini/platforms/windows",
+          "-B",
+          "${workspaceFolder}/understand-build/interpreter-classic-debug",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Debug",
+          "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+          "-DCMAKE_C_FLAGS_DEBUG:STRING=/Zi /Od /Ob0 /DWASM_ENABLE_LABELS_AS_VALUES=0",
+          "-DWAMR_BUILD_INTERP=1",
+          "-DWAMR_BUILD_FAST_INTERP=0",
+          "-DWAMR_BUILD_DEBUG_INTERP=0",
+          "-DWAMR_BUILD_AOT=0",
+          "-DWAMR_BUILD_JIT=0",
+          "-DWAMR_BUILD_FAST_JIT=0",
+          "-DWAMR_BUILD_LIBC_BUILTIN=0",
+          "-DWAMR_BUILD_LIBC_WASI=0",
+          "-DWAMR_BUILD_THREAD_MGR=0",
+          "-DWAMR_BUILD_LIB_PTHREAD=0",
+          "-DWAMR_BUILD_LIB_WASI_THREADS=0",
+          "-DWAMR_BUILD_MULTI_MODULE=0",
+          "-DWAMR_BUILD_SHARED_MEMORY=0",
+          "-DWAMR_BUILD_SHARED_HEAP=0",
+          "-DWAMR_BUILD_GC=0",
+          "-DWAMR_BUILD_REF_TYPES=0",
+          "-DWAMR_BUILD_TAIL_CALL=0",
+          "-DWAMR_BUILD_SIMD=0",
+          "-DWAMR_BUILD_MEMORY_PROFILING=0",
+          "-DWAMR_BUILD_PERF_PROFILING=0",
+          "-DWAMR_BUILD_LOAD_CUSTOM_SECTION=0",
+          "-DWAMR_BUILD_SHRUNK_MEMORY=0",
+          "-DWAMR_DISABLE_WAKEUP_BLOCKING_OP=1",
+          "-DWAMR_BUILD_BRANCH_HINTS=0",
+          "-DWAMR_BUILD_BULK_MEMORY=0",
+          "-DWAMR_BUILD_EXTENDED_CONST_EXPR=0"
+        ]
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "WAMR: Compile Minimal Debug Wasm",
+      "type": "process",
+      "command": "wat2wasm",
+      "args": [
+        "${workspaceFolder}/.vscode/wasm/minimal.wat",
+        "-o",
+        "${workspaceFolder}/.vscode/wasm/minimal.wasm"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "WAMR: Build Classic Interpreter (Learning)",
+      "type": "process",
+      "command": "cmake",
+      "args": [
+        "--build",
+        "${workspaceFolder}/understand-build/interpreter-classic-debug",
+        "--target",
+        "iwasm",
+        "--parallel"
+      ],
+      "dependsOn": [
+        "WAMR: Configure Classic Interpreter (Learning)",
+        "WAMR: Compile Minimal Debug Wasm"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": "$gcc",
+      "windows": {
+        "problemMatcher": "$msCompile"
+      },
+      "group": "build"
+    }
+  ]
+}

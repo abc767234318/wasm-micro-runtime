@@ -1,0 +1,140 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "WAMR Fast [macOS]: simple.wasm",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/understand-build/interpreter/iwasm",
+      "args": [
+        "${workspaceFolder}/tests/standalone/simple/simple.wasm"
+      ],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "WAMR: Build Interpreter (Debug)",
+      "preRunCommands": [
+        "breakpoint set --name main"
+      ],
+      "sourceLanguages": [
+        "c",
+        "cpp"
+      ],
+      "terminal": "integrated"
+    },
+    {
+      "name": "WAMR Fast [macOS]: custom wasm",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/understand-build/interpreter/iwasm",
+      "args": [
+        "${input:wamrWasmModule}"
+      ],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "WAMR: Build Interpreter (Debug)",
+      "preRunCommands": [
+        "breakpoint set --name main"
+      ],
+      "sourceLanguages": [
+        "c",
+        "cpp"
+      ],
+      "terminal": "integrated"
+    },
+    {
+      "name": "WAMR Classic [macOS]: 1 Lifecycle",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/understand-build/interpreter-classic-debug/iwasm",
+      "args": [
+        "${workspaceFolder}/.vscode/wasm/minimal.wasm"
+      ],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "WAMR: Build Classic Interpreter (Learning)",
+      "preRunCommands": [
+        "breakpoint set --name main",
+        "breakpoint set --name wasm_runtime_full_init",
+        "breakpoint set --name wasm_runtime_load",
+        "breakpoint set --name wasm_runtime_instantiate_ex2",
+        "breakpoint set --name wasm_application_execute_main",
+        "breakpoint set --name wasm_runtime_call_wasm",
+        "breakpoint set --name wasm_interp_call_wasm"
+      ],
+      "sourceLanguages": [
+        "c",
+        "cpp"
+      ],
+      "terminal": "integrated"
+    },
+    {
+      "name": "WAMR Classic [macOS]: 2 Interpreter Entry",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/understand-build/interpreter-classic-debug/iwasm",
+      "args": [
+        "${workspaceFolder}/.vscode/wasm/minimal.wasm"
+      ],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "WAMR: Build Classic Interpreter (Learning)",
+      "preRunCommands": [
+        "breakpoint set --name wasm_interp_call_wasm"
+      ],
+      "sourceLanguages": [
+        "c",
+        "cpp"
+      ],
+      "terminal": "integrated"
+    },
+    {
+      "name": "WAMR Classic [macOS]: 3 Opcode Loop",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/understand-build/interpreter-classic-debug/iwasm",
+      "args": [
+        "${workspaceFolder}/.vscode/wasm/minimal.wasm"
+      ],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "WAMR: Build Classic Interpreter (Learning)",
+      "preRunCommands": [
+        "breakpoint set --file wasm_interp_classic.c --line 1677"
+      ],
+      "sourceLanguages": [
+        "c",
+        "cpp"
+      ],
+      "terminal": "integrated"
+    },
+    {
+      "name": "WAMR Fast [Windows]: simple.wasm",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/understand-build/interpreter/iwasm.exe",
+      "args": [
+        "${workspaceFolder}/tests/standalone/simple/simple.wasm"
+      ],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "WAMR: Build Interpreter (Debug)",
+      "stopAtEntry": true,
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "WAMR Classic [Windows]: Learning",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/understand-build/interpreter-classic-debug/iwasm.exe",
+      "args": [
+        "${workspaceFolder}/.vscode/wasm/minimal.wasm"
+      ],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "WAMR: Build Classic Interpreter (Learning)",
+      "stopAtEntry": true,
+      "console": "integratedTerminal"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "wamrWasmModule",
+      "type": "promptString",
+      "description": "输入要运行的 .wasm 路径（相对于 WAMR 仓库根目录或绝对路径）",
+      "default": "tests/standalone/simple/simple.wasm"
+    }
+  ]
+}

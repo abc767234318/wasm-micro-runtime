@@ -48,3 +48,17 @@ samples/workload/include/**
 
 tests/unit/runtime-common/wasm-apps/main.aot
 tests/unit/aot-stack-frame/wasm-apps/test_aot.h
+
+# Portable VS Code configuration for the WAMR study environment.
+# Keep generated files such as .vscode/wasm/*.wasm ignored.
+!.vscode/
+.vscode/*
+!.vscode/c_cpp_properties.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/WAMR_DEBUGGING.md
+!.vscode/wasm/
+.vscode/wasm/*
+!.vscode/wasm/minimal.wat

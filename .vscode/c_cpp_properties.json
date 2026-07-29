@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "name": "WAMR Interpreter",
+      "compileCommands": "${workspaceFolder}/understand-build/interpreter/compile_commands.json"
+    },
+    {
+      "name": "WAMR Classic Interpreter (Learning)",
+      "compileCommands": "${workspaceFolder}/understand-build/interpreter-classic-debug/compile_commands.json"
+    },
+    {
+      "name": "WAMR LLVM JIT",
+      "compileCommands": "${workspaceFolder}/understand-build/jit/compile_commands.json"
+    },
+    {
+      "name": "WAMR AOT",
+      "compileCommands": "${workspaceFolder}/understand-build/aot/compile_commands.json"
+    }
+  ],
+  "version": 4,
+  "enableConfigurationSquiggles": true
+}

@@ -1,0 +1,21 @@
+{
+  "C_Cpp.dimInactiveRegions": true,
+  "C_Cpp.inactiveRegionOpacity": 0.25,
+  "C_Cpp.inactiveRegionForegroundColor": "#606060",
+  "C_Cpp.enhancedColorization": "enabled",
+  "debug.inlineValues": "on",
+  "lldb.showDisassembly": "never",
+  "editor.semanticHighlighting.enabled": true,
+  "editor.semanticTokenColorCustomizations": {
+    "rules": {
+      "macro:c": {
+        "foreground": "#E5A84B",
+        "bold": true
+      },
+      "macro:cpp": {
+        "foreground": "#E5A84B",
+        "bold": true
+      }
+    }
+  }
+}
