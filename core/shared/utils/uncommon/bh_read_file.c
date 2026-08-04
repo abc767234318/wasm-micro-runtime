@@ -65,7 +65,7 @@ bh_read_file_to_buffer(const char *filename, uint32 *ret_size)
 }
 #else /* else of defined(_WIN32) || defined(_WIN32_) */
 char *
-bh_read_file_to_buffer(const char *filename, uint32 *ret_size)
+bh_read_file_to_buffer(const char *filename, uint32 *ret_size)// bh指代的是 Base Helper
 {
     char *buffer;
     int file;
