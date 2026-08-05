@@ -967,9 +967,9 @@ main(int argc, char *argv[])
         goto fail3;
     }
     wasm_runtime_instantiation_args_set_default_stack_size(inst_args,
-                                                           stack_size);
+                                                           stack_size); //设置默认栈大小
     wasm_runtime_instantiation_args_set_host_managed_heap_size(inst_args,
-                                                               heap_size);
+                                                               heap_size); // 设置默认堆大小
 #if WASM_ENABLE_LIBC_WASI != 0
     libc_wasi_set_init_args(inst_args, argc, argv, &wasi_parse_ctx);
 #endif
