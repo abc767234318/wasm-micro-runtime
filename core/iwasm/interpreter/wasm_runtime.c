@@ -2601,7 +2601,7 @@ wasm_instantiate(WASMModule *module, WASMModuleInstance *parent,
         && !(globals = globals_instantiate(module, module_inst, error_buf,
                                            error_buf_size))) {
         goto fail;
-    }
+    } // 初始化global段
     module_inst->e->global_count = global_count;
     module_inst->e->globals = globals;
     module_inst->global_data = (uint8 *)module_inst + module_inst_struct_size

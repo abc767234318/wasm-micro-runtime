@@ -90,7 +90,7 @@ check_main_func_type(const WASMFuncType *type, bool is_memory64)
 }
 
 static bool
-execute_main(WASMModuleInstanceCommon *module_inst, int32 argc, char *argv[])
+execute_main(WASMModuleInstanceCommon *module_inst, int32 argc, char *argv[]) // 这个函数开始执行binary程序
 {
     WASMFunctionInstanceCommon *func;
     WASMFuncType *func_type = NULL;
