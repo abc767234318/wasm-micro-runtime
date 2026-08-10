@@ -1,0 +1,363 @@
+{
+  "upstream": "https://webassembly.github.io/spec/core/",
+  "generated_at": "2026-08-10T16:02:03.025781+00:00",
+  "page_count": 50,
+  "skipped_page_count": 0,
+  "search_entry_count": 945,
+  "translation_cache_entries": 3759,
+  "new_translation_entries": 0,
+  "translation_cache_hits": 5678,
+  "translator": "argos",
+  "pages": [
+    {
+      "path": "appendix/algorithm.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/algorithm.html",
+      "title_en": "Validation Algorithm ",
+      "title_zh": "验证 算法 ",
+      "skipped": false
+    },
+    {
+      "path": "appendix/changes.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/changes.html",
+      "title_en": "Change History ",
+      "title_zh": "更改历史 ",
+      "skipped": false
+    },
+    {
+      "path": "appendix/custom.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/custom.html",
+      "title_en": "Custom Sections and Annotations ",
+      "title_zh": "自定义段 说明 ",
+      "skipped": false
+    },
+    {
+      "path": "appendix/embedding.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/embedding.html",
+      "title_en": "Embedding ",
+      "title_zh": "嵌入 ",
+      "skipped": false
+    },
+    {
+      "path": "appendix/implementation.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/implementation.html",
+      "title_en": "Implementation Limitations ",
+      "title_zh": "执行限制 ",
+      "skipped": false
+    },
+    {
+      "path": "appendix/index-instructions.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/index-instructions.html",
+      "title_en": "Index of Instructions ",
+      "title_zh": "指数 指令 ",
+      "skipped": false
+    },
+    {
+      "path": "appendix/index-rules.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/index-rules.html",
+      "title_en": "Index of Semantic Rules ",
+      "title_zh": "指数 语义规则 ",
+      "skipped": false
+    },
+    {
+      "path": "appendix/index-types.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/index-types.html",
+      "title_en": "Index of Types ",
+      "title_zh": "指数 类型 ",
+      "skipped": false
+    },
+    {
+      "path": "appendix/index.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/index.html",
+      "title_en": "Appendix ",
+      "title_zh": "附 录 ",
+      "skipped": false
+    },
+    {
+      "path": "appendix/profiles.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/profiles.html",
+      "title_en": "Profiles ",
+      "title_zh": "简介 ",
+      "skipped": false
+    },
+    {
+      "path": "appendix/properties.html",
+      "source_url": "https://webassembly.github.io/spec/core/appendix/properties.html",
+      "title_en": "Type Soundness ",
+      "title_zh": "类型声音 ",
+      "skipped": false
+    },
+    {
+      "path": "binary/conventions.html",
+      "source_url": "https://webassembly.github.io/spec/core/binary/conventions.html",
+      "title_en": "Conventions ",
+      "title_zh": "约定 ",
+      "skipped": false
+    },
+    {
+      "path": "binary/index.html",
+      "source_url": "https://webassembly.github.io/spec/core/binary/index.html",
+      "title_en": "Binary Format ",
+      "title_zh": "二进制格式 ",
+      "skipped": false
+    },
+    {
+      "path": "binary/instructions.html",
+      "source_url": "https://webassembly.github.io/spec/core/binary/instructions.html",
+      "title_en": "Instructions ",
+      "title_zh": "指令 ",
+      "skipped": false
+    },
+    {
+      "path": "binary/modules.html",
+      "source_url": "https://webassembly.github.io/spec/core/binary/modules.html",
+      "title_en": "Modules ",
+      "title_zh": "模块 ",
+      "skipped": false
+    },
+    {
+      "path": "binary/types.html",
+      "source_url": "https://webassembly.github.io/spec/core/binary/types.html",
+      "title_en": "Types ",
+      "title_zh": "类型 ",
+      "skipped": false
+    },
+    {
+      "path": "binary/values.html",
+      "source_url": "https://webassembly.github.io/spec/core/binary/values.html",
+      "title_en": "Values ",
+      "title_zh": "值 ",
+      "skipped": false
+    },
+    {
+      "path": "exec/conventions.html",
+      "source_url": "https://webassembly.github.io/spec/core/exec/conventions.html",
+      "title_en": "Conventions ",
+      "title_zh": "约定 ",
+      "skipped": false
+    },
+    {
+      "path": "exec/index.html",
+      "source_url": "https://webassembly.github.io/spec/core/exec/index.html",
+      "title_en": "Execution ",
+      "title_zh": "执行 ",
+      "skipped": false
+    },
+    {
+      "path": "exec/instructions.html",
+      "source_url": "https://webassembly.github.io/spec/core/exec/instructions.html",
+      "title_en": "Instructions ",
+      "title_zh": "指令 ",
+      "skipped": false
+    },
+    {
+      "path": "exec/modules.html",
+      "source_url": "https://webassembly.github.io/spec/core/exec/modules.html",
+      "title_en": "Modules ",
+      "title_zh": "模块 ",
+      "skipped": false
+    },
+    {
+      "path": "exec/numerics.html",
+      "source_url": "https://webassembly.github.io/spec/core/exec/numerics.html",
+      "title_en": "Numerics ",
+      "title_zh": "数字 ",
+      "skipped": false
+    },
+    {
+      "path": "exec/runtime.html",
+      "source_url": "https://webassembly.github.io/spec/core/exec/runtime.html",
+      "title_en": "Runtime Structure ",
+      "title_zh": "运行时结构 ",
+      "skipped": false
+    },
+    {
+      "path": "exec/types.html",
+      "source_url": "https://webassembly.github.io/spec/core/exec/types.html",
+      "title_en": "Types ",
+      "title_zh": "类型 ",
+      "skipped": false
+    },
+    {
+      "path": "exec/values.html",
+      "source_url": "https://webassembly.github.io/spec/core/exec/values.html",
+      "title_en": "Values ",
+      "title_zh": "值 ",
+      "skipped": false
+    },
+    {
+      "path": "genindex.html",
+      "source_url": "https://webassembly.github.io/spec/core/genindex.html",
+      "title_en": "Index",
+      "title_zh": "指数",
+      "skipped": false
+    },
+    {
+      "path": "index.html",
+      "source_url": "https://webassembly.github.io/spec/core/index.html",
+      "title_en": "WebAssembly Specification ",
+      "title_zh": "WebAssembly 规范 ",
+      "skipped": false
+    },
+    {
+      "path": "intro/index.html",
+      "source_url": "https://webassembly.github.io/spec/core/intro/index.html",
+      "title_en": "Introduction ",
+      "title_zh": "导言 ",
+      "skipped": false
+    },
+    {
+      "path": "intro/introduction.html",
+      "source_url": "https://webassembly.github.io/spec/core/intro/introduction.html",
+      "title_en": "Introduction ",
+      "title_zh": "导言 ",
+      "skipped": false
+    },
+    {
+      "path": "intro/overview.html",
+      "source_url": "https://webassembly.github.io/spec/core/intro/overview.html",
+      "title_en": "Overview ",
+      "title_zh": "概览 ",
+      "skipped": false
+    },
+    {
+      "path": "search.html",
+      "source_url": "https://webassembly.github.io/spec/core/search.html",
+      "title_en": "Search",
+      "title_zh": "搜索",
+      "skipped": false
+    },
+    {
+      "path": "syntax/conventions.html",
+      "source_url": "https://webassembly.github.io/spec/core/syntax/conventions.html",
+      "title_en": "Conventions ",
+      "title_zh": "约定 ",
+      "skipped": false
+    },
+    {
+      "path": "syntax/index.html",
+      "source_url": "https://webassembly.github.io/spec/core/syntax/index.html",
+      "title_en": "Structure ",
+      "title_zh": "结构 ",
+      "skipped": false
+    },
+    {
+      "path": "syntax/instructions.html",
+      "source_url": "https://webassembly.github.io/spec/core/syntax/instructions.html",
+      "title_en": "Instructions ",
+      "title_zh": "指令 ",
+      "skipped": false
+    },
+    {
+      "path": "syntax/modules.html",
+      "source_url": "https://webassembly.github.io/spec/core/syntax/modules.html",
+      "title_en": "Modules ",
+      "title_zh": "模块 ",
+      "skipped": false
+    },
+    {
+      "path": "syntax/types.html",
+      "source_url": "https://webassembly.github.io/spec/core/syntax/types.html",
+      "title_en": "Types ",
+      "title_zh": "类型 ",
+      "skipped": false
+    },
+    {
+      "path": "syntax/values.html",
+      "source_url": "https://webassembly.github.io/spec/core/syntax/values.html",
+      "title_en": "Values ",
+      "title_zh": "值 ",
+      "skipped": false
+    },
+    {
+      "path": "text/conventions.html",
+      "source_url": "https://webassembly.github.io/spec/core/text/conventions.html",
+      "title_en": "Conventions ",
+      "title_zh": "约定 ",
+      "skipped": false
+    },
+    {
+      "path": "text/index.html",
+      "source_url": "https://webassembly.github.io/spec/core/text/index.html",
+      "title_en": "Text Format ",
+      "title_zh": "文本格式 ",
+      "skipped": false
+    },
+    {
+      "path": "text/instructions.html",
+      "source_url": "https://webassembly.github.io/spec/core/text/instructions.html",
+      "title_en": "Instructions ",
+      "title_zh": "指令 ",
+      "skipped": false
+    },
+    {
+      "path": "text/lexical.html",
+      "source_url": "https://webassembly.github.io/spec/core/text/lexical.html",
+      "title_en": "Lexical Format ",
+      "title_zh": "词法格式 ",
+      "skipped": false
+    },
+    {
+      "path": "text/modules.html",
+      "source_url": "https://webassembly.github.io/spec/core/text/modules.html",
+      "title_en": "Modules ",
+      "title_zh": "模块 ",
+      "skipped": false
+    },
+    {
+      "path": "text/types.html",
+      "source_url": "https://webassembly.github.io/spec/core/text/types.html",
+      "title_en": "Types ",
+      "title_zh": "类型 ",
+      "skipped": false
+    },
+    {
+      "path": "text/values.html",
+      "source_url": "https://webassembly.github.io/spec/core/text/values.html",
+      "title_en": "Values ",
+      "title_zh": "值 ",
+      "skipped": false
+    },
+    {
+      "path": "valid/conventions.html",
+      "source_url": "https://webassembly.github.io/spec/core/valid/conventions.html",
+      "title_en": "Conventions ",
+      "title_zh": "约定 ",
+      "skipped": false
+    },
+    {
+      "path": "valid/index.html",
+      "source_url": "https://webassembly.github.io/spec/core/valid/index.html",
+      "title_en": "Validation ",
+      "title_zh": "验证 ",
+      "skipped": false
+    },
+    {
+      "path": "valid/instructions.html",
+      "source_url": "https://webassembly.github.io/spec/core/valid/instructions.html",
+      "title_en": "Instructions ",
+      "title_zh": "指令 ",
+      "skipped": false
+    },
+    {
+      "path": "valid/matching.html",
+      "source_url": "https://webassembly.github.io/spec/core/valid/matching.html",
+      "title_en": "Matching ",
+      "title_zh": "匹配 ",
+      "skipped": false
+    },
+    {
+      "path": "valid/modules.html",
+      "source_url": "https://webassembly.github.io/spec/core/valid/modules.html",
+      "title_en": "Modules ",
+      "title_zh": "模块 ",
+      "skipped": false
+    },
+    {
+      "path": "valid/types.html",
+      "source_url": "https://webassembly.github.io/spec/core/valid/types.html",
+      "title_en": "Types ",
+      "title_zh": "类型 ",
+      "skipped": false
+    }
+  ]
+}
