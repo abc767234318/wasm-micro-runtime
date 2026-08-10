@@ -424,6 +424,9 @@ def copy_site(source_dir: Path, site_dir: Path) -> None:
     if site_dir.exists():
         shutil.rmtree(site_dir)
     shutil.copytree(source_dir, site_dir)
+    # Keep the generated repository lightweight. The upstream PDF remains
+    # available from the canonical specification site and is linked directly.
+    shutil.rmtree(site_dir / "_download", ignore_errors=True)
     custom_dir = site_dir / "_bilingual"
     custom_dir.mkdir(parents=True, exist_ok=True)
     shutil.copy2(PROJECT_ROOT / "theme" / "bilingual.css", custom_dir / "bilingual.css")
@@ -646,6 +649,9 @@ def process_page(
     root = page_root(relative)
     source_url = urljoin(upstream, relative.as_posix())
     soup = BeautifulSoup(html_path.read_text(encoding="utf-8"), "lxml")
+    for anchor in soup.find_all("a", href=True):
+        if anchor["href"].split("#", 1)[0].endswith("_download/WebAssembly.pdf"):
+            anchor["href"] = urljoin(upstream, "_download/WebAssembly.pdf")
     body = soup.select_one("div.body")
     if body is None:
         return {"path": relative.as_posix(), "skipped": True}
