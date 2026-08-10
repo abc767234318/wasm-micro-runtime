@@ -1,0 +1,17 @@
+.cache/
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+.next/
+dist/
+.wrangler/
+public/spec/
+.env*
+
+# The WAMR root ignores dot-directories and build directories globally, but
+# these two paths are source files required by the Sites deployment project.
+!.openai/
+!.openai/hosting.json
+!build/
+!build/**
