@@ -20,8 +20,9 @@ test("server-renders the bilingual specification landing page", async () => {
   const html = await response.text();
   assert.match(html, /Wasm Spec 中英对照/);
   assert.match(html, /WebAssembly Core Specification/);
-  assert.match(html, /开始阅读/);
+  assert.match(html, /打开规范/);
   assert.match(html, /\/spec\/index\.html/);
+  assert.doesNotMatch(html, /学习译文|一边学|推荐路径/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/);
 });
 
@@ -38,6 +39,8 @@ test("packages the complete verified static specification", async () => {
   assert.ok(parsed.search_entry_count >= 900);
   assert.match(index, /wasm-bi-panel-en/);
   assert.match(index, /wasm-bi-panel-zh/);
+  assert.match(index, /中文 · 对照文本/);
+  assert.doesNotMatch(index, /学习译文/);
   assert.ok(socialCard.byteLength > 100_000);
   assert.match(bilingualCss, /\.wasm-bi-active \.documentwrapper,/);
   assert.match(bilingualCss, /\.wasm-bi-active \.body \{\s*display: flex;/);

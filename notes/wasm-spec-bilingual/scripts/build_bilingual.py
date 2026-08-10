@@ -88,7 +88,7 @@ class TranslationMemory:
         self.translator = translator
         self.delay = delay
         self.session = requests.Session()
-        self.session.headers.update({"User-Agent": "WasmSpecBilingual/1.0 (learning mirror)"})
+        self.session.headers.update({"User-Agent": "WasmSpecBilingual/1.0 (bilingual reference)"})
         self.cache: dict[str, dict[str, str]] = self._read_json(cache_path, {})
         glossary: dict[str, str] = self._read_json(glossary_path, {})
         self.glossary = sorted(glossary.items(), key=lambda item: len(item[0]), reverse=True)
@@ -539,7 +539,7 @@ def replace_node_html(node: Tag, html: str) -> None:
 def make_toolbar(soup: BeautifulSoup, root: str, upstream_url: str) -> Tag:
     markup = f"""
     <div class="wasm-bi-toolbar" role="region" aria-label="Bilingual reading controls">
-      <div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+      <div class="wasm-bi-brand">Wasm Spec 中英对照<small>Bilingual reference · 英文原文为准</small></div>
       <div class="wasm-bi-controls" role="group" aria-label="Language view">
         <button class="wasm-bi-button" type="button" data-bi-view-button="both">中英</button>
         <button class="wasm-bi-button" type="button" data-bi-view-button="en">EN</button>
@@ -579,7 +579,7 @@ def make_panel(
         f'<p class="wasm-bi-disclaimer">'
         f'<a href="{upstream_url}">WebAssembly Community Group 官方原文</a> · '
         f'<a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · '
-        f'中文为非官方学习译文。</p>',
+        f'中文为非官方对照文本。</p>',
         "html.parser",
     ).p
     inner.append(disclaimer)
@@ -674,7 +674,7 @@ def process_page(
     columns = soup.new_tag("div")
     columns["class"] = ["wasm-bi-columns"]
     columns.append(make_panel(soup, "en", "English · 官方原文", english, source_url))
-    columns.append(make_panel(soup, "zh", "中文 · 学习译文", chinese, source_url))
+    columns.append(make_panel(soup, "zh", "中文 · 对照文本", chinese, source_url))
     body.append(columns)
     add_assets(soup, root)
 

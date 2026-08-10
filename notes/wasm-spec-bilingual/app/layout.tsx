@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase,
     title: "Wasm Spec 中英对照 | WebAssembly 3.0",
-    description: "WebAssembly Core Specification 3.0 官方英文与中文学习译文双栏对照站。",
+    description: "WebAssembly Core Specification 3.0 官方英文与中文对照文本双栏版。",
     icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
     openGraph: {
       title: "Wasm Spec 中英对照",

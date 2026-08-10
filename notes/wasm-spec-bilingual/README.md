@@ -1,6 +1,6 @@
 # WebAssembly Core Specification 3.0 中英对照站
 
-这是一个可重复生成的 WebAssembly Core Specification 中英对照项目。英文内容同步自 [WebAssembly 官方规范](https://webassembly.github.io/spec/core/)，中文是面向学习的非官方译文。
+这是一个可重复生成的 WebAssembly Core Specification 中英对照项目。英文内容同步自 [WebAssembly 官方规范](https://webassembly.github.io/spec/core/)，中文是非官方对照文本。
 
 > 英文规范是唯一权威文本。当中英文存在歧义时，以官方英文为准。
 
@@ -54,7 +54,7 @@ python3 -m http.server 8000 --directory site
 
 ## 翻译质量策略
 
-默认构建器使用本地 Argos Translate 英→中模型生成学习草译，全量重建不依赖翻译 API，并通过术语表和不可翻译节点保护提高一致性。机器译文不是规范性文本；可以直接编辑 cache 中的条目进行人工校订，后续构建会保留校订结果。`--translator google` 仅作为可选在线后端。
+默认构建器使用本地 Argos Translate 英→中模型生成初始译文，全量重建不依赖翻译 API，并通过术语表和不可翻译节点保护提高一致性。机器译文不是规范性文本；可以直接编辑 cache 中的条目进行人工校订，后续构建会保留校订结果。`--translator google` 仅作为可选在线后端。
 
 ## 授权与署名
 

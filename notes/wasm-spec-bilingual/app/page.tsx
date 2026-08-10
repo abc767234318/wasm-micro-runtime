@@ -1,7 +1,7 @@
 const stats = [
-  ["50", "完整规范页面"],
-  ["7.6 万+", "中文学习译文"],
-  ["945", "双语搜索条目"],
+  ["3.0", "Core Specification"],
+  ["50", "规范页面"],
+  ["945", "双语索引条目"],
 ];
 
 export default function Home() {
@@ -18,17 +18,17 @@ export default function Home() {
 
       <section className="hero">
         <div className="hero-copy">
-          <div className="eyebrow">WebAssembly Core Specification · Release 3.0</div>
-          <h1>一边学 Wasm，<br />一边读懂技术英语。</h1>
+          <div className="eyebrow">Bilingual Edition · Release 3.0</div>
+          <h1>WebAssembly Core Specification<br /><span>中英对照版</span></h1>
           <p className="lede">
-            官方英文与中文学习译文同屏对照。保留公式、语法产生式、
-            指令名称、章节锚点和官方链接，适合从实现者角度系统学习。
+            官方英文与中文对照文本并列呈现。完整保留公式、语法产生式、
+            指令名称、章节锚点与规范内部链接。
           </p>
           <div className="actions">
-            <a className="primary" href="/spec/index.html">开始阅读 <span aria-hidden="true">→</span></a>
-            <a className="secondary" href="/spec/intro/introduction.html">Introduction / 简介</a>
+            <a className="primary" href="/spec/index.html">打开规范 <span aria-hidden="true">→</span></a>
+            <a className="secondary" href="/spec/genindex.html">Index / 总索引</a>
           </div>
-          <p className="authority">英文原文是权威文本；中文为非官方学习译文。</p>
+          <p className="authority">英文原文为规范性文本；中文为非官方对照文本。</p>
         </div>
 
         <div className="document-pair" aria-label="中英双栏文档预览">
@@ -40,9 +40,8 @@ export default function Home() {
             <h3>Modules</h3>
             <p>A module is encoded as a sequence of sections.</p>
           </article>
-          <div className="bridge" aria-hidden="true"><i /><i /><i /></div>
           <article className="sheet sheet-zh" lang="zh-CN">
-            <div className="sheet-tag">ZH · 学习译文</div>
+            <div className="sheet-tag">ZH · Translation</div>
             <h2>二进制格式</h2>
             <p>二进制格式是对抽象语法的紧凑线性编码。</p>
             <div className="rule"><code>段 ::= id size contents</code></div>
@@ -60,19 +59,19 @@ export default function Home() {
 
       <section className="paths">
         <div className="section-heading">
-          <span>推荐路径</span>
-          <h2>从概念到字节，循序渐进。</h2>
+          <span>SPECIFICATION CONTENTS</span>
+          <h2>按规范组成直接访问。</h2>
         </div>
         <div className="path-grid">
-          <a href="/spec/intro/overview.html"><b>01</b><h3>Overview / 概述</h3><p>建立值、指令、函数、表和线性内存的整体心智模型。</p></a>
-          <a href="/spec/syntax/index.html"><b>02</b><h3>Structure / 结构</h3><p>掌握 Wasm 抽象语法中的类型、指令与模块结构。</p></a>
-          <a href="/spec/valid/index.html"><b>03</b><h3>Validation / 验证</h3><p>理解类型系统如何在执行前证明模块安全。</p></a>
-          <a href="/spec/binary/index.html"><b>04</b><h3>Binary / 二进制</h3><p>对照 Section、LEB128、opcode 与 function body 的实际编码。</p></a>
+          <a href="/spec/intro/overview.html"><b>01</b><h3>Overview / 概述</h3><p>WebAssembly 的设计目标、概念与核心语义概览。</p></a>
+          <a href="/spec/syntax/index.html"><b>02</b><h3>Structure / 结构</h3><p>类型、指令、函数、表、内存与模块的抽象语法。</p></a>
+          <a href="/spec/valid/index.html"><b>03</b><h3>Validation / 验证</h3><p>类型系统、验证上下文及各类结构的判定规则。</p></a>
+          <a href="/spec/binary/index.html"><b>04</b><h3>Binary / 二进制</h3><p>Section、LEB128、opcode 与 function body 的二进制编码。</p></a>
         </div>
       </section>
 
       <footer>
-        <span>Wasm Spec 中英对照</span>
+        <span>WebAssembly Core Specification 3.0 · 中英对照版</span>
         <p>Source: WebAssembly Community Group · W3C Software and Document License</p>
       </footer>
     </main>
