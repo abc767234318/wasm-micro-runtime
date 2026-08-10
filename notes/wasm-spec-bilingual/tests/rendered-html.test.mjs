@@ -26,10 +26,11 @@ test("server-renders the bilingual specification landing page", async () => {
 });
 
 test("packages the complete verified static specification", async () => {
-  const [metadata, index, socialCard] = await Promise.all([
+  const [metadata, index, socialCard, bilingualCss] = await Promise.all([
     readFile(new URL("../public/spec/_bilingual/metadata.json", import.meta.url), "utf8"),
     readFile(new URL("../public/spec/index.html", import.meta.url), "utf8"),
     readFile(new URL("../public/spec/_bilingual/og.png", import.meta.url)),
+    readFile(new URL("../public/spec/_bilingual/bilingual.css", import.meta.url), "utf8"),
   ]);
   const parsed = JSON.parse(metadata);
   assert.equal(parsed.page_count, 50);
@@ -38,4 +39,8 @@ test("packages the complete verified static specification", async () => {
   assert.match(index, /wasm-bi-panel-en/);
   assert.match(index, /wasm-bi-panel-zh/);
   assert.ok(socialCard.byteLength > 100_000);
+  assert.match(bilingualCss, /\.wasm-bi-active \.documentwrapper,/);
+  assert.match(bilingualCss, /\.wasm-bi-active \.body \{\s*display: flex;/);
+  assert.match(bilingualCss, /\.wasm-bi-columns \{[\s\S]*?flex: 1 1 auto;[\s\S]*?min-height: 0;/);
+  assert.match(bilingualCss, /\.wasm-bi-panel \{[\s\S]*?min-height: 0;[\s\S]*?overflow-y: auto;/);
 });
