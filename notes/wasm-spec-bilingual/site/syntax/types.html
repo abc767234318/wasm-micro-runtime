@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Types  / 类型  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="instructions.html" rel="next" title="Instructions"/>
+<link href="values.html" rel="prev" title="Values"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conventions.html"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="types.html#"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/syntax/types.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="types">
+<span id="index-0"></span><h1>Types<a class="headerlink" href="types.html#types" title="Link to this heading">¶</a></h1>
+<p>Various entities in WebAssembly are classified by types.
+Types are checked during <a class="reference internal" href="../valid/index.html#valid"><span class="std std-ref">validation</span></a>, <a class="reference internal" href="../exec/modules.html#exec-instantiation"><span class="std std-ref">instantiation</span></a>, and possibly <a class="reference internal" href="instructions.html#syntax-call-indirect"><span class="std std-ref">execution</span></a>.</p>
+<section id="number-types">
+<span id="syntax-numtype"></span><span id="index-1"></span><h2>Number Types<a class="headerlink" href="types.html#number-types" title="Link to this heading">¶</a></h2>
+<p><em>Number types</em> classify numeric values.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} ~~|~~ \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} ~~|~~ \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle32}} ~~|~~ \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} \\
+\end{array}\end{split}\]</div>
+<p>The types <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 32}}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 64}}\)</span> classify 32 and 64 bit integers, respectively.
+Integers are not inherently signed or unsigned, their interpretation is determined by individual operations.</p>
+<p>The types <span class="math notranslate nohighlight">\(\mathsf{f{\scriptstyle 32}}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{f{\scriptstyle 64}}\)</span> classify 32 and 64 bit floating-point data, respectively.
+They correspond to the respective binary floating-point representations, also known as <em>single</em> and <em>double</em> precision, as defined by the <a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754</a> standard (Section 3.3).</p>
+<p>Number types are <em>transparent</em>, meaning that their bit patterns can be observed.
+Values of number type can be stored in <a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memories</span></a>.</p>
+<section id="conventions">
+<span id="bitwidth-valtype"></span><span id="bitwidth-numtype"></span><h3>Conventions<a class="headerlink" href="types.html#conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The notation <span class="math notranslate nohighlight">\({|t|}\)</span> denotes the <em>bit width</em> of a number type <span class="math notranslate nohighlight">\(t\)</span>.
+That is, <span class="math notranslate nohighlight">\({|\mathsf{i{\scriptstyle 32}}|} = {|\mathsf{f{\scriptstyle 32}}|} = 32\)</span> and <span class="math notranslate nohighlight">\({|\mathsf{i{\scriptstyle 64}}|} = {|\mathsf{f{\scriptstyle 64}}|} = 64\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="vector-types">
+<span id="syntax-vectype"></span><span id="index-2"></span><h2>Vector Types<a class="headerlink" href="types.html#vector-types" title="Link to this heading">¶</a></h2>
+<p><em>Vector types</em> classify vectors of <a class="reference internal" href="types.html#syntax-numtype"><span class="std std-ref">numeric</span></a> values processed by vector instructions (also known as <em>SIMD</em> instructions, single instruction multiple data).</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-vectype}{\mathsf{v\scriptstyle128}} \\
+\end{array}\end{split}\]</div>
+<p>The type <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> corresponds to a 128 bit vector of packed integer or floating-point data. The packed data
+can be interpreted as signed or unsigned integers, single or double precision floating-point
+values, or a single 128 bit type. The interpretation is determined by individual operations.</p>
+<p>Vector types, like <a class="reference internal" href="types.html#syntax-numtype"><span class="std std-ref">number types</span></a> are <em>transparent</em>, meaning that their bit patterns can be observed.
+Values of vector type can be stored in <a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memories</span></a>.</p>
+<section id="bitwidth-vectype">
+<span id="id1"></span><h3>Conventions<a class="headerlink" href="types.html#bitwidth-vectype" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The notation <span class="math notranslate nohighlight">\({|t|}\)</span> for <a class="reference internal" href="types.html#bitwidth-numtype"><span class="std std-ref">bit width</span></a> extends to vector types as well, that is, <span class="math notranslate nohighlight">\({|\mathsf{v{\scriptstyle 128}}|} = 128\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="type-uses">
+<span id="syntax-typeuse"></span><span id="index-3"></span><h2>Type Uses<a class="headerlink" href="types.html#type-uses" title="Link to this heading">¶</a></h2>
+<p>A <em>type use</em> is the use site of a <a class="reference internal" href="modules.html#syntax-typeidx"><span class="std std-ref">type index</span></a> referencing a <a class="reference internal" href="types.html#syntax-comptype"><span class="std std-ref">composite type</span></a> <a class="reference internal" href="modules.html#syntax-type"><span class="std std-ref">defined</span></a> in a <a class="reference internal" href="modules.html#syntax-module"><span class="std std-ref">module</span></a>.
+It classifies objects of the respective type.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} ~~|~~ \dots \\
+\end{array}\end{split}\]</div>
+<p>The syntax of type uses is <a class="reference internal" href="../valid/conventions.html#syntax-typeuse-ext"><span class="std std-ref">extended</span></a> with additional forms for the purpose of specifying <a class="reference internal" href="../valid/index.html#valid"><span class="std std-ref">validation</span></a> and <a class="reference internal" href="../exec/index.html#exec"><span class="std std-ref">execution</span></a>.</p>
+</section>
+<section id="heap-types">
+<span id="syntax-absheaptype"></span><span id="syntax-heaptype"></span><span id="syntax-i31"></span><span id="type-concrete"></span><span id="type-abstract"></span><span id="index-4"></span><h2>Heap Types<a class="headerlink" href="types.html#heap-types" title="Link to this heading">¶</a></h2>
+<p><em>Heap types</em> classify objects in the runtime <a class="reference internal" href="../exec/runtime.html#store"><span class="std std-ref">store</span></a>.
+There are three disjoint hierarchies of heap types:</p>
+<ul class="simple">
+<li><p><em>function types</em> classify <a class="reference internal" href="modules.html#syntax-func"><span class="std std-ref">functions</span></a>,</p></li>
+<li><p><em>aggregate types</em> classify dynamically allocated <em>managed</em> data, such as <em>structures</em>, <em>arrays</em>, or <em>unboxed scalars</em>,</p></li>
+<li><p><em>external types</em> classify <em>external</em> references possibly owned by the <a class="reference internal" href="../intro/overview.html#embedder"><span class="std std-ref">embedder</span></a>.</p></li>
+</ul>
+<p>The values from the latter two hierarchies are interconvertible by ways of the <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{extern{.}convert\_any}}\)</span> and <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{any{.}convert\_extern}}\)</span> instructions.
+That is, both type hierarchies are inhabited by an isomorphic set of values, but may have different, incompatible representations in practice.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-absheaptype}{\mathit{absheaptype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{any}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{eq}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{struct}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{array}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{none}} \\
+&amp; &amp; | &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{func}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{nofunc}} \\
+&amp; &amp; | &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{noexn}} \\
+&amp; &amp; | &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{noextern}} \\
+&amp; &amp; | &amp; \dots \\
+&amp; {\href{../syntax/types.html#syntax-heaptype}{\mathit{heaptype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-absheaptype}{\mathit{absheaptype}}} ~~|~~ {\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+\end{array}\end{split}\]</div>
+<p>A heap type is either <em>abstract</em> or <em>concrete</em>.
+A concrete heap type consists of a <a class="reference internal" href="types.html#syntax-typeuse"><span class="std std-ref">type use</span></a> that classifies an object of the respective <a class="reference internal" href="modules.html#syntax-type"><span class="std std-ref">type</span></a> defined in a module.
+Abstract types are denoted by individual keywords.</p>
+<p>The type <span class="math notranslate nohighlight">\(\mathsf{func}\)</span> denotes the common supertype of all <a class="reference internal" href="types.html#syntax-functype"><span class="std std-ref">function types</span></a>, regardless of their concrete definition.
+Dually, the type <span class="math notranslate nohighlight">\(\mathsf{nofunc}\)</span> denotes the common subtype of all <a class="reference internal" href="types.html#syntax-functype"><span class="std std-ref">function types</span></a>, regardless of their concrete definition.
+This type has no values.</p>
+<p>The type <span class="math notranslate nohighlight">\(\mathsf{exn}\)</span> denotes the common supertype of all <a class="reference internal" href="../exec/runtime.html#syntax-ref-exn"><span class="std std-ref">exception references</span></a>.
+This type has no concrete subtypes.
+Dually, the type <span class="math notranslate nohighlight">\(\mathsf{noexn}\)</span> denotes the common subtype of all forms of exception references.
+This type has no values.</p>
+<p>The type <span class="math notranslate nohighlight">\(\mathsf{extern}\)</span> denotes the common supertype of all external references received through the <a class="reference internal" href="../intro/overview.html#embedder"><span class="std std-ref">embedder</span></a>.
+This type has no concrete subtypes.
+Dually, the type <span class="math notranslate nohighlight">\(\mathsf{noextern}\)</span> denotes the common subtype of all forms of external references.
+This type has no values.</p>
+<p>The type <span class="math notranslate nohighlight">\(\mathsf{any}\)</span> denotes the common supertype of all aggregate types, as well as possibly abstract values produced by <em>internalizing</em> an external reference of type <span class="math notranslate nohighlight">\(\mathsf{extern}\)</span>.
+Dually, the type <span class="math notranslate nohighlight">\(\mathsf{none}\)</span> denotes the common subtype of all forms of aggregate types.
+This type has no values.</p>
+<p>The type <span class="math notranslate nohighlight">\(\mathsf{eq}\)</span> is a subtype of <span class="math notranslate nohighlight">\(\mathsf{any}\)</span> that includes all types for which references can be compared, i.e., aggregate values and <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 31}}\)</span>.</p>
+<p>The types <span class="math notranslate nohighlight">\(\mathsf{struct}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{array}\)</span> denote the common supertypes of all <a class="reference internal" href="types.html#syntax-structtype"><span class="std std-ref">structure</span></a> and <a class="reference internal" href="types.html#syntax-arraytype"><span class="std std-ref">array</span></a> aggregates, respectively.</p>
+<p>The type <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 31}}\)</span> denotes <em>unboxed scalars</em>, that is, integers injected into references.
+Their observable value range is limited to 31 bits.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Values of type <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 31}}\)</span> are not actually allocated in the store,
+but represented in a way that allows them to be mixed with actual references into the store without ambiguity.
+Engines need to perform some form of <em>pointer tagging</em> to achieve this,
+which is why one bit is reserved.
+Since this type is to be reliably unboxed on all hardware platforms supported by WebAssembly,
+it cannot be wider than 32 bits minus the tag bit.</p>
+<p>Although the types <span class="math notranslate nohighlight">\(\mathsf{none}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{nofunc}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{noexn}\)</span>, and <span class="math notranslate nohighlight">\(\mathsf{noextern}\)</span> are not inhabited by any values,
+they can be used to form the types of all null <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">references</span></a> in their respective hierarchy.
+For example, <span class="math notranslate nohighlight">\((\mathsf{ref}~\mathsf{null}~\mathsf{nofunc})\)</span> is the generic type of a null reference compatible with all function reference types.</p>
+</div>
+<p>The syntax of abstract heap types is <a class="reference internal" href="../valid/conventions.html#syntax-heaptype-ext"><span class="std std-ref">extended</span></a> with additional forms for the purpose of specifying <a class="reference internal" href="../valid/index.html#valid"><span class="std std-ref">validation</span></a> and <a class="reference internal" href="../exec/index.html#exec"><span class="std std-ref">execution</span></a>.</p>
+</section>
+<section id="reference-types">
+<span id="syntax-null"></span><span id="syntax-reftype"></span><span id="index-5"></span><h2>Reference Types<a class="headerlink" href="types.html#reference-types" title="Link to this heading">¶</a></h2>
+<p><em>Reference types</em> classify <a class="reference internal" href="values.html#syntax-value"><span class="std std-ref">values</span></a> that are first-class references to objects in the runtime <a class="reference internal" href="../exec/runtime.html#store"><span class="std std-ref">store</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}^?}~{\href{../syntax/types.html#syntax-heaptype}{\mathit{heaptype}}} \\
+\end{array}\end{split}\]</div>
+<p>A reference type is characterised by the <a class="reference internal" href="types.html#syntax-heaptype"><span class="std std-ref">heap type</span></a> it points to.</p>
+<p>In addition, a reference type of the form <span class="math notranslate nohighlight">\(\mathsf{ref}~\mathsf{null}~{\mathit{ht}}\)</span> is <em>nullable</em>, meaning that it can either be a proper reference to <span class="math notranslate nohighlight">\({\mathit{ht}}\)</span> or <a class="reference internal" href="types.html#syntax-null"><span class="std std-ref">null</span></a>.
+Other references are <em>non-null</em>.</p>
+<p>Reference types are <em>opaque</em>, meaning that neither their size nor their bit pattern can be observed.
+Values of reference type can be stored in <a class="reference internal" href="modules.html#syntax-table"><span class="std std-ref">tables</span></a> but not in <a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memories</span></a>.</p>
+<section id="id2">
+<h3>Conventions<a class="headerlink" href="types.html#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{anyref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{eqref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{eq}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{i{\scriptstyle31}ref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{structref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{struct}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{arrayref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{array}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{funcref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{func}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{exnref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{externref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{none}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullfuncref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{nofunc}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullexnref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{noexn}})\)</span>.</p></li>
+<li><p>The reference type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullexternref}}\)</span> is an abbreviation for <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{noextern}})\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="value-types">
+<span id="syntax-consttype"></span><span id="syntax-valtype"></span><span id="index-6"></span><h2>Value Types<a class="headerlink" href="types.html#value-types" title="Link to this heading">¶</a></h2>
+<p><em>Value types</em> classify the individual values that WebAssembly code can compute with and the values that a variable accepts.
+They are either <a class="reference internal" href="types.html#syntax-numtype"><span class="std std-ref">number types</span></a>, <a class="reference internal" href="types.html#syntax-vectype"><span class="std std-ref">vector types</span></a>, or <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">reference types</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-consttype}{\mathit{consttype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} ~~|~~ {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} \\
+&amp; {\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} ~~|~~ {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} ~~|~~ {\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} ~~|~~ \dots \\
+\end{array}\end{split}\]</div>
+<p>The syntax of value types is <a class="reference internal" href="../valid/conventions.html#syntax-valtype-ext"><span class="std std-ref">extended</span></a> with additional forms for the purpose of specifying <a class="reference internal" href="../valid/index.html#valid"><span class="std std-ref">validation</span></a>.</p>
+<section id="id3">
+<h3>Conventions<a class="headerlink" href="types.html#id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The meta variable <span class="math notranslate nohighlight">\(t\)</span> ranges over value types or subclasses thereof where clear from context.</p></li>
+</ul>
+</section>
+</section>
+<section id="result-types">
+<span id="syntax-resulttype"></span><span id="index-7"></span><h2>Result Types<a class="headerlink" href="types.html#result-types" title="Link to this heading">¶</a></h2>
+<p><em>Result types</em> classify the result of <a class="reference internal" href="../exec/instructions.html#exec-instr"><span class="std std-ref">executing</span></a> <a class="reference internal" href="instructions.html#syntax-instr"><span class="std std-ref">instructions</span></a> or <a class="reference internal" href="modules.html#syntax-func"><span class="std std-ref">functions</span></a>,
+which is a sequence of values, written with brackets.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-resulttype}{\mathit{resulttype}}} &amp; ::= &amp; {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}) \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="block-types">
+<span id="syntax-blocktype"></span><span id="index-8"></span><h2>Block Types<a class="headerlink" href="types.html#block-types" title="Link to this heading">¶</a></h2>
+<p><em>Block types</em> classify the <em>input</em> and <em>output</em> of structured <a class="reference internal" href="instructions.html#syntax-instr-control"><span class="std std-ref">control instructions</span></a> delimiting <a class="reference internal" href="instructions.html#syntax-block"><span class="std std-ref">blocks</span></a> of instructions.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-blocktype}{\mathit{blocktype}}} &amp; ::= &amp; {{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}^?} \\
+&amp; &amp; | &amp; {\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+\end{array}\end{split}\]</div>
+<p>They are given either as a <a class="reference internal" href="modules.html#syntax-funcidx"><span class="std std-ref">type index</span></a> that refers to a suitable <a class="reference internal" href="types.html#syntax-functype"><span class="std std-ref">function type</span></a> reinterpreted as an <a class="reference internal" href="../valid/conventions.html#syntax-instrtype"><span class="std std-ref">instruction type</span></a>,
+or as an optional <a class="reference internal" href="types.html#syntax-valtype"><span class="std std-ref">value type</span></a> inline,
+which is a shorthand for the instruction type <span class="math notranslate nohighlight">\(\epsilon \rightarrow {{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}^?}\)</span>.</p>
+</section>
+<section id="composite-types">
+<span id="syntax-packtype"></span><span id="syntax-storagetype"></span><span id="syntax-fieldtype"></span><span id="syntax-arraytype"></span><span id="syntax-structtype"></span><span id="syntax-aggrtype"></span><span id="syntax-functype"></span><span id="syntax-comptype"></span><span id="index-9"></span><h2>Composite Types<a class="headerlink" href="types.html#composite-types" title="Link to this heading">¶</a></h2>
+<p><em>Composite types</em> are all types composed from simpler types,
+including <em>function types</em>, <em>structure types</em> and <em>array types</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-comptype}{\mathit{comptype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-comptype}{\mathsf{struct}}~{\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/types.html#syntax-fieldtype}{\mathit{fieldtype}}}) \\
+&amp; &amp; | &amp; \href{../syntax/types.html#syntax-comptype}{\mathsf{array}}~{\href{../syntax/types.html#syntax-fieldtype}{\mathit{fieldtype}}} \\
+&amp; &amp; | &amp; \href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{\href{../syntax/types.html#syntax-resulttype}{\mathit{resulttype}}} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {\href{../syntax/types.html#syntax-resulttype}{\mathit{resulttype}}} \\[0.8ex]
+&amp; {\href{../syntax/types.html#syntax-fieldtype}{\mathit{fieldtype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-mut}{\mathsf{mut}}^?}~{\href{../syntax/types.html#syntax-storagetype}{\mathit{storagetype}}} \\
+&amp; {\href{../syntax/types.html#syntax-storagetype}{\mathit{storagetype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}} ~~|~~ {\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}} \\
+&amp; {\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle8}} ~~|~~ \href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle16}} \\
+\end{array}\end{split}\]</div>
+<p>Function types classify the signature of <a class="reference internal" href="modules.html#syntax-func"><span class="std std-ref">functions</span></a>,
+mapping a list of parameters to a list of results.
+They are also used to classify the inputs and outputs of <a class="reference internal" href="instructions.html#syntax-instr"><span class="std std-ref">instructions</span></a>.</p>
+<p><em>Aggregate types</em> like structure or array types consist of a list of possibly mutable, possibly packed <em>field types</em> describing their components.
+Structures are heterogeneous, but require static indexing, while arrays need to be homogeneous, but allow dynamic indexing.</p>
+<section id="aux-unpack">
+<span id="bitwidth-fieldtype"></span><span id="id4"></span><h3>Conventions<a class="headerlink" href="types.html#aux-unpack" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The notation <span class="math notranslate nohighlight">\({|t|}\)</span> for the <a class="reference internal" href="types.html#bitwidth-valtype"><span class="std std-ref">bit width</span></a> of a <a class="reference internal" href="types.html#syntax-valtype"><span class="std std-ref">value type</span></a> <span class="math notranslate nohighlight">\(t\)</span> extends to packed types as well, that is, <span class="math notranslate nohighlight">\({|\mathsf{i{\scriptstyle 8}}|} = 8\)</span> and <span class="math notranslate nohighlight">\({|\mathsf{i{\scriptstyle 16}}|} = 16\)</span>.</p></li>
+<li><p>The auxiliary function <span class="math notranslate nohighlight">\(\href{../syntax/types.html#aux-unpack}{\mathrm{unpack}}\)</span> maps a storage type to the <a class="reference internal" href="types.html#syntax-valtype"><span class="std std-ref">value type</span></a> obtained when accessing a field:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{\href{../syntax/types.html#aux-unpack}{\mathrm{unpack}}}({\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}) &amp; = &amp; {\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}} \\
+{\href{../syntax/types.html#aux-unpack}{\mathrm{unpack}}}({\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}) &amp; = &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="recursive-types">
+<span id="syntax-final"></span><span id="syntax-subtype"></span><span id="syntax-rectype"></span><span id="index-10"></span><h2>Recursive Types<a class="headerlink" href="types.html#recursive-types" title="Link to this heading">¶</a></h2>
+<p><em>Recursive types</em> denote a group of mutually recursive <a class="reference internal" href="types.html#syntax-comptype"><span class="std std-ref">composite types</span></a>, each of which can optionally declare a list of <a class="reference internal" href="types.html#syntax-typeuse"><span class="std std-ref">type uses</span></a> of supertypes that it <a class="reference internal" href="../valid/matching.html#match-comptype"><span class="std std-ref">matches</span></a>.
+Each type can also be declared <em>final</em>, preventing further subtyping.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-rectype}{\mathit{rectype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~{\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/types.html#syntax-subtype}{\mathit{subtype}}}) \\
+&amp; {\href{../syntax/types.html#syntax-subtype}{\mathit{subtype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~{\href{../syntax/types.html#syntax-subtype}{\mathsf{final}}^?}~{{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}}^\ast}~{\href{../syntax/types.html#syntax-comptype}{\mathit{comptype}}} \\
+\end{array}\end{split}\]</div>
+<p>In a <a class="reference internal" href="modules.html#syntax-module"><span class="std std-ref">module</span></a>, each member of a recursive type is assigned a separate <a class="reference internal" href="modules.html#syntax-typeidx"><span class="std std-ref">type index</span></a>.</p>
+</section>
+<section id="address-types">
+<span id="syntax-addrtype"></span><h2>Address Types<a class="headerlink" href="types.html#address-types" title="Link to this heading">¶</a></h2>
+<p><em>Address types</em> are a subset of <a class="reference internal" href="types.html#syntax-numtype"><span class="std std-ref">number types</span></a> that classify the values that can be used as offsets into
+<a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memories</span></a> and <a class="reference internal" href="modules.html#syntax-table"><span class="std std-ref">tables</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-addrtype}{\mathit{addrtype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} ~~|~~ \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} \\
+\end{array}\end{split}\]</div>
+<section id="aux-addrtype-min">
+<span id="id5"></span><h3>Conventions<a class="headerlink" href="types.html#aux-addrtype-min" title="Link to this heading">¶</a></h3>
+<p>The <em>minimum</em> of two address types is defined as the address type whose <a class="reference internal" href="types.html#bitwidth-numtype"><span class="std std-ref">bit width</span></a> is the minimum of the two.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{\href{../syntax/types.html#aux-addrtype-min}{\mathrm{min}}}({\mathit{at}}_1, {\mathit{at}}_2) &amp; = &amp; {\mathit{at}}_1 &amp; \quad \mbox{if}~ {|{\mathit{at}}_1|} \leq {|{\mathit{at}}_2|} \\
+{\href{../syntax/types.html#aux-addrtype-min}{\mathrm{min}}}({\mathit{at}}_1, {\mathit{at}}_2) &amp; = &amp; {\mathit{at}}_2 &amp; \quad \mbox{otherwise} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="limits">
+<span id="syntax-limits"></span><span id="index-11"></span><h2>Limits<a class="headerlink" href="types.html#limits" title="Link to this heading">¶</a></h2>
+<p><em>Limits</em> classify the size range of resizeable storage associated with <a class="reference internal" href="types.html#syntax-memtype"><span class="std std-ref">memory types</span></a> and <a class="reference internal" href="types.html#syntax-tabletype"><span class="std std-ref">table types</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-limits}{\mathit{limits}}} &amp; ::= &amp; {}[ {\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em64}}} \href{../syntax/types.html#syntax-limits}{\,{..}\,} {{\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em64}}}^?} ] \\
+\end{array}\end{split}\]</div>
+<p>If no maximum is present,
+then the respective storage can grow to any valid size.</p>
+</section>
+<section id="tag-types">
+<span id="syntax-tagtype"></span><span id="index-12"></span><h2>Tag Types<a class="headerlink" href="types.html#tag-types" title="Link to this heading">¶</a></h2>
+<p><em>Tag types</em> classify the signature <a class="reference internal" href="modules.html#syntax-tag"><span class="std std-ref">tags</span></a>
+with a <a class="reference internal" href="types.html#syntax-typeuse"><span class="std std-ref">type use</span></a> referring to the definition of a <a class="reference internal" href="types.html#syntax-functype"><span class="std std-ref">function type</span></a> that declares the types of parameter and result values associated with the tag.
+The result type is empty for exception tags.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-tagtype}{\mathit{tagtype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="global-types">
+<span id="syntax-globaltype"></span><span id="syntax-mut"></span><span id="index-13"></span><h2>Global Types<a class="headerlink" href="types.html#global-types" title="Link to this heading">¶</a></h2>
+<p><em>Global types</em> classify <a class="reference internal" href="modules.html#syntax-global"><span class="std std-ref">global</span></a> variables, which hold a value and can either be mutable or immutable.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-globaltype}{\mathit{globaltype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-mut}{\mathsf{mut}}^?}~{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="memory-types">
+<span id="syntax-memtype"></span><span id="index-14"></span><h2>Memory Types<a class="headerlink" href="types.html#memory-types" title="Link to this heading">¶</a></h2>
+<p><em>Memory types</em> classify linear <a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memories</span></a> and their size range.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-memtype}{\mathit{memtype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-addrtype}{\mathit{addrtype}}}~{\href{../syntax/types.html#syntax-limits}{\mathit{limits}}}~\href{../syntax/types.html#syntax-memtype}{\mathsf{page}} \\
+\end{array}\end{split}\]</div>
+<p>The limits constrain the minimum and optionally the maximum size of a memory.
+The limits are given in units of <a class="reference internal" href="../exec/runtime.html#page-size"><span class="std std-ref">page size</span></a>.</p>
+</section>
+<section id="table-types">
+<span id="syntax-tabletype"></span><span id="index-15"></span><h2>Table Types<a class="headerlink" href="types.html#table-types" title="Link to this heading">¶</a></h2>
+<p><em>Table types</em> classify <a class="reference internal" href="modules.html#syntax-table"><span class="std std-ref">tables</span></a> over elements of <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> within a size range.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-addrtype}{\mathit{addrtype}}}~{\href{../syntax/types.html#syntax-limits}{\mathit{limits}}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+\end{array}\end{split}\]</div>
+<p>Like memories, tables are constrained by limits for their minimum and optionally maximum size.
+The limits are given in numbers of entries.</p>
+</section>
+<section id="data-types">
+<span id="syntax-datatype"></span><span id="index-16"></span><h2>Data Types<a class="headerlink" href="types.html#data-types" title="Link to this heading">¶</a></h2>
+<p><em>Data types</em> classify <a class="reference internal" href="modules.html#syntax-elem"><span class="std std-ref">data segments</span></a>.
+Since the contents of a data segment requires no further classification, they merely consist of a universal marker <span class="math notranslate nohighlight">\(\mathsf{ok}\)</span> indicating well-formedness.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-datatype}{\mathit{datatype}}} &amp; ::= &amp; \href{../valid/modules.html#valid-data}{\mathsf{ok}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="element-types">
+<span id="syntax-elemtype"></span><span id="index-17"></span><h2>Element Types<a class="headerlink" href="types.html#element-types" title="Link to this heading">¶</a></h2>
+<p><em>Element types</em> classify <a class="reference internal" href="modules.html#syntax-elem"><span class="std std-ref">element segments</span></a> by the <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> of its elements.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-elemtype}{\mathit{elemtype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="external-types">
+<span id="syntax-externtype"></span><span id="index-18"></span><h2>External Types<a class="headerlink" href="types.html#external-types" title="Link to this heading">¶</a></h2>
+<p><em>External types</em> classify <a class="reference internal" href="modules.html#syntax-import"><span class="std std-ref">imports</span></a> and <a class="reference internal" href="../exec/runtime.html#syntax-externaddr"><span class="std std-ref">external addresses</span></a> with their respective types.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-externtype}{\mathsf{tag}}~{\href{../syntax/types.html#syntax-tagtype}{\mathit{tagtype}}} ~~|~~ \href{../syntax/types.html#syntax-externtype}{\mathsf{global}}~{\href{../syntax/types.html#syntax-globaltype}{\mathit{globaltype}}} ~~|~~ \href{../syntax/types.html#syntax-externtype}{\mathsf{mem}}~{\href{../syntax/types.html#syntax-memtype}{\mathit{memtype}}} ~~|~~ \href{../syntax/types.html#syntax-externtype}{\mathsf{table}}~{\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}} ~~|~~ \href{../syntax/types.html#syntax-externtype}{\mathsf{func}}~{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+\end{array}\end{split}\]</div>
+<p>For functions, the <a class="reference internal" href="types.html#syntax-typeuse"><span class="std std-ref">type use</span></a> has to refer to the definition of a <a class="reference internal" href="types.html#syntax-functype"><span class="std std-ref">function type</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Future versions of WebAssembly may have additional uses for tags, and may allow non-empty result types in the function types of tags.</p>
+</div>
+<section id="id6">
+<h3>Conventions<a class="headerlink" href="types.html#id6" title="Link to this heading">¶</a></h3>
+<p>The following auxiliary notation is defined for sequences of external types.
+It filters out entries of a specific kind in an order-preserving fashion:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{funcs}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{funcs}}}((\href{../syntax/types.html#syntax-externtype}{\mathsf{func}}~{\mathit{dt}})~{{\mathit{xt}}^\ast}) &amp; = &amp; {\mathit{dt}}~{\href{../syntax/types.html#syntax-externtype}{\mathrm{funcs}}}({{\mathit{xt}}^\ast}) \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{funcs}}}({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}}~{{\mathit{xt}}^\ast}) &amp; = &amp; {\href{../syntax/types.html#syntax-externtype}{\mathrm{funcs}}}({{\mathit{xt}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tables}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tables}}}((\href{../syntax/types.html#syntax-externtype}{\mathsf{table}}~{\mathit{tt}})~{{\mathit{xt}}^\ast}) &amp; = &amp; {\mathit{tt}}~{\href{../syntax/types.html#syntax-externtype}{\mathrm{tables}}}({{\mathit{xt}}^\ast}) \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tables}}}({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}}~{{\mathit{xt}}^\ast}) &amp; = &amp; {\href{../syntax/types.html#syntax-externtype}{\mathrm{tables}}}({{\mathit{xt}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{mems}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{mems}}}((\href{../syntax/types.html#syntax-externtype}{\mathsf{mem}}~{\mathit{mt}})~{{\mathit{xt}}^\ast}) &amp; = &amp; {\mathit{mt}}~{\href{../syntax/types.html#syntax-externtype}{\mathrm{mems}}}({{\mathit{xt}}^\ast}) \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{mems}}}({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}}~{{\mathit{xt}}^\ast}) &amp; = &amp; {\href{../syntax/types.html#syntax-externtype}{\mathrm{mems}}}({{\mathit{xt}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{globals}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{globals}}}((\href{../syntax/types.html#syntax-externtype}{\mathsf{global}}~{\mathit{gt}})~{{\mathit{xt}}^\ast}) &amp; = &amp; {\mathit{gt}}~{\href{../syntax/types.html#syntax-externtype}{\mathrm{globals}}}({{\mathit{xt}}^\ast}) \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{globals}}}({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}}~{{\mathit{xt}}^\ast}) &amp; = &amp; {\href{../syntax/types.html#syntax-externtype}{\mathrm{globals}}}({{\mathit{xt}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tags}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tags}}}((\href{../syntax/types.html#syntax-externtype}{\mathsf{tag}}~{\mathit{jt}})~{{\mathit{xt}}^\ast}) &amp; = &amp; {\mathit{jt}}~{\href{../syntax/types.html#syntax-externtype}{\mathrm{tags}}}({{\mathit{xt}}^\ast}) \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tags}}}({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}}~{{\mathit{xt}}^\ast}) &amp; = &amp; {\href{../syntax/types.html#syntax-externtype}{\mathrm{tags}}}({{\mathit{xt}}^\ast}) &amp; \quad \mbox{otherwise} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/syntax/types.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-types">
+<span id="zh-index-0"></span><h1>类型<a class="headerlink" href="types.html#zh-types" title="Link to this heading">¶</a></h1>
+<p>各个实体 WebAssembly 按分类 类型.
+类型 检查期间 <a class="reference internal" href="../valid/index.html#zh-valid"><span class="std std-ref">验证</span></a>, <a class="reference internal" href="../exec/modules.html#zh-exec-instantiation"><span class="std std-ref">即时</span></a>,并可能 <a class="reference internal" href="instructions.html#zh-syntax-call-indirect"><span class="std std-ref">执行</span></a>.</p>
+<section id="zh-number-types">
+<span id="zh-syntax-numtype"></span><span id="zh-index-1"></span><h2>数目 类型<a class="headerlink" href="types.html#zh-number-types" title="Link to this heading">¶</a></h2>
+<p><em>数目 类型</em> 分类数字 值.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} ~~|~~ \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} ~~|~~ \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle32}} ~~|~~ \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} \\
+\end{array}\end{split}\]</div>
+<p>那个 类型 <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 32}}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 64}}\)</span> 分类32和64位 整数分别为:
+整数 其解释由个别行动决定。</p>
+<p>那个 类型 <span class="math notranslate nohighlight">\(\mathsf{f{\scriptstyle 32}}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{f{\scriptstyle 64}}\)</span> 分类32和64位 浮点数 数据。
+它们对应相应的二进制 浮点数 说明,又称 <em>单人</em> 和 <em>双</em> 精确度,按 <a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754 (英语).</a> 标准段 3.3).</p>
+<p>数目 类型 已经 <em>透明</em>,表示它们的位图案可以观察到.
+值 数字类型可以存储在 <a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a>.</p>
+<section id="zh-conventions">
+<span id="zh-bitwidth-valtype"></span><span id="zh-bitwidth-numtype"></span><h3>约定<a class="headerlink" href="types.html#zh-conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>标记 <span class="math notranslate nohighlight">\({|t|}\)</span> 表示 <em>位宽</em> 数字类型 <span class="math notranslate nohighlight">\(t\)</span>。 。 。
+这是, <span class="math notranslate nohighlight">\({|\mathsf{i{\scriptstyle 32}}|} = {|\mathsf{f{\scriptstyle 32}}|} = 32\)</span> 和 <span class="math notranslate nohighlight">\({|\mathsf{i{\scriptstyle 64}}|} = {|\mathsf{f{\scriptstyle 64}}|} = 64\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-vector-types">
+<span id="zh-syntax-vectype"></span><span id="zh-index-2"></span><h2>矢量 类型<a class="headerlink" href="types.html#zh-vector-types" title="Link to this heading">¶</a></h2>
+<p><em>矢量 类型</em> 将矢量分类 <a class="reference internal" href="types.html#zh-syntax-numtype"><span class="std std-ref">数字</span></a> 值 由 向量指令 (又称: <em>锡默德</em> 指令单 指令 多数据).</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-vectype}{\mathsf{v\scriptstyle128}} \\
+\end{array}\end{split}\]</div>
+<p>类型 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 对应 128 位矢量已打包 整数 或 浮点数 数据。 数据包
+可解释为签名或未签名 整数,单精度或双精度 浮点数
+值,或一个128位类型。 解释由个别业务决定.</p>
+<p>矢量 类型喜欢 <a class="reference internal" href="types.html#zh-syntax-numtype"><span class="std std-ref">编号 类型</span></a> 已经 <em>透明</em>,表示它们的位图案可以观察到.
+值 页:1 向量类型 可存储在 <a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a>.</p>
+<section id="zh-bitwidth-vectype">
+<span id="zh-id1"></span><h3>约定<a class="headerlink" href="types.html#zh-bitwidth-vectype" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>标记 <span class="math notranslate nohighlight">\({|t|}\)</span> (单位:千美元) <a class="reference internal" href="types.html#zh-bitwidth-numtype"><span class="std std-ref">位宽</span></a> 延伸至矢量 类型 也就是说, <span class="math notranslate nohighlight">\({|\mathsf{v{\scriptstyle 128}}|} = 128\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-type-uses">
+<span id="zh-syntax-typeuse"></span><span id="zh-index-3"></span><h2>类型用途<a class="headerlink" href="types.html#zh-type-uses" title="Link to this heading">¶</a></h2>
+<p>A <em>类型使用</em> 是一个 <a class="reference internal" href="modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a> 参考资料a <a class="reference internal" href="types.html#zh-syntax-comptype"><span class="std std-ref">复合类型</span></a> <a class="reference internal" href="modules.html#zh-syntax-type"><span class="std std-ref">定义</span></a> 在一个 <a class="reference internal" href="modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>。 。 。
+它将相应类型的对象分类。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} ~~|~~ \dots \\
+\end{array}\end{split}\]</div>
+<p>那个 语法 类型用途为 <a class="reference internal" href="../valid/conventions.html#zh-syntax-typeuse-ext"><span class="std std-ref">延长</span></a> 附加表格,以具体说明 <a class="reference internal" href="../valid/index.html#zh-valid"><span class="std std-ref">验证</span></a> 和 <a class="reference internal" href="../exec/index.html#zh-exec"><span class="std std-ref">执行</span></a>.</p>
+</section>
+<section id="zh-heap-types">
+<span id="zh-syntax-absheaptype"></span><span id="zh-syntax-heaptype"></span><span id="zh-syntax-i31"></span><span id="zh-type-concrete"></span><span id="zh-type-abstract"></span><span id="zh-index-4"></span><h2>堆积 类型<a class="headerlink" href="types.html#zh-heap-types" title="Link to this heading">¶</a></h2>
+<p><em>堆积 类型</em> 在运行时间对对象进行分类 <a class="reference internal" href="../exec/runtime.html#zh-store"><span class="std std-ref">存储</span></a>。 。 。
+有三个不相连的等级 类型:</p>
+<ul class="simple">
+<li><p><em>函数 类型</em> 分类 <a class="reference internal" href="modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a>,</p></li>
+<li><p><em>合计 类型</em> 动态分配的分类 <em>管理</em> 数据,例如: <em>结构</em>, <em>数组</em>,或 <em>未装箱的滑板</em>,</p></li>
+<li><p><em>外部 类型</em> 分类 <em>外部</em> 可能属于 <a class="reference internal" href="../intro/overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a>.</p></li>
+</ul>
+<p>那个 值 后两个等级可以互换 <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{extern{.}convert\_any}}\)</span> 和 <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{any{.}convert\_extern}}\)</span> 指令。 。 。
+也就是说,两种类型的等级都由一组异形的 值,但在实践中可能有不同,不相容的表述.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-absheaptype}{\mathit{absheaptype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{any}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{eq}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{struct}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{array}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{none}} \\
+&amp; &amp; | &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{func}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{nofunc}} \\
+&amp; &amp; | &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{noexn}} \\
+&amp; &amp; | &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}} ~~|~~ \href{../syntax/types.html#syntax-heaptype}{\mathsf{noextern}} \\
+&amp; &amp; | &amp; \dots \\
+&amp; {\href{../syntax/types.html#syntax-heaptype}{\mathit{heaptype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-absheaptype}{\mathit{absheaptype}}} ~~|~~ {\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+\end{array}\end{split}\]</div>
+<p>A 堆类型 无论是 <em>抽象</em> 或 <em>混凝土</em>。 。 。
+一个混凝土 堆类型 包含一个 <a class="reference internal" href="types.html#zh-syntax-typeuse"><span class="std std-ref">类型使用</span></a> 将相应的对象分类 <a class="reference internal" href="modules.html#zh-syntax-type"><span class="std std-ref">类型</span></a> a 定义 模块。 。 。
+摘要 类型 以个别关键词表示。</p>
+<p>类型 <span class="math notranslate nohighlight">\(\mathsf{func}\)</span> 表示全部的常见超类型 <a class="reference internal" href="types.html#zh-syntax-functype"><span class="std std-ref">函数 类型</span></a>无论它们的具体定义如何。
+双重类型 <span class="math notranslate nohighlight">\(\mathsf{nofunc}\)</span> 表示常见 子类型 总计 <a class="reference internal" href="types.html#zh-syntax-functype"><span class="std std-ref">函数 类型</span></a>无论它们的具体定义如何。
+此类型没有 值.</p>
+<p>类型 <span class="math notranslate nohighlight">\(\mathsf{exn}\)</span> 表示全部的常见超类型 <a class="reference internal" href="../exec/runtime.html#zh-syntax-ref-exn"><span class="std std-ref">例外参考</span></a>。 。 。
+这种类型没有混凝土子类型.
+双重类型 <span class="math notranslate nohighlight">\(\mathsf{noexn}\)</span> 表示常见 子类型 以及所有形式的例外参考资料。
+此类型没有 值.</p>
+<p>类型 <span class="math notranslate nohighlight">\(\mathsf{extern}\)</span> 表示通过 <a class="reference internal" href="../intro/overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a>。 。 。
+这种类型没有混凝土子类型.
+双重类型 <span class="math notranslate nohighlight">\(\mathsf{noextern}\)</span> 表示常见 子类型 以及所有形式的外部参考资料。
+此类型没有 值.</p>
+<p>类型 <span class="math notranslate nohighlight">\(\mathsf{any}\)</span> 表示所有集合的常见超类型 类型,以及可能抽象 值 (单位:千美元) <em>内部化</em> 类型外部参考 <span class="math notranslate nohighlight">\(\mathsf{extern}\)</span>。 。 。
+双重类型 <span class="math notranslate nohighlight">\(\mathsf{none}\)</span> 表示常见 子类型 各种形式的合计 类型。 。 。
+此类型没有 值.</p>
+<p>类型 <span class="math notranslate nohighlight">\(\mathsf{eq}\)</span> 是一个 子类型 页:1 <span class="math notranslate nohighlight">\(\mathsf{any}\)</span> 包括所有 类型 可比较参考文献,即汇总 值 和 <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 31}}\)</span>.</p>
+<p>那个 类型 <span class="math notranslate nohighlight">\(\mathsf{struct}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{array}\)</span> 表示常见的超类型 <a class="reference internal" href="types.html#zh-syntax-structtype"><span class="std std-ref">结构</span></a> 和 <a class="reference internal" href="types.html#zh-syntax-arraytype"><span class="std std-ref">数组</span></a> 合计数,分别列出。</p>
+<p>类型 <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 31}}\)</span> 表示 <em>未装箱的滑板</em>也就是说, 整数 输入参考文献。
+它们的可观测值范围限于31位.</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>值 类型 <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 31}}\)</span> 未实际分配到 存储, (中文).
+但表示方式允许它们与实际参考物混为一谈。 存储 毫不含糊
+发动机需要执行某种形式的 <em>指针标记</em> 为此,
+这就是为什么保留了一点。
+由于该类型将在支持的所有硬件平台上可靠地解框 WebAssembly, (中文).
+它的宽度不能超过32位减去标记位。</p>
+<p>虽然 类型 <span class="math notranslate nohighlight">\(\mathsf{none}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{nofunc}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{noexn}\)</span>,以及 <span class="math notranslate nohighlight">\(\mathsf{noextern}\)</span> 没有任何人居住 值, (中文).
+它们可以用来形成 类型 完全无效 <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">参考文献</span></a> 各自等级。
+举例来说, <span class="math notranslate nohighlight">\((\mathsf{ref}~\mathsf{null}~\mathsf{nofunc})\)</span> 是符合所有函数引用的无效引用的通用类型 类型.</p>
+</div>
+<p>那个 语法 抽象堆积 类型 这是 <a class="reference internal" href="../valid/conventions.html#zh-syntax-heaptype-ext"><span class="std std-ref">延长</span></a> 附加表格,以具体说明 <a class="reference internal" href="../valid/index.html#zh-valid"><span class="std std-ref">验证</span></a> 和 <a class="reference internal" href="../exec/index.html#zh-exec"><span class="std std-ref">执行</span></a>.</p>
+</section>
+<section id="zh-reference-types">
+<span id="zh-syntax-null"></span><span id="zh-syntax-reftype"></span><span id="zh-index-5"></span><h2>参考 类型<a class="headerlink" href="types.html#zh-reference-types" title="Link to this heading">¶</a></h2>
+<p><em>参考 类型</em> 分类 <a class="reference internal" href="values.html#zh-syntax-value"><span class="std std-ref">值</span></a> 是运行时对象的一级引用 <a class="reference internal" href="../exec/runtime.html#zh-store"><span class="std std-ref">存储</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}^?}~{\href{../syntax/types.html#syntax-heaptype}{\mathit{heaptype}}} \\
+\end{array}\end{split}\]</div>
+<p>A 引用类型 特征为 <a class="reference internal" href="types.html#zh-syntax-heaptype"><span class="std std-ref">堆类型</span></a> 它指的就是这个</p>
+<p>此外,a 引用类型 表格编号 <span class="math notranslate nohighlight">\(\mathsf{ref}~\mathsf{null}~{\mathit{ht}}\)</span> 这是 <em>无效</em>,意思是它可以是适当参考 <span class="math notranslate nohighlight">\({\mathit{ht}}\)</span> 或 <a class="reference internal" href="types.html#zh-syntax-null"><span class="std std-ref">无效</span></a>。 。 。
+其他参考资料有: <em>非无</em>.</p>
+<p>参考 类型 已经 <em>不透明</em>,表示其大小或位式都无法观察到.
+值 页:1 引用类型 可存储在 <a class="reference internal" href="modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a> 但不会在 <a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a>.</p>
+<section id="zh-id2">
+<h3>约定<a class="headerlink" href="types.html#zh-id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{anyref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{eqref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{eq}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{i{\scriptstyle31}ref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{structref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{struct}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{arrayref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{array}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{funcref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{func}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{exnref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{externref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{none}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullfuncref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{nofunc}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullexnref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{noexn}})\)</span>.</p></li>
+<li><p>那个 引用类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullexternref}}\)</span> 是一个缩写,用于 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{noextern}})\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-value-types">
+<span id="zh-syntax-consttype"></span><span id="zh-syntax-valtype"></span><span id="zh-index-6"></span><h2>数值 类型<a class="headerlink" href="types.html#zh-value-types" title="Link to this heading">¶</a></h2>
+<p><em>数值 类型</em> 个人分类 值 那个 WebAssembly 代码可以计算和 值 一个变量接受。
+他们也是 <a class="reference internal" href="types.html#zh-syntax-numtype"><span class="std std-ref">编号 类型</span></a>, <a class="reference internal" href="types.html#zh-syntax-vectype"><span class="std std-ref">矢量 类型</span></a>,或 <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">参考文献 类型</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-consttype}{\mathit{consttype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} ~~|~~ {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} \\
+&amp; {\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} ~~|~~ {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} ~~|~~ {\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} ~~|~~ \dots \\
+\end{array}\end{split}\]</div>
+<p>那个 语法 价值 类型 这是 <a class="reference internal" href="../valid/conventions.html#zh-syntax-valtype-ext"><span class="std std-ref">延长</span></a> 附加表格,以具体说明 <a class="reference internal" href="../valid/index.html#zh-valid"><span class="std std-ref">验证</span></a>.</p>
+<section id="zh-id3">
+<h3>约定<a class="headerlink" href="types.html#zh-id3" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>元变量 <span class="math notranslate nohighlight">\(t\)</span> 区域大于数值 类型 或从上下文看清楚的子类。</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-result-types">
+<span id="zh-syntax-resulttype"></span><span id="zh-index-7"></span><h2>结果 类型<a class="headerlink" href="types.html#zh-result-types" title="Link to this heading">¶</a></h2>
+<p><em>结果 类型</em> 分类结果 <a class="reference internal" href="../exec/instructions.html#zh-exec-instr"><span class="std std-ref">执行</span></a> <a class="reference internal" href="instructions.html#zh-syntax-instr"><span class="std std-ref">指令</span></a> 或 <a class="reference internal" href="modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a>, (中文).
+它是一个序列 值,用括号写成。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-resulttype}{\mathit{resulttype}}} &amp; ::= &amp; {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}) \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-block-types">
+<span id="zh-syntax-blocktype"></span><span id="zh-index-8"></span><h2>块 类型<a class="headerlink" href="types.html#zh-block-types" title="Link to this heading">¶</a></h2>
+<p><em>块 类型</em> 分类 <em>投入</em> 和 <em>产出</em> 结构化 <a class="reference internal" href="instructions.html#zh-syntax-instr-control"><span class="std std-ref">控制指令</span></a> 定义 <a class="reference internal" href="instructions.html#zh-syntax-block"><span class="std std-ref">块</span></a> 页:1 指令.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-blocktype}{\mathit{blocktype}}} &amp; ::= &amp; {{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}^?} \\
+&amp; &amp; | &amp; {\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+\end{array}\end{split}\]</div>
+<p>他们要么是作为 <a class="reference internal" href="modules.html#zh-syntax-funcidx"><span class="std std-ref">类型索引</span></a> 指一个合适的 <a class="reference internal" href="types.html#zh-syntax-functype"><span class="std std-ref">函数类型</span></a> 重新解释为 <a class="reference internal" href="../valid/conventions.html#zh-syntax-instrtype"><span class="std std-ref">指令 类型</span></a>, (中文).
+或作为任择 <a class="reference internal" href="types.html#zh-syntax-valtype"><span class="std std-ref">值类型</span></a> 内线
+这是用来形容 指令 类型 <span class="math notranslate nohighlight">\(\epsilon \rightarrow {{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}^?}\)</span>.</p>
+</section>
+<section id="zh-composite-types">
+<span id="zh-syntax-packtype"></span><span id="zh-syntax-storagetype"></span><span id="zh-syntax-fieldtype"></span><span id="zh-syntax-arraytype"></span><span id="zh-syntax-structtype"></span><span id="zh-syntax-aggrtype"></span><span id="zh-syntax-functype"></span><span id="zh-syntax-comptype"></span><span id="zh-index-9"></span><h2>复合 类型<a class="headerlink" href="types.html#zh-composite-types" title="Link to this heading">¶</a></h2>
+<p><em>复合 类型</em> 这些都是 类型 由较简单的 类型, (中文).
+包括 <em>函数 类型</em>, <em>结构 类型</em> 和 <em>数组 类型</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-comptype}{\mathit{comptype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-comptype}{\mathsf{struct}}~{\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/types.html#syntax-fieldtype}{\mathit{fieldtype}}}) \\
+&amp; &amp; | &amp; \href{../syntax/types.html#syntax-comptype}{\mathsf{array}}~{\href{../syntax/types.html#syntax-fieldtype}{\mathit{fieldtype}}} \\
+&amp; &amp; | &amp; \href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{\href{../syntax/types.html#syntax-resulttype}{\mathit{resulttype}}} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {\href{../syntax/types.html#syntax-resulttype}{\mathit{resulttype}}} \\[0.8ex]
+&amp; {\href{../syntax/types.html#syntax-fieldtype}{\mathit{fieldtype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-mut}{\mathsf{mut}}^?}~{\href{../syntax/types.html#syntax-storagetype}{\mathit{storagetype}}} \\
+&amp; {\href{../syntax/types.html#syntax-storagetype}{\mathit{storagetype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}} ~~|~~ {\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}} \\
+&amp; {\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle8}} ~~|~~ \href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle16}} \\
+\end{array}\end{split}\]</div>
+<p>函数 类型 对签名进行分类 <a class="reference internal" href="modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a>, (中文).
+将参数列表映射为结果列表.
+它们也用于对投入和产出进行分类。 <a class="reference internal" href="instructions.html#zh-syntax-instr"><span class="std std-ref">指令</span></a>.</p>
+<p><em>合计 类型</em> 如结构或阵列 类型 由可能变异、可能包装的清单组成 <em>字段 类型</em> 描述其组件。
+结构各异,但需要静态索引,而数组需要均匀,但允许动态索引.</p>
+<section id="zh-aux-unpack">
+<span id="zh-bitwidth-fieldtype"></span><span id="zh-id4"></span><h3>约定<a class="headerlink" href="types.html#zh-aux-unpack" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>标记 <span class="math notranslate nohighlight">\({|t|}\)</span> 联 合 国 <a class="reference internal" href="types.html#zh-bitwidth-valtype"><span class="std std-ref">位宽</span></a> 页:1 <a class="reference internal" href="types.html#zh-syntax-valtype"><span class="std std-ref">值类型</span></a> <span class="math notranslate nohighlight">\(t\)</span> 延伸至已打包 类型 也就是说, <span class="math notranslate nohighlight">\({|\mathsf{i{\scriptstyle 8}}|} = 8\)</span> 和 <span class="math notranslate nohighlight">\({|\mathsf{i{\scriptstyle 16}}|} = 16\)</span>.</p></li>
+<li><p>辅助功能 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#aux-unpack}{\mathrm{unpack}}\)</span> 将存储类型映射到 <a class="reference internal" href="types.html#zh-syntax-valtype"><span class="std std-ref">值类型</span></a> 访问字段时获取 :</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{\href{../syntax/types.html#aux-unpack}{\mathrm{unpack}}}({\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}) &amp; = &amp; {\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}} \\
+{\href{../syntax/types.html#aux-unpack}{\mathrm{unpack}}}({\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}) &amp; = &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="zh-recursive-types">
+<span id="zh-syntax-final"></span><span id="zh-syntax-subtype"></span><span id="zh-syntax-rectype"></span><span id="zh-index-10"></span><h2>递归 类型<a class="headerlink" href="types.html#zh-recursive-types" title="Link to this heading">¶</a></h2>
+<p><em>递归 类型</em> 表示一组相互递归 <a class="reference internal" href="types.html#zh-syntax-comptype"><span class="std std-ref">复合 类型</span></a>,每个可以选择声明列表 <a class="reference internal" href="types.html#zh-syntax-typeuse"><span class="std std-ref">类型用途</span></a> 超类型 <a class="reference internal" href="../valid/matching.html#zh-match-comptype"><span class="std std-ref">匹配</span></a>。 。 。
+每种类型也可以宣布 <em>最终</em>防止进一步 子类型关系.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-rectype}{\mathit{rectype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~{\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/types.html#syntax-subtype}{\mathit{subtype}}}) \\
+&amp; {\href{../syntax/types.html#syntax-subtype}{\mathit{subtype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~{\href{../syntax/types.html#syntax-subtype}{\mathsf{final}}^?}~{{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}}^\ast}~{\href{../syntax/types.html#syntax-comptype}{\mathit{comptype}}} \\
+\end{array}\end{split}\]</div>
+<p>在一个 <a class="reference internal" href="modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>,每个递归型成员被分配到单独的 <a class="reference internal" href="modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a>.</p>
+</section>
+<section id="zh-address-types">
+<span id="zh-syntax-addrtype"></span><h2>地址 类型<a class="headerlink" href="types.html#zh-address-types" title="Link to this heading">¶</a></h2>
+<p><em>地址 类型</em> 属于 <a class="reference internal" href="types.html#zh-syntax-numtype"><span class="std std-ref">编号 类型</span></a> 分类 值 可用作冲抵
+<a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a> 和 <a class="reference internal" href="modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-addrtype}{\mathit{addrtype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} ~~|~~ \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} \\
+\end{array}\end{split}\]</div>
+<section id="zh-aux-addrtype-min">
+<span id="zh-id5"></span><h3>约定<a class="headerlink" href="types.html#zh-aux-addrtype-min" title="Link to this heading">¶</a></h3>
+<p>那个 <em>最低</em> 2个 地址 类型 定义为: 地址 类型 <a class="reference internal" href="types.html#zh-bitwidth-numtype"><span class="std std-ref">位宽</span></a> 是两者的最小值。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{\href{../syntax/types.html#aux-addrtype-min}{\mathrm{min}}}({\mathit{at}}_1, {\mathit{at}}_2) &amp; = &amp; {\mathit{at}}_1 &amp; \quad \mbox{if}~ {|{\mathit{at}}_1|} \leq {|{\mathit{at}}_2|} \\
+{\href{../syntax/types.html#aux-addrtype-min}{\mathrm{min}}}({\mathit{at}}_1, {\mathit{at}}_2) &amp; = &amp; {\mathit{at}}_2 &amp; \quad \mbox{otherwise} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="zh-limits">
+<span id="zh-syntax-limits"></span><span id="zh-index-11"></span><h2>限制<a class="headerlink" href="types.html#zh-limits" title="Link to this heading">¶</a></h2>
+<p><em>限制</em> 分类可调整的存储大小范围 <a class="reference internal" href="types.html#zh-syntax-memtype"><span class="std std-ref">内存 类型</span></a> 和 <a class="reference internal" href="types.html#zh-syntax-tabletype"><span class="std std-ref">图表 类型</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-limits}{\mathit{limits}}} &amp; ::= &amp; {}[ {\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em64}}} \href{../syntax/types.html#syntax-limits}{\,{..}\,} {{\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em64}}}^?} ] \\
+\end{array}\end{split}\]</div>
+<p>如果没有最大值,
+然后相应的存储可以增长到任何有效的大小。</p>
+</section>
+<section id="zh-tag-types">
+<span id="zh-syntax-tagtype"></span><span id="zh-index-12"></span><h2>标记 类型<a class="headerlink" href="types.html#zh-tag-types" title="Link to this heading">¶</a></h2>
+<p><em>标记 类型</em> 对签名进行分类 <a class="reference internal" href="modules.html#zh-syntax-tag"><span class="std std-ref">标记</span></a>
+带有 <a class="reference internal" href="types.html#zh-syntax-typeuse"><span class="std std-ref">类型使用</span></a> 定义的定义 <a class="reference internal" href="types.html#zh-syntax-functype"><span class="std std-ref">函数类型</span></a> 声明 类型 参数和结果 值 与标记相关。
+那个 结果类型 用于例外标记的空。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-tagtype}{\mathit{tagtype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-global-types">
+<span id="zh-syntax-globaltype"></span><span id="zh-syntax-mut"></span><span id="zh-index-13"></span><h2>全球 类型<a class="headerlink" href="types.html#zh-global-types" title="Link to this heading">¶</a></h2>
+<p><em>全球 类型</em> 分类 <a class="reference internal" href="modules.html#zh-syntax-global"><span class="std std-ref">全球</span></a> 变量,它具有一个值并且可以是可变的或不可变的。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-globaltype}{\mathit{globaltype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-mut}{\mathsf{mut}}^?}~{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-memory-types">
+<span id="zh-syntax-memtype"></span><span id="zh-index-14"></span><h2>内存 类型<a class="headerlink" href="types.html#zh-memory-types" title="Link to this heading">¶</a></h2>
+<p><em>内存 类型</em> 分类线性 <a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a> 及其大小范围。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-memtype}{\mathit{memtype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-addrtype}{\mathit{addrtype}}}~{\href{../syntax/types.html#syntax-limits}{\mathit{limits}}}~\href{../syntax/types.html#syntax-memtype}{\mathsf{page}} \\
+\end{array}\end{split}\]</div>
+<p>限制限制一个内存的最小和可选的最大大小.
+限额按下列单位列出: <a class="reference internal" href="../exec/runtime.html#zh-page-size"><span class="std std-ref">页面大小</span></a>.</p>
+</section>
+<section id="zh-table-types">
+<span id="zh-syntax-tabletype"></span><span id="zh-index-15"></span><h2>图表 类型<a class="headerlink" href="types.html#zh-table-types" title="Link to this heading">¶</a></h2>
+<p><em>图表 类型</em> 分类 <a class="reference internal" href="modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a> 超过 <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> 在一个大小范围内。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-addrtype}{\mathit{addrtype}}}~{\href{../syntax/types.html#syntax-limits}{\mathit{limits}}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+\end{array}\end{split}\]</div>
+<p>与记忆一样,表格受到最小和可选最大尺寸的限制。
+限制以条目数表示。</p>
+</section>
+<section id="zh-data-types">
+<span id="zh-syntax-datatype"></span><span id="zh-index-16"></span><h2>数据 类型<a class="headerlink" href="types.html#zh-data-types" title="Link to this heading">¶</a></h2>
+<p><em>数据 类型</em> 分类 <a class="reference internal" href="modules.html#zh-syntax-elem"><span class="std std-ref">数据段</span></a>。 。 。
+由于a的内容 数据段 不需要进一步分类,它们只是由一个通用标记组成 <span class="math notranslate nohighlight">\(\mathsf{ok}\)</span> 说明身材良好。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-datatype}{\mathit{datatype}}} &amp; ::= &amp; \href{../valid/modules.html#valid-data}{\mathsf{ok}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-element-types">
+<span id="zh-syntax-elemtype"></span><span id="zh-index-17"></span><h2>元素 类型<a class="headerlink" href="types.html#zh-element-types" title="Link to this heading">¶</a></h2>
+<p><em>元素 类型</em> 分类 <a class="reference internal" href="modules.html#zh-syntax-elem"><span class="std std-ref">元素段</span></a> 由 <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> 内容。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-elemtype}{\mathit{elemtype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-external-types">
+<span id="zh-syntax-externtype"></span><span id="zh-index-18"></span><h2>外部 类型<a class="headerlink" href="types.html#zh-external-types" title="Link to this heading">¶</a></h2>
+<p><em>外部 类型</em> 分类 <a class="reference internal" href="modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a> 和 <a class="reference internal" href="../exec/runtime.html#zh-syntax-externaddr"><span class="std std-ref">外部地址</span></a> 与各自 类型.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}} &amp; ::= &amp; \href{../syntax/types.html#syntax-externtype}{\mathsf{tag}}~{\href{../syntax/types.html#syntax-tagtype}{\mathit{tagtype}}} ~~|~~ \href{../syntax/types.html#syntax-externtype}{\mathsf{global}}~{\href{../syntax/types.html#syntax-globaltype}{\mathit{globaltype}}} ~~|~~ \href{../syntax/types.html#syntax-externtype}{\mathsf{mem}}~{\href{../syntax/types.html#syntax-memtype}{\mathit{memtype}}} ~~|~~ \href{../syntax/types.html#syntax-externtype}{\mathsf{table}}~{\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}} ~~|~~ \href{../syntax/types.html#syntax-externtype}{\mathsf{func}}~{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+\end{array}\end{split}\]</div>
+<p>关于职能, <a class="reference internal" href="types.html#zh-syntax-typeuse"><span class="std std-ref">类型使用</span></a> 须提及定义。 <a class="reference internal" href="types.html#zh-syntax-functype"><span class="std std-ref">函数类型</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>未来版本 WebAssembly 标记可能具有额外的用途,并允许非空结果 类型 函数 类型 标记。</p>
+</div>
+<section id="zh-id6">
+<h3>约定<a class="headerlink" href="types.html#zh-id6" title="Link to this heading">¶</a></h3>
+<p>以下辅助标记是外部序列的定义 类型。 。 。
+它以保留顺序的方式过滤出特定类型的条目:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{funcs}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{funcs}}}((\href{../syntax/types.html#syntax-externtype}{\mathsf{func}}~{\mathit{dt}})~{{\mathit{xt}}^\ast}) &amp; = &amp; {\mathit{dt}}~{\href{../syntax/types.html#syntax-externtype}{\mathrm{funcs}}}({{\mathit{xt}}^\ast}) \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{funcs}}}({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}}~{{\mathit{xt}}^\ast}) &amp; = &amp; {\href{../syntax/types.html#syntax-externtype}{\mathrm{funcs}}}({{\mathit{xt}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tables}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tables}}}((\href{../syntax/types.html#syntax-externtype}{\mathsf{table}}~{\mathit{tt}})~{{\mathit{xt}}^\ast}) &amp; = &amp; {\mathit{tt}}~{\href{../syntax/types.html#syntax-externtype}{\mathrm{tables}}}({{\mathit{xt}}^\ast}) \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tables}}}({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}}~{{\mathit{xt}}^\ast}) &amp; = &amp; {\href{../syntax/types.html#syntax-externtype}{\mathrm{tables}}}({{\mathit{xt}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{mems}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{mems}}}((\href{../syntax/types.html#syntax-externtype}{\mathsf{mem}}~{\mathit{mt}})~{{\mathit{xt}}^\ast}) &amp; = &amp; {\mathit{mt}}~{\href{../syntax/types.html#syntax-externtype}{\mathrm{mems}}}({{\mathit{xt}}^\ast}) \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{mems}}}({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}}~{{\mathit{xt}}^\ast}) &amp; = &amp; {\href{../syntax/types.html#syntax-externtype}{\mathrm{mems}}}({{\mathit{xt}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{globals}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{globals}}}((\href{../syntax/types.html#syntax-externtype}{\mathsf{global}}~{\mathit{gt}})~{{\mathit{xt}}^\ast}) &amp; = &amp; {\mathit{gt}}~{\href{../syntax/types.html#syntax-externtype}{\mathrm{globals}}}({{\mathit{xt}}^\ast}) \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{globals}}}({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}}~{{\mathit{xt}}^\ast}) &amp; = &amp; {\href{../syntax/types.html#syntax-externtype}{\mathrm{globals}}}({{\mathit{xt}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tags}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tags}}}((\href{../syntax/types.html#syntax-externtype}{\mathsf{tag}}~{\mathit{jt}})~{{\mathit{xt}}^\ast}) &amp; = &amp; {\mathit{jt}}~{\href{../syntax/types.html#syntax-externtype}{\mathrm{tags}}}({{\mathit{xt}}^\ast}) \\
+{\href{../syntax/types.html#syntax-externtype}{\mathrm{tags}}}({\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}}~{{\mathit{xt}}^\ast}) &amp; = &amp; {\href{../syntax/types.html#syntax-externtype}{\mathrm{tags}}}({{\mathit{xt}}^\ast}) &amp; \quad \mbox{otherwise} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/syntax/types.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

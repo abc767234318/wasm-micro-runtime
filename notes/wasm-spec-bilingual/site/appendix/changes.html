@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Change History  / 更改历史  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="index-types.html" rel="next" title="Index of Types"/>
+<link href="custom.html" rel="prev" title="Custom Sections and Annotations"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="embedding.html"><span class="wasm-bi-nav-en">Embedding</span><span class="wasm-bi-nav-zh">嵌入</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles.html"><span class="wasm-bi-nav-en">Profiles</span><span class="wasm-bi-nav-zh">简介</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html"><span class="wasm-bi-nav-en">Implementation Limitations</span><span class="wasm-bi-nav-zh">执行限制</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html"><span class="wasm-bi-nav-en">Type Soundness</span><span class="wasm-bi-nav-zh">类型声音</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#type-system-properties"><span class="wasm-bi-nav-en">Type System Properties</span><span class="wasm-bi-nav-zh">类型系统属性</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html"><span class="wasm-bi-nav-en">Validation Algorithm</span><span class="wasm-bi-nav-zh">验证 算法</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom.html"><span class="wasm-bi-nav-en">Custom Sections and Annotations</span><span class="wasm-bi-nav-zh">自定义段 说明</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="changes.html#"><span class="wasm-bi-nav-en">Change History</span><span class="wasm-bi-nav-zh">更改历史</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/appendix/changes.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="change-history">
+<span id="changes"></span><span id="index-0"></span><h1>Change History<a class="headerlink" href="changes.html#change-history" title="Link to this heading">¶</a></h1>
+<p>Since the original release 1.0 of the WebAssembly specification, a number of proposals for extensions have been integrated.
+The following sections provide an overview of what has changed.</p>
+<p>All present and future versions of WebAssembly are intended to be <em>backwards-compatible</em> with all previous versions.
+Concretely:</p>
+<ol class="arabic simple">
+<li><p>All syntactically well-formed (in <a class="reference internal" href="../binary/index.html#binary"><span class="std std-ref">binary</span></a> or <a class="reference internal" href="../text/index.html#text"><span class="std std-ref">text</span></a> format) and <a class="reference internal" href="../valid/index.html#valid"><span class="std std-ref">valid</span></a> modules remain well-formed and valid with an equivalent <a class="reference internal" href="../valid/modules.html#syntax-moduletype"><span class="std std-ref">module type</span></a> (or a subtype).</p></li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This allows previously malformed or invalid modules to become legal,
+e.g., by adding new features or by relaxing typing rules.</p>
+<p>It also allows reclassifying previously malformed modules as well-formed but invalid,
+or vice versa.</p>
+<p>And it allows refining the typing of <a class="reference internal" href="../syntax/modules.html#syntax-import"><span class="std std-ref">imports</span></a> and <a class="reference internal" href="../syntax/modules.html#syntax-export"><span class="std std-ref">exports</span></a>,
+such that previously unlinkable modules become linkable.</p>
+<p>Historically, minor breaking changes to the <em>text format</em> have been allowed
+that turned previously possible valid modules invalid,
+as long as they were unlikely to occur in practice.</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>All non-<a class="reference internal" href="../intro/overview.html#trap"><span class="std std-ref">trapping</span></a> <a class="reference internal" href="../exec/index.html#exec"><span class="std std-ref">executions</span></a> of a valid program retain their behaviour with an equivalent set of possible <a class="reference internal" href="../exec/runtime.html#syntax-result"><span class="std std-ref">results</span></a> (or a non-empty subset).</p></li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This allows previously malformed or invalid programs to become executable.</p>
+<p>It also allows program executions that previously trapped to execute successfully,
+although the intention is to only exercise this where the possibility of such an extension has been previously noted.</p>
+<p>And it allows reducing the set of observable behaviours of a program execution,
+e.g., by reducing non-determinism.</p>
+<p>In a program linking prior modules with modules using new features,
+a prior module may encounter new behaviours,
+e.g., new forms of control flow or side effects when calling into a latter module.</p>
+</div>
+</div></blockquote>
+<p>In addition, future versions of WebAssembly will not allocate the <a class="reference internal" href="../binary/instructions.html#binary-instr"><span class="std std-ref">opcode</span></a> <span class="math notranslate nohighlight">\(\def\mathdef63#1{\mathtt{0x#1}}\mathdef63{FF}\)</span> to represent an instruction or instruction prefix.</p>
+<section id="release-2-0">
+<h2>Release 2.0<a class="headerlink" href="changes.html#release-2-0" title="Link to this heading">¶</a></h2>
+<section id="sign-extension-instructions">
+<span id="index-1"></span><h3>Sign Extension Instructions<a class="headerlink" href="changes.html#sign-extension-instructions" title="Link to this heading">¶</a></h3>
+<p>Added new numeric instructions for performing sign extension within integer representations. <a class="footnote-reference brackets" href="changes.html#proposal-signext" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-numeric"><span class="std std-ref">numeric instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\mathit{nn}\mathsf{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{extend}}\mathit{N}\mathsf{\_s}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="non-trapping-float-to-int-conversions">
+<span id="index-2"></span><h3>Non-trapping Float-to-Int Conversions<a class="headerlink" href="changes.html#non-trapping-float-to-int-conversions" title="Link to this heading">¶</a></h3>
+<p>Added new conversion instructions that avoid trapping when converting a floating-point number to an integer. <a class="footnote-reference brackets" href="changes.html#proposal-cvtsat" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-numeric"><span class="std std-ref">numeric instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\mathit{nn}\mathsf{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{trunc}}\mathsf{\_sat\_f}\mathit{mm}\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="multiple-values">
+<span id="index-3"></span><h3>Multiple Values<a class="headerlink" href="changes.html#multiple-values" title="Link to this heading">¶</a></h3>
+<p>Generalized the result type of blocks and functions to allow for multiple values; in addition, introduced the ability to have block parameters. <a class="footnote-reference brackets" href="changes.html#proposal-multivalue" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/types.html#syntax-functype"><span class="std std-ref">Function types</span></a> allow more than one result</p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#syntax-blocktype"><span class="std std-ref">Block types</span></a> can be arbitrary function types</p></li>
+</ul>
+</section>
+<section id="reference-types">
+<span id="index-4"></span><h3>Reference Types<a class="headerlink" href="changes.html#reference-types" title="Link to this heading">¶</a></h3>
+<p>Added <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{funcref}}\)</span> and <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{externref}}\)</span> as new value types and respective instructions. <a class="footnote-reference brackets" href="changes.html#proposal-reftype" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>New <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference</span></a> <a class="reference internal" href="../syntax/types.html#syntax-valtype"><span class="std std-ref">value types</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{funcref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{externref}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-ref"><span class="std std-ref">reference instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}null}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}is\_null}}\)</span></p></li>
+</ul>
+</li>
+<li><p>Extended <a class="reference internal" href="../syntax/instructions.html#syntax-instr-parametric"><span class="std std-ref">parametric instruction</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-parametric}{\mathsf{select}}\)</span> with optional type immediate</p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/modules.html#syntax-elemmode"><span class="std std-ref">declarative</span></a> form of <a class="reference internal" href="../syntax/modules.html#syntax-elem"><span class="std std-ref">element segment</span></a></p></li>
+</ul>
+</section>
+<section id="table-instructions">
+<span id="index-5"></span><h3>Table Instructions<a class="headerlink" href="changes.html#table-instructions" title="Link to this heading">¶</a></h3>
+<p>Added instructions to directly access and modify tables. <a class="footnote-reference brackets" href="changes.html#proposal-reftype" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/types.html#syntax-tabletype"><span class="std std-ref">Table types</span></a> allow any <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> as element type</p></li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-table"><span class="std std-ref">table instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}get}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}set}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}size}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}grow}}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="multiple-tables">
+<span id="index-6"></span><h3>Multiple Tables<a class="headerlink" href="changes.html#multiple-tables" title="Link to this heading">¶</a></h3>
+<p>Added the ability to use multiple tables per module. <a class="footnote-reference brackets" href="changes.html#proposal-reftype" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">Modules</span></a> may</p>
+<ul>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-table"><span class="std std-ref">define</span></a> multiple tables</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-import"><span class="std std-ref">import</span></a> multiple tables</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-export"><span class="std std-ref">export</span></a> multiple tables</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../syntax/instructions.html#syntax-instr-table"><span class="std std-ref">Table instructions</span></a> take a <a class="reference internal" href="../syntax/modules.html#syntax-tableidx"><span class="std std-ref">table index</span></a> immediate:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}get}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}set}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}size}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}grow}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{call\_indirect}}\)</span></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-elem"><span class="std std-ref">Element segments</span></a> take a <a class="reference internal" href="../syntax/modules.html#syntax-tableidx"><span class="std std-ref">table index</span></a></p></li>
+</ul>
+</section>
+<section id="bulk-memory-and-table-instructions">
+<span id="index-7"></span><h3>Bulk Memory and Table Instructions<a class="headerlink" href="changes.html#bulk-memory-and-table-instructions" title="Link to this heading">¶</a></h3>
+<p>Added instructions that modify ranges of memory or table entries. <a class="footnote-reference brackets" href="changes.html#proposal-reftype" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="changes.html#proposal-bulk" id="id8" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-memory"><span class="std std-ref">memory instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}init}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{data{.}drop}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-table"><span class="std std-ref">table instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}init}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{elem{.}drop}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/modules.html#syntax-datamode"><span class="std std-ref">passive</span></a> form of <a class="reference internal" href="../syntax/modules.html#syntax-data"><span class="std std-ref">data segment</span></a></p></li>
+<li><p>New <a class="reference internal" href="../syntax/modules.html#syntax-elemmode"><span class="std std-ref">passive</span></a> form of <a class="reference internal" href="../syntax/modules.html#syntax-elem"><span class="std std-ref">element segment</span></a></p></li>
+<li><p>New <a class="reference internal" href="../binary/modules.html#binary-datacntsec"><span class="std std-ref">data count section</span></a> in binary format</p></li>
+<li><p>Active data and element segments boundaries are no longer checked at compile time but may trap instead</p></li>
+</ul>
+</section>
+<section id="vector-instructions">
+<span id="index-8"></span><h3>Vector Instructions<a class="headerlink" href="changes.html#vector-instructions" title="Link to this heading">¶</a></h3>
+<p>Added vector type and instructions that manipulate multiple numeric values in parallel
+(also known as <em>SIMD</em>, single instruction multiple data) <a class="footnote-reference brackets" href="changes.html#proposal-vectype" id="id9" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>New <a class="reference internal" href="../syntax/types.html#syntax-valtype"><span class="std std-ref">value type</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-vectype}{\mathsf{v\scriptstyle128}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-memory"><span class="std std-ref">memory instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}{}\!N\!\mathsf{x}\!M\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}{}N\mathsf{\_zero}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}{}N\mathsf{\_splat}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}{}N\mathsf{\_lane}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{store}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{store}}{}N\mathsf{\_lane}\)</span></p></li>
+</ul>
+</li>
+<li><p>New constant <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instruction</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{const}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New unary <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.not}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.abs}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.neg}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.popcnt}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.abs}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.neg}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.sqrt}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.ceil}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.floor}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.trunc}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.nearest}\)</span></p></li>
+</ul>
+</li>
+<li><p>New binary <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.and}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.andnot}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.or}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.xor}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.add}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.sub}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.mul}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.add\_sat\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.sub\_sat\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.min\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.max\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.shl}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.shr\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.add}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.sub}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.mul}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.div}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.extadd\_pairwise\_i8x16\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.extadd\_pairwise\_i16x8\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.extmul\_}\href{../syntax/instructions.html#syntax-half}{\mathit{half}}\mathsf{\_i}\!N'\!\mathsf{x}\!M'\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.q15mulr\_sat\_s}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.dot\_i16x8\_s}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.avgr\_u}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.avgr\_u}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.min}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.max}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.pmin}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.pmax}\)</span></p></li>
+</ul>
+</li>
+<li><p>New ternary <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instruction</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.bitselect}\)</span></p></li>
+</ul>
+</li>
+<li><p>New test <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.any\_true}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.all\_true}\)</span></p></li>
+</ul>
+</li>
+<li><p>New relational <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.eq}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.ne}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.lt\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.gt\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.le\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.ge\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.eq}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.ne}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.lt}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.gt}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.le}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.ge}\)</span></p></li>
+</ul>
+</li>
+<li><p>New conversion <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.trunc\_sat\_f32x4\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.trunc\_sat\_f64x2\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\mathsf{\_zero}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f32x4.convert\_i32x4\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f32x4.demote\_f64x2\_zero}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f64x2.convert\_low\_i32x4\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f64x2.promote\_low\_f32x4}\)</span></p></li>
+</ul>
+</li>
+<li><p>New lane access <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.extract\_lane\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}^?\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.replace\_lane}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.extract\_lane}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.replace\_lane}\)</span></p></li>
+</ul>
+</li>
+<li><p>New lane splitting/combining <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.extend\_}\href{../syntax/instructions.html#syntax-half}{\mathit{half}}\mathsf{\_i}\!N'\!\mathsf{x}\!M'\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.narrow\_i16x8\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.narrow\_i32x4\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New byte reordering <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.shuffle}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.swizzle}\)</span></p></li>
+</ul>
+</li>
+<li><p>New injection/projection <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec"><span class="std std-ref">vector instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.splat}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.splat}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.bitmask}\)</span></p></li>
+</ul>
+</li>
+</ul>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="proposal-signext" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id1" role="doc-backlink">1</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/sign-extension-ops/">https://github.com/WebAssembly/spec/tree/main/proposals/sign-extension-ops/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-cvtsat" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id2" role="doc-backlink">2</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/nontrapping-float-to-int-conversion/">https://github.com/WebAssembly/spec/tree/main/proposals/nontrapping-float-to-int-conversion/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-multivalue" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id3" role="doc-backlink">3</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/multi-value/">https://github.com/WebAssembly/spec/tree/main/proposals/multi-value/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-reftype" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a href="changes.html#id4" role="doc-backlink">1</a>,<a href="changes.html#id5" role="doc-backlink">2</a>,<a href="changes.html#id6" role="doc-backlink">3</a>,<a href="changes.html#id7" role="doc-backlink">4</a>)</span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/reference-types/">https://github.com/WebAssembly/spec/tree/main/proposals/reference-types/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-bulk" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id8" role="doc-backlink">5</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/bulk-memory-operations/">https://github.com/WebAssembly/spec/tree/main/proposals/bulk-memory-operations/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-vectype" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id9" role="doc-backlink">6</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/simd/">https://github.com/WebAssembly/spec/tree/main/proposals/simd/</a></p>
+</aside>
+</aside>
+</section>
+</section>
+<section id="release-3-0">
+<h2>Release 3.0<a class="headerlink" href="changes.html#release-3-0" title="Link to this heading">¶</a></h2>
+<section id="extended-constant-expressions">
+<span id="index-9"></span><h3>Extended Constant Expressions<a class="headerlink" href="changes.html#extended-constant-expressions" title="Link to this heading">¶</a></h3>
+<p>Allowed basic numeric computations in constant expressions. <a class="footnote-reference brackets" href="changes.html#proposal-extconst" id="id10" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>Extended set of <a class="reference internal" href="../valid/instructions.html#valid-constant"><span class="std std-ref">constant instructions</span></a> with:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\mathit{nn}\mathsf{.add}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\mathit{nn}\mathsf{.sub}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\mathit{nn}\mathsf{.mul}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{global{.}get}}\)</span> for any previously declared immutable <a class="reference internal" href="../syntax/modules.html#syntax-global"><span class="std std-ref">global</span></a></p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="changes.html#extension-gc"><span class="std std-ref">garbage collection</span></a> extension added further constant instructions.</p>
+</div>
+</section>
+<section id="tail-calls">
+<span id="index-10"></span><h3>Tail Calls<a class="headerlink" href="changes.html#tail-calls" title="Link to this heading">¶</a></h3>
+<p>Added instructions to perform tail calls. <a class="footnote-reference brackets" href="changes.html#proposal-tailcall" id="id11" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-control"><span class="std std-ref">control instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return\_call}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return\_call\_indirect}}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="exception-handling">
+<span id="index-11"></span><h3>Exception Handling<a class="headerlink" href="changes.html#exception-handling" title="Link to this heading">¶</a></h3>
+<p>Added tag definitions, imports, and exports, and instructions to throw and catch exceptions. <a class="footnote-reference brackets" href="changes.html#proposal-exn" id="id12" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">Modules</span></a> may</p>
+<ul>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-tag"><span class="std std-ref">define</span></a> tags</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-import"><span class="std std-ref">import</span></a> tags</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-export"><span class="std std-ref">export</span></a> tags</p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/types.html#syntax-heaptype"><span class="std std-ref">heap types</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{noexn}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> short-hands:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{exnref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullexnref}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-control"><span class="std std-ref">control instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{throw}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{throw\_ref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{try\_table}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../binary/modules.html#binary-tagsec"><span class="std std-ref">tag section</span></a> in binary format.</p></li>
+</ul>
+</section>
+<section id="multiple-memories">
+<span id="index-12"></span><h3>Multiple Memories<a class="headerlink" href="changes.html#multiple-memories" title="Link to this heading">¶</a></h3>
+<p>Added the ability to use multiple memories per module. <a class="footnote-reference brackets" href="changes.html#proposal-multimem" id="id13" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">Modules</span></a> may</p>
+<ul>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-mem"><span class="std std-ref">define</span></a> multiple memories</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-import"><span class="std std-ref">import</span></a> multiple memories</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-export"><span class="std std-ref">export</span></a> multiple memories</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../syntax/instructions.html#syntax-instr-memory"><span class="std std-ref">Memory instructions</span></a> take a <a class="reference internal" href="../syntax/modules.html#syntax-memidx"><span class="std std-ref">memory index</span></a> immediate:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}size}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}init}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.load}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.store}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.load}\!N\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.store}\!N\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{x}\!M\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_zero}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_splat}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_lane}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.store}\!N\!\mathsf{\_lane}\)</span></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../syntax/modules.html#syntax-elem"><span class="std std-ref">Data segments</span></a> take a <a class="reference internal" href="../syntax/modules.html#syntax-memidx"><span class="std std-ref">memory index</span></a></p></li>
+</ul>
+</section>
+<section id="bit-address-space">
+<span id="index-13"></span><h3>64-bit Address Space<a class="headerlink" href="changes.html#bit-address-space" title="Link to this heading">¶</a></h3>
+<p>Added the ability to declare an <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}}\)</span> <a class="reference internal" href="../syntax/types.html#syntax-addrtype"><span class="std std-ref">address type</span></a> for <a class="reference internal" href="../syntax/types.html#syntax-tabletype"><span class="std std-ref">tables</span></a> and <a class="reference internal" href="../syntax/types.html#syntax-memtype"><span class="std std-ref">memories</span></a>. <a class="footnote-reference brackets" href="changes.html#proposal-addr64" id="id14" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/types.html#syntax-addrtype"><span class="std std-ref">Address types</span></a> denote a subset of the integral <a class="reference internal" href="../syntax/types.html#syntax-numtype"><span class="std std-ref">number types</span></a></p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#syntax-tabletype"><span class="std std-ref">Table types</span></a> include an <a class="reference internal" href="../syntax/types.html#syntax-addrtype"><span class="std std-ref">address type</span></a></p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#syntax-memtype"><span class="std std-ref">Memory types</span></a> include an <a class="reference internal" href="../syntax/types.html#syntax-addrtype"><span class="std std-ref">address type</span></a></p></li>
+<li><p>Operand types of <a class="reference internal" href="../syntax/instructions.html#syntax-instr-table"><span class="std std-ref">table</span></a> and <a class="reference internal" href="../syntax/instructions.html#syntax-instr-memory"><span class="std std-ref">memory</span></a> instructions now depend on the subject’s declared address type:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}get}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}set}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}size}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}grow}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}init}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}size}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}init}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.load}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.store}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.load}\!N\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.store}\!N\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{x}\!M\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_zero}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_splat}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_lane}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.store}\!N\!\mathsf{\_lane}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="typeful-references">
+<span id="index-14"></span><h3>Typeful References<a class="headerlink" href="changes.html#typeful-references" title="Link to this heading">¶</a></h3>
+<p>Added more precise types for references. <a class="footnote-reference brackets" href="changes.html#proposal-typedref" id="id15" role="doc-noteref"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>New generalised form of <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference types</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}^?~\href{../syntax/types.html#syntax-heaptype}{\mathit{heaptype}})\)</span></p></li>
+</ul>
+</li>
+<li><p>New class of <a class="reference internal" href="../syntax/types.html#syntax-heaptype"><span class="std std-ref">heap types</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-func}{\mathsf{func}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}\)</span></p></li>
+</ul>
+</li>
+<li><p>Basic <a class="reference internal" href="../valid/matching.html#match"><span class="std std-ref">subtyping</span></a> on <a class="reference internal" href="../valid/matching.html#match-reftype"><span class="std std-ref">reference</span></a> and <a class="reference internal" href="../valid/matching.html#match-valtype"><span class="std std-ref">value</span></a> types</p></li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-ref"><span class="std std-ref">reference instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}as\_non\_null}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_null}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_non\_null}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-control"><span class="std std-ref">control instruction</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{call\_ref}}\)</span></p></li>
+</ul>
+</li>
+<li><p>Refined typing of <a class="reference internal" href="../syntax/instructions.html#syntax-instr-ref"><span class="std std-ref">reference instruction</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}\)</span> with more precise result type</p></li>
+</ul>
+</li>
+<li><p>Refined typing of <a class="reference internal" href="../valid/instructions.html#valid-instr-variable"><span class="std std-ref">local instructions</span></a> and <a class="reference internal" href="../valid/instructions.html#valid-instrs"><span class="std std-ref">instruction sequences</span></a> to track the <a class="reference internal" href="../valid/conventions.html#syntax-init"><span class="std std-ref">initialization status</span></a> of <a class="reference internal" href="../syntax/modules.html#syntax-local"><span class="std std-ref">locals</span></a> with non-defaultable type</p></li>
+<li><p>Refined decoding of <a class="reference internal" href="../syntax/modules.html#syntax-elemmode"><span class="std std-ref">active</span></a> <a class="reference internal" href="../binary/modules.html#binary-elem"><span class="std std-ref">element segments</span></a> with implicit element type and plain function indices (opcode <span class="math notranslate nohighlight">\(0\)</span>) to produce <a class="reference internal" href="../syntax/types.html#syntax-null"><span class="std std-ref">non-null</span></a> <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a></p></li>
+<li><p>Extended <a class="reference internal" href="../syntax/modules.html#syntax-table"><span class="std std-ref">table definitions</span></a> with optional initializer expression</p></li>
+</ul>
+</section>
+<section id="garbage-collection">
+<span id="extension-gc"></span><span id="index-15"></span><h3>Garbage Collection<a class="headerlink" href="changes.html#garbage-collection" title="Link to this heading">¶</a></h3>
+<p>Added managed reference types. <a class="footnote-reference brackets" href="changes.html#proposal-gc" id="id16" role="doc-noteref"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>New forms of <a class="reference internal" href="../syntax/types.html#syntax-heaptype"><span class="std std-ref">heap types</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{eq}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{struct}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{array}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{none}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{nofunc}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{noextern}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> short-hands:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{anyref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{eqref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{i{\scriptstyle31}ref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{structref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{arrayref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullfuncref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullexternref}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New forms of type definitions:</p>
+<ul>
+<li><p><a class="reference internal" href="../syntax/types.html#syntax-structtype"><span class="std std-ref">structure</span></a></p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#syntax-arraytype"><span class="std std-ref">array types</span></a></p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#syntax-subtype"><span class="std std-ref">sub types</span></a></p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#syntax-rectype"><span class="std std-ref">recursive types</span></a></p></li>
+</ul>
+</li>
+<li><p>Enriched <a class="reference internal" href="../valid/matching.html#match"><span class="std std-ref">subtyping</span></a> based on explicitly declared <a class="reference internal" href="../syntax/types.html#syntax-subtype"><span class="std std-ref">sub types</span></a> and the new heap types</p></li>
+<li><p>New generic <a class="reference internal" href="../syntax/instructions.html#syntax-instr-ref"><span class="std std-ref">reference instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}eq}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}test}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}cast}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_cast}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_cast\_fail}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-ref"><span class="std std-ref">reference instructions</span></a> for <a class="reference internal" href="../syntax/types.html#syntax-i31"><span class="std std-ref">unboxed scalars</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-i31}{\mathsf{ref{.}i\scriptstyle31}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-i31}{\mathsf{i{\scriptstyle31}{.}get}}\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-ref"><span class="std std-ref">reference instructions</span></a> for <a class="reference internal" href="../syntax/types.html#syntax-structtype"><span class="std std-ref">structure types</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new\_default}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}get}}\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}^?\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}set}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-ref"><span class="std std-ref">reference instructions</span></a> for <a class="reference internal" href="../syntax/types.html#syntax-structtype"><span class="std std-ref">array types</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_default}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_fixed}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_data}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_elem}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}get}}\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}^?\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}set}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}len}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}init\_data}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}init\_elem}}\)</span></p></li>
+</ul>
+</li>
+<li><p>New <a class="reference internal" href="../syntax/instructions.html#syntax-instr-ref"><span class="std std-ref">reference instructions</span></a> for converting <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external types</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{any{.}convert\_extern}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{extern{.}convert\_any}}\)</span></p></li>
+</ul>
+</li>
+<li><p>Extended set of <a class="reference internal" href="../valid/instructions.html#valid-constant"><span class="std std-ref">constant instructions</span></a> with:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-i31}{\mathsf{ref{.}i\scriptstyle31}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new\_default}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_default}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_fixed}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{any{.}convert\_extern}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{extern{.}convert\_any}}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="relaxed-vector-instructions">
+<span id="index-16"></span><h3>Relaxed Vector Instructions<a class="headerlink" href="changes.html#relaxed-vector-instructions" title="Link to this heading">¶</a></h3>
+<p>Added new <em>relaxed</em> vector instructions,
+whose behaviour is non-deterministic and implementation-dependent. <a class="footnote-reference brackets" href="changes.html#proposal-relaxed" id="id17" role="doc-noteref"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>New binary <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec-relaxed"><span class="std std-ref">vector instruction</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.relaxed\_min}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.relaxed\_max}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.relaxed\_q15mulr\_s}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.relaxed\_dot\_i8x16\_i7x16\_s}\)</span></p></li>
+</ul>
+</li>
+<li><p>New ternary <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec-relaxed"><span class="std std-ref">vector instruction</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.relaxed\_madd}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.relaxed\_nmadd}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.relaxed\_laneselect}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.relaxed\_dot\_i8x16\_i7x16\_add\_s}\)</span></p></li>
+</ul>
+</li>
+<li><p>New conversion <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec-relaxed"><span class="std std-ref">vector instructions</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.relaxed\_trunc\_f32x4\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.relaxed\_trunc\_f64x2\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\mathsf{\_zero}\)</span></p></li>
+</ul>
+</li>
+<li><p>New byte reordering <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec-relaxed"><span class="std std-ref">vector instruction</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.relaxed\_swizzle}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="profiles">
+<span id="index-17"></span><h3>Profiles<a class="headerlink" href="changes.html#profiles" title="Link to this heading">¶</a></h3>
+<p>Introduced the concept of <a class="reference internal" href="profiles.html#profiles"><span class="std std-ref">profile</span></a> for specifying language subsets.</p>
+<ul class="simple">
+<li><p>A new profile defining a <a class="reference internal" href="profiles.html#profile-deterministic"><span class="std std-ref">deterministic</span></a> mode of execution.</p></li>
+</ul>
+</section>
+<section id="custom-annotations">
+<span id="index-18"></span><h3>Custom Annotations<a class="headerlink" href="changes.html#custom-annotations" title="Link to this heading">¶</a></h3>
+<p>Added generic syntax for custom annotations in the text format,
+mirroring the role of custom sections in the binary format. <a class="footnote-reference brackets" href="changes.html#proposal-annot" id="id18" role="doc-noteref"><span class="fn-bracket">[</span>15<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../text/lexical.html#text-annot"><span class="std std-ref">Annotations</span></a> of the form <span class="math notranslate nohighlight">\(\def\mathdef64#1{\mbox{‘}\mathtt{#1}\mbox{’}}\mathdef64{(@id~\dots)}\)</span> are allowed anywhere in the <a class="reference internal" href="../text/index.html#text"><span class="std std-ref">text format</span></a></p></li>
+<li><p><a class="reference internal" href="../text/values.html#text-id"><span class="std std-ref">Identifiers</span></a> can be escaped as <span class="math notranslate nohighlight">\(\def\mathdef65#1{\mbox{‘}\mathtt{#1}\mbox{’}}\mathdef65{@"\dots"}\)</span> with arbitrary <a class="reference internal" href="../text/values.html#text-name"><span class="std std-ref">names</span></a></p></li>
+<li><p>Defined <a class="reference internal" href="custom.html#text-nameannot"><span class="std std-ref">name annotations</span></a> <span class="math notranslate nohighlight">\(\def\mathdef66#1{\mbox{‘}\mathtt{#1}\mbox{’}}\mathdef66{(@name~"\dots")}\)</span> for:</p>
+<ul>
+<li><p><a class="reference internal" href="custom.html#text-modulenameannot"><span class="std std-ref">module names</span></a></p></li>
+<li><p><a class="reference internal" href="custom.html#text-typenameannot"><span class="std std-ref">type names</span></a></p></li>
+<li><p><a class="reference internal" href="custom.html#text-funcnameannot"><span class="std std-ref">function names</span></a></p></li>
+<li><p><a class="reference internal" href="custom.html#text-localnameannot"><span class="std std-ref">local names</span></a></p></li>
+<li><p><a class="reference internal" href="custom.html#text-fieldnameannot"><span class="std std-ref">field names</span></a></p></li>
+</ul>
+</li>
+<li><p>Defined <a class="reference internal" href="custom.html#text-customannot"><span class="std std-ref">custom annotation</span></a> <span class="math notranslate nohighlight">\(\def\mathdef67#1{\mbox{‘}\mathtt{#1}\mbox{’}}\mathdef67{(@custom~"\dots")}\)</span> to represent arbitrary <a class="reference internal" href="../binary/modules.html#binary-customsec"><span class="std std-ref">custom sections</span></a> in the text format</p></li>
+</ul>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="proposal-extconst" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id10" role="doc-backlink">7</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/extended-const/">https://github.com/WebAssembly/spec/tree/main/proposals/extended-const/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-tailcall" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id11" role="doc-backlink">8</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/tail-call/">https://github.com/WebAssembly/spec/tree/main/proposals/tail-call/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-exn" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id12" role="doc-backlink">9</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/exception-handling/">https://github.com/WebAssembly/spec/tree/main/proposals/exception-handling/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-multimem" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id13" role="doc-backlink">10</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/multi-memory/">https://github.com/WebAssembly/spec/tree/main/proposals/multi-memory/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-addr64" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id14" role="doc-backlink">11</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/memory64/">https://github.com/WebAssembly/spec/tree/main/proposals/memory64/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-typedref" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id15" role="doc-backlink">12</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/function-references/">https://github.com/WebAssembly/spec/tree/main/proposals/function-references/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-gc" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id16" role="doc-backlink">13</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/gc/">https://github.com/WebAssembly/spec/tree/main/proposals/gc/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-relaxed" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id17" role="doc-backlink">14</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/relaxed-simd/">https://github.com/WebAssembly/spec/tree/main/proposals/relaxed-simd/</a></p>
+</aside>
+<aside class="footnote brackets" id="proposal-annot" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#id18" role="doc-backlink">15</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/annotations/">https://github.com/WebAssembly/spec/tree/main/proposals/annotations/</a></p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/appendix/changes.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-change-history">
+<span id="zh-changes"></span><span id="zh-index-0"></span><h1>更改历史<a class="headerlink" href="changes.html#zh-change-history" title="Link to this heading">¶</a></h1>
+<p>自最初的1.0版以来 WebAssembly 规范将一些延期建议合并在一起。
+以下是: 段 概述已发生的变化。</p>
+<p>所有现有和今后版本 WebAssembly 原意为: <em>向后兼容</em> 与所有先前的版本。
+具体而言:</p>
+<ol class="arabic simple">
+<li><p>全部在战术上造型良好(在 <a class="reference internal" href="../binary/index.html#zh-binary"><span class="std std-ref">二进制</span></a> 或 <a class="reference internal" href="../text/index.html#zh-text"><span class="std std-ref">文本</span></a> 格式)和 <a class="reference internal" href="../valid/index.html#zh-valid"><span class="std std-ref">无效</span></a> 模块 保持良好结构并具有同等效力 <a class="reference internal" href="../valid/modules.html#zh-syntax-moduletype"><span class="std std-ref">模块 类型</span></a> (或a) 国家 子类型).</p></li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>这允许先前的畸形或无效 模块 成为合法,
+例如,通过增加新功能或放松打字规则.</p>
+<p>还可以重新分类之前的错位 模块 既成型又无效的,
+或反之亦然。</p>
+<p>它可以改进打字 <a class="reference internal" href="../syntax/modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a> 和 <a class="reference internal" href="../syntax/modules.html#zh-syntax-export"><span class="std std-ref">导出</span></a>, (中文).
+如此,以前无法连接 模块 成为链接。</p>
+<p>从历史上看,小的改变 <em>文本格式</em> 已允许
+以前可能变成有效的 模块 无效,
+只要它们在实践中不太可能发生。</p>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>所有无<a class="reference internal" href="../intro/overview.html#zh-trap"><span class="std std-ref">陷阱</span></a> <a class="reference internal" href="../exec/index.html#zh-exec"><span class="std std-ref">处决</span></a> 在有效程序中保留其行为,并有一套等效的可能 <a class="reference internal" href="../exec/runtime.html#zh-syntax-result"><span class="std std-ref">结果</span></a> (或非空子集).</p></li>
+</ol>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>这使得先前的不正确或无效的程序成为可执行程序.</p>
+<p>也可以让之前被困的程式处决成功执行,
+虽然这样做的用意是只有在以前已经注意到这种延长的可能性时才这样做。</p>
+<p>它可以减少 一套可观察到的行为 一个程序 执行, (中文).
+例如,通过减少非决定因素。</p>
+<p>在链接前一个程序中 模块 与 模块 使用新的特性,
+a 先前 模块 可能会遇到新的行为,
+例如,新形式的控制流动或对后者的副作用 模块.</p>
+</div>
+</div></blockquote>
+<p>此外,未来版本 WebAssembly 将不分配 <a class="reference internal" href="../binary/instructions.html#zh-binary-instr"><span class="std std-ref">操作码</span></a> <span class="math notranslate nohighlight">\(\def\mathdef63#1{\mathtt{0x#1}}\mathdef63{FF}\)</span> 代表一个 指令 或 指令 前缀。</p>
+<section id="zh-release-2-0">
+<h2>发布 2.0<a class="headerlink" href="changes.html#zh-release-2-0" title="Link to this heading">¶</a></h2>
+<section id="zh-sign-extension-instructions">
+<span id="zh-index-1"></span><h3>签名扩展 指令<a class="headerlink" href="changes.html#zh-sign-extension-instructions" title="Link to this heading">¶</a></h3>
+<p>新增 数值指令 用于在内部执行符号扩展 整数 说明。 <a class="footnote-reference brackets" href="changes.html#zh-proposal-signext" id="zh-id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-numeric"><span class="std std-ref">数值指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\mathit{nn}\mathsf{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{extend}}\mathit{N}\mathsf{\_s}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="zh-non-trapping-float-to-int-conversions">
+<span id="zh-index-2"></span><h3>非牵引浮点转换<a class="headerlink" href="changes.html#zh-non-trapping-float-to-int-conversions" title="Link to this heading">¶</a></h3>
+<p>新增转换 指令 在转换时避免陷阱 浮点数 编号改为 整数. <a class="footnote-reference brackets" href="changes.html#zh-proposal-cvtsat" id="zh-id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-numeric"><span class="std std-ref">数值指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\mathit{nn}\mathsf{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{trunc}}\mathsf{\_sat\_f}\mathit{mm}\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="zh-multiple-values">
+<span id="zh-index-3"></span><h3>多个 值<a class="headerlink" href="changes.html#zh-multiple-values" title="Link to this heading">¶</a></h3>
+<p>普及 结果类型 区块和函数的组合 值;此外,引入了拥有块参数的能力. <a class="footnote-reference brackets" href="changes.html#zh-proposal-multivalue" id="zh-id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/types.html#zh-syntax-functype"><span class="std std-ref">函数 类型</span></a> 允许一个以上的结果</p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#zh-syntax-blocktype"><span class="std std-ref">块 类型</span></a> 可以是任意函数 类型</p></li>
+</ul>
+</section>
+<section id="zh-reference-types">
+<span id="zh-index-4"></span><h3>参考 类型<a class="headerlink" href="changes.html#zh-reference-types" title="Link to this heading">¶</a></h3>
+<p>已添加 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{funcref}}\)</span> 和 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{externref}}\)</span> 作为新值 类型 和各自的 指令. <a class="footnote-reference brackets" href="changes.html#zh-proposal-reftype" id="zh-id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>新设 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">参考文献</span></a> <a class="reference internal" href="../syntax/types.html#zh-syntax-valtype"><span class="std std-ref">价值 类型</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{funcref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{externref}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-ref"><span class="std std-ref">引用指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}null}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}is\_null}}\)</span></p></li>
+</ul>
+</li>
+<li><p>扩展 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-parametric"><span class="std std-ref">参数指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-parametric}{\mathsf{select}}\)</span> 带有可选类型 立即数</p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/modules.html#zh-syntax-elemmode"><span class="std std-ref">声明</span></a> 形式 <a class="reference internal" href="../syntax/modules.html#zh-syntax-elem"><span class="std std-ref">元素段</span></a></p></li>
+</ul>
+</section>
+<section id="zh-table-instructions">
+<span id="zh-index-5"></span><h3>表指令<a class="headerlink" href="changes.html#zh-table-instructions" title="Link to this heading">¶</a></h3>
+<p>已添加 指令 直接访问和修改表格。 <a class="footnote-reference brackets" href="changes.html#zh-proposal-reftype" id="zh-id5" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/types.html#zh-syntax-tabletype"><span class="std std-ref">图表 类型</span></a> 允许任何 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> 作为元素类型</p></li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-table"><span class="std std-ref">表指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}get}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}set}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}size}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}grow}}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="zh-multiple-tables">
+<span id="zh-index-6"></span><h3>多个表格<a class="headerlink" href="changes.html#zh-multiple-tables" title="Link to this heading">¶</a></h3>
+<p>增加了每个表格使用多个表格的能力 模块. <a class="footnote-reference brackets" href="changes.html#zh-proposal-reftype" id="zh-id6" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a> 可能</p>
+<ul>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-table"><span class="std std-ref">定义</span></a> 多个表格</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a> 多个表格</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-export"><span class="std std-ref">导出</span></a> 多个表格</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-table"><span class="std std-ref">表指令</span></a> 带一个 <a class="reference internal" href="../syntax/modules.html#zh-syntax-tableidx"><span class="std std-ref">表格索引</span></a> 立即数:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}get}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}set}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}size}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}grow}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{call\_indirect}}\)</span></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-elem"><span class="std std-ref">元素段</span></a> 带一个 <a class="reference internal" href="../syntax/modules.html#zh-syntax-tableidx"><span class="std std-ref">表格索引</span></a></p></li>
+</ul>
+</section>
+<section id="zh-bulk-memory-and-table-instructions">
+<span id="zh-index-7"></span><h3>散装内存和 表指令<a class="headerlink" href="changes.html#zh-bulk-memory-and-table-instructions" title="Link to this heading">¶</a></h3>
+<p>已添加 指令 修改内存或表格条目的范围。 <a class="footnote-reference brackets" href="changes.html#zh-proposal-reftype" id="zh-id7" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="changes.html#zh-proposal-bulk" id="zh-id8" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-memory"><span class="std std-ref">内存指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}init}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{data{.}drop}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-table"><span class="std std-ref">表指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}init}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{elem{.}drop}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/modules.html#zh-syntax-datamode"><span class="std std-ref">被动</span></a> 形式 <a class="reference internal" href="../syntax/modules.html#zh-syntax-data"><span class="std std-ref">数据段</span></a></p></li>
+<li><p>新设 <a class="reference internal" href="../syntax/modules.html#zh-syntax-elemmode"><span class="std std-ref">被动</span></a> 形式 <a class="reference internal" href="../syntax/modules.html#zh-syntax-elem"><span class="std std-ref">元素段</span></a></p></li>
+<li><p>新设 <a class="reference internal" href="../binary/modules.html#zh-binary-datacntsec"><span class="std std-ref">数据数 段</span></a> 输入 二进制格式</p></li>
+<li><p>主动数据和 元素段 边框在编译时不再检查,但可能 陷阱 换成</p></li>
+</ul>
+</section>
+<section id="zh-vector-instructions">
+<span id="zh-index-8"></span><h3>向量指令<a class="headerlink" href="changes.html#zh-vector-instructions" title="Link to this heading">¶</a></h3>
+<p>已添加 向量类型 和 指令 操作多个数字 值 平行
+(又称: <em>锡默德</em>单 指令 多个数据) <a class="footnote-reference brackets" href="changes.html#zh-proposal-vectype" id="zh-id9" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>新设 <a class="reference internal" href="../syntax/types.html#zh-syntax-valtype"><span class="std std-ref">值类型</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-vectype}{\mathsf{v\scriptstyle128}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-memory"><span class="std std-ref">内存指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}{}\!N\!\mathsf{x}\!M\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}{}N\mathsf{\_zero}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}{}N\mathsf{\_splat}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}{}N\mathsf{\_lane}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{store}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{store}}{}N\mathsf{\_lane}\)</span></p></li>
+</ul>
+</li>
+<li><p>新建常数 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{const}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新建无保留 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.not}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.abs}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.neg}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.popcnt}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.abs}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.neg}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.sqrt}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.ceil}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.floor}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.trunc}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.nearest}\)</span></p></li>
+</ul>
+</li>
+<li><p>新建二进制 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.and}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.andnot}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.or}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.xor}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.add}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.sub}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.mul}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.add\_sat\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.sub\_sat\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.min\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.max\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.shl}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.shr\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.add}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.sub}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.mul}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.div}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.extadd\_pairwise\_i8x16\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.extadd\_pairwise\_i16x8\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.extmul\_}\href{../syntax/instructions.html#syntax-half}{\mathit{half}}\mathsf{\_i}\!N'\!\mathsf{x}\!M'\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.q15mulr\_sat\_s}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.dot\_i16x8\_s}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.avgr\_u}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.avgr\_u}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.min}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.max}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.pmin}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.pmax}\)</span></p></li>
+</ul>
+</li>
+<li><p>新建毒性 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.bitselect}\)</span></p></li>
+</ul>
+</li>
+<li><p>新测试 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.any\_true}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.all\_true}\)</span></p></li>
+</ul>
+</li>
+<li><p>新关系 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.eq}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.ne}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.lt\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.gt\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.le\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.ge\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.eq}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.ne}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.lt}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.gt}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.le}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.ge}\)</span></p></li>
+</ul>
+</li>
+<li><p>新转换 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.trunc\_sat\_f32x4\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.trunc\_sat\_f64x2\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\mathsf{\_zero}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f32x4.convert\_i32x4\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f32x4.demote\_f64x2\_zero}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f64x2.convert\_low\_i32x4\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f64x2.promote\_low\_f32x4}\)</span></p></li>
+</ul>
+</li>
+<li><p>新车道进入 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.extract\_lane\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}^?\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.replace\_lane}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.extract\_lane}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.replace\_lane}\)</span></p></li>
+</ul>
+</li>
+<li><p>新车道拆分/合并 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.extend\_}\href{../syntax/instructions.html#syntax-half}{\mathit{half}}\mathsf{\_i}\!N'\!\mathsf{x}\!M'\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.narrow\_i16x8\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.narrow\_i32x4\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+</ul>
+</li>
+<li><p>重新排序新字节 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.shuffle}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.swizzle}\)</span></p></li>
+</ul>
+</li>
+<li><p>新注射/预测 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.splat}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.splat}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.bitmask}\)</span></p></li>
+</ul>
+</li>
+</ul>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="zh-proposal-signext" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id1" role="doc-backlink">1</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/sign-extension-ops/">https://github.com/ (中文(中国大陆) ).WebAssembly/ spec/tree/main/ projects/sign-expension-ops/ 页面存档备份,存于互联网档案馆 / p.</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-cvtsat" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id2" role="doc-backlink">2</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/nontrapping-float-to-int-conversion/">https://github.com/ (中文(中国大陆) ).WebAssembly/ spec/tree/main/ proposes/nontraping-float-to-int-conversion/ (原始内容存档于2019-03-09) (英语).</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-multivalue" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id3" role="doc-backlink">3</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/multi-value/">https://github.com/ (中文(中国大陆) ).WebAssembly/谱/树/主/提议/多值/</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-reftype" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a href="changes.html#zh-id4" role="doc-backlink">1</a>,<a href="changes.html#zh-id5" role="doc-backlink">2</a>,<a href="changes.html#zh-id6" role="doc-backlink">3</a>,<a href="changes.html#zh-id7" role="doc-backlink">4</a>)</span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/reference-types/">https://github.com/ (中文(中国大陆) ).WebAssembly/谱/树/主/提议/参考-类型/</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-bulk" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id8" role="doc-backlink">5</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/bulk-memory-operations/">https://github.com/ (中文(中国大陆) ).WebAssembly/ spec/tree/main/提议/bulk-memory-operations//</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-vectype" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id9" role="doc-backlink">6</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/simd/">https://github.com/ (中文(中国大陆) ).WebAssembly/ spec/tree/main/提议/成像/</a></p>
+</aside>
+</aside>
+</section>
+</section>
+<section id="zh-release-3-0">
+<h2>发布 3.0<a class="headerlink" href="changes.html#zh-release-3-0" title="Link to this heading">¶</a></h2>
+<section id="zh-extended-constant-expressions">
+<span id="zh-index-9"></span><h3>扩展常数表达式<a class="headerlink" href="changes.html#zh-extended-constant-expressions" title="Link to this heading">¶</a></h3>
+<p>允许在常数表达式中进行基本数值计算. <a class="footnote-reference brackets" href="changes.html#zh-proposal-extconst" id="zh-id10" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>扩展集 <a class="reference internal" href="../valid/instructions.html#zh-valid-constant"><span class="std std-ref">常数 指令</span></a> 改为:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\mathit{nn}\mathsf{.add}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\mathit{nn}\mathsf{.sub}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\mathit{nn}\mathsf{.mul}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{global{.}get}}\)</span> 对于任何先前宣布的不可改变性 <a class="reference internal" href="../syntax/modules.html#zh-syntax-global"><span class="std std-ref">全球</span></a></p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>那个 <a class="reference internal" href="changes.html#zh-extension-gc"><span class="std std-ref">垃圾收集</span></a> 扩展添加了进一步的常数 指令.</p>
+</div>
+</section>
+<section id="zh-tail-calls">
+<span id="zh-index-10"></span><h3>尾声呼叫<a class="headerlink" href="changes.html#zh-tail-calls" title="Link to this heading">¶</a></h3>
+<p>已添加 指令 执行尾声呼叫。 <a class="footnote-reference brackets" href="changes.html#zh-proposal-tailcall" id="zh-id11" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-control"><span class="std std-ref">控制指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return\_call}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return\_call\_indirect}}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="zh-exception-handling">
+<span id="zh-index-11"></span><h3>例外处理<a class="headerlink" href="changes.html#zh-exception-handling" title="Link to this heading">¶</a></h3>
+<p>添加标签定义, 导入,以及 导出,以及 指令 以丢弃和捕捉例外。 <a class="footnote-reference brackets" href="changes.html#zh-proposal-exn" id="zh-id12" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a> 可能</p>
+<ul>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-tag"><span class="std std-ref">定义</span></a> 标记</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a> 标记</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-export"><span class="std std-ref">导出</span></a> 标记</p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/types.html#zh-syntax-heaptype"><span class="std std-ref">堆积 类型</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{noexn}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> 缩写 :</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{exnref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullexnref}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-control"><span class="std std-ref">控制指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{throw}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{throw\_ref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{try\_table}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../binary/modules.html#zh-binary-tagsec"><span class="std std-ref">标签 段</span></a> 输入 二进制格式.</p></li>
+</ul>
+</section>
+<section id="zh-multiple-memories">
+<span id="zh-index-12"></span><h3>多重记忆<a class="headerlink" href="changes.html#zh-multiple-memories" title="Link to this heading">¶</a></h3>
+<p>增加了使用多个记忆的能力 模块. <a class="footnote-reference brackets" href="changes.html#zh-proposal-multimem" id="zh-id13" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a> 可能</p>
+<ul>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-mem"><span class="std std-ref">定义</span></a> 多个记忆</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a> 多个记忆</p></li>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-export"><span class="std std-ref">导出</span></a> 多个记忆</p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-memory"><span class="std std-ref">内存指令</span></a> 带一个 <a class="reference internal" href="../syntax/modules.html#zh-syntax-memidx"><span class="std std-ref">内存索引</span></a> 立即数:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}size}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}init}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.load}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.store}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.load}\!N\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.store}\!N\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{x}\!M\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_zero}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_splat}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_lane}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.store}\!N\!\mathsf{\_lane}\)</span></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="../syntax/modules.html#zh-syntax-elem"><span class="std std-ref">数据段</span></a> 带一个 <a class="reference internal" href="../syntax/modules.html#zh-syntax-memidx"><span class="std std-ref">内存索引</span></a></p></li>
+</ul>
+</section>
+<section id="zh-bit-address-space">
+<span id="zh-index-13"></span><h3>64 位数 地址 空间<a class="headerlink" href="changes.html#zh-bit-address-space" title="Link to this heading">¶</a></h3>
+<p>添加了宣布 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}}\)</span> <a class="reference internal" href="../syntax/types.html#zh-syntax-addrtype"><span class="std std-ref">地址 类型</span></a> (单位:千美元) <a class="reference internal" href="../syntax/types.html#zh-syntax-tabletype"><span class="std std-ref">图表</span></a> 和 <a class="reference internal" href="../syntax/types.html#zh-syntax-memtype"><span class="std std-ref">回忆</span></a>. <a class="footnote-reference brackets" href="changes.html#zh-proposal-addr64" id="zh-id14" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../syntax/types.html#zh-syntax-addrtype"><span class="std std-ref">地址 类型</span></a> 表示组成部分的子集 <a class="reference internal" href="../syntax/types.html#zh-syntax-numtype"><span class="std std-ref">编号 类型</span></a></p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#zh-syntax-tabletype"><span class="std std-ref">图表 类型</span></a> 包括一个 <a class="reference internal" href="../syntax/types.html#zh-syntax-addrtype"><span class="std std-ref">地址 类型</span></a></p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#zh-syntax-memtype"><span class="std std-ref">内存 类型</span></a> 包括一个 <a class="reference internal" href="../syntax/types.html#zh-syntax-addrtype"><span class="std std-ref">地址 类型</span></a></p></li>
+<li><p>作业 类型 页:1 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-table"><span class="std std-ref">图表</span></a> 和 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-memory"><span class="std std-ref">内存</span></a> 指令 现在要看当事人是否申报了 地址 类型 :</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}get}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}set}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}size}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}grow}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}init}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}size}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}init}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.load}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.store}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.load}\!N\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(t\mathsf{.store}\!N\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{x}\!M\!\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_zero}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_splat}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.load}\!N\!\mathsf{\_lane}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{v128.store}\!N\!\mathsf{\_lane}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="zh-typeful-references">
+<span id="zh-index-14"></span><h3>类型参考<a class="headerlink" href="changes.html#zh-typeful-references" title="Link to this heading">¶</a></h3>
+<p>添加更精确 类型 参考文献。 <a class="footnote-reference brackets" href="changes.html#zh-proposal-typedref" id="zh-id15" role="doc-noteref"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>新的通用形式 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">参考文献 类型</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}^?~\href{../syntax/types.html#syntax-heaptype}{\mathit{heaptype}})\)</span></p></li>
+</ul>
+</li>
+<li><p>新类别 <a class="reference internal" href="../syntax/types.html#zh-syntax-heaptype"><span class="std std-ref">堆积 类型</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-func}{\mathsf{func}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}\)</span></p></li>
+</ul>
+</li>
+<li><p>基础 <a class="reference internal" href="../valid/matching.html#zh-match"><span class="std std-ref">子类型关系</span></a> 打开 <a class="reference internal" href="../valid/matching.html#zh-match-reftype"><span class="std std-ref">参考文献</span></a> 和 <a class="reference internal" href="../valid/matching.html#zh-match-valtype"><span class="std std-ref">价值</span></a> 类型</p></li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-ref"><span class="std std-ref">引用指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}as\_non\_null}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_null}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_non\_null}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-control"><span class="std std-ref">控制指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{call\_ref}}\)</span></p></li>
+</ul>
+</li>
+<li><p>精细打字 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-ref"><span class="std std-ref">引用指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}\)</span> 更准确 结果类型</p></li>
+</ul>
+</li>
+<li><p>精细打字 <a class="reference internal" href="../valid/instructions.html#zh-valid-instr-variable"><span class="std std-ref">当地 指令</span></a> 和 <a class="reference internal" href="../valid/instructions.html#zh-valid-instrs"><span class="std std-ref">指令 顺序</span></a> 跟踪 <a class="reference internal" href="../valid/conventions.html#zh-syntax-init"><span class="std std-ref">初始化状态</span></a> 页:1 <a class="reference internal" href="../syntax/modules.html#zh-syntax-local"><span class="std std-ref">当地人</span></a> 带有不可默认类型</p></li>
+<li><p>改良 解码 页:1 <a class="reference internal" href="../syntax/modules.html#zh-syntax-elemmode"><span class="std std-ref">活动</span></a> <a class="reference internal" href="../binary/modules.html#zh-binary-elem"><span class="std std-ref">元素段</span></a> 包含隐含元素类型和纯函数索引(opcode) <span class="math notranslate nohighlight">\(0\)</span>生产 <a class="reference internal" href="../syntax/types.html#zh-syntax-null"><span class="std std-ref">非无</span></a> <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a></p></li>
+<li><p>扩展 <a class="reference internal" href="../syntax/modules.html#zh-syntax-table"><span class="std std-ref">表格定义</span></a> 带有可选初始化表达式</p></li>
+</ul>
+</section>
+<section id="zh-garbage-collection">
+<span id="zh-extension-gc"></span><span id="zh-index-15"></span><h3>垃圾收集<a class="headerlink" href="changes.html#zh-garbage-collection" title="Link to this heading">¶</a></h3>
+<p>添加管理的引用 类型. <a class="footnote-reference brackets" href="changes.html#zh-proposal-gc" id="zh-id16" role="doc-noteref"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>新的形式 <a class="reference internal" href="../syntax/types.html#zh-syntax-heaptype"><span class="std std-ref">堆积 类型</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{eq}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{struct}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{array}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{none}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{nofunc}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-heaptype}{\mathsf{noextern}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> 缩写 :</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{anyref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{eqref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{i{\scriptstyle31}ref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{structref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{arrayref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullfuncref}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-reftype}{\mathsf{nullexternref}}\)</span></p></li>
+</ul>
+</li>
+<li><p>类型定义的新形式:</p>
+<ul>
+<li><p><a class="reference internal" href="../syntax/types.html#zh-syntax-structtype"><span class="std std-ref">结构</span></a></p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#zh-syntax-arraytype"><span class="std std-ref">数组 类型</span></a></p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#zh-syntax-subtype"><span class="std std-ref">次级 类型</span></a></p></li>
+<li><p><a class="reference internal" href="../syntax/types.html#zh-syntax-rectype"><span class="std std-ref">递归 类型</span></a></p></li>
+</ul>
+</li>
+<li><p>丰富 <a class="reference internal" href="../valid/matching.html#zh-match"><span class="std std-ref">子类型关系</span></a> 根据明确声明 <a class="reference internal" href="../syntax/types.html#zh-syntax-subtype"><span class="std std-ref">次级 类型</span></a> 和新堆积 类型</p></li>
+<li><p>新建通用 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-ref"><span class="std std-ref">引用指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}eq}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}test}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}cast}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_cast}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_cast\_fail}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-ref"><span class="std std-ref">引用指令</span></a> (单位:千美元) <a class="reference internal" href="../syntax/types.html#zh-syntax-i31"><span class="std std-ref">未装箱的滑板</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-i31}{\mathsf{ref{.}i\scriptstyle31}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-i31}{\mathsf{i{\scriptstyle31}{.}get}}\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-ref"><span class="std std-ref">引用指令</span></a> (单位:千美元) <a class="reference internal" href="../syntax/types.html#zh-syntax-structtype"><span class="std std-ref">结构 类型</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new\_default}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}get}}\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}^?\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}set}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-ref"><span class="std std-ref">引用指令</span></a> (单位:千美元) <a class="reference internal" href="../syntax/types.html#zh-syntax-structtype"><span class="std std-ref">数组 类型</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_default}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_fixed}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_data}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_elem}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}get}}\mathsf{\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}^?\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}set}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}len}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}fill}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}copy}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}init\_data}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}init\_elem}}\)</span></p></li>
+</ul>
+</li>
+<li><p>新设 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-ref"><span class="std std-ref">引用指令</span></a> 用于转换 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部 类型</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{any{.}convert\_extern}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{extern{.}convert\_any}}\)</span></p></li>
+</ul>
+</li>
+<li><p>扩展集 <a class="reference internal" href="../valid/instructions.html#zh-valid-constant"><span class="std std-ref">常数 指令</span></a> 改为:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-i31}{\mathsf{ref{.}i\scriptstyle31}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new\_default}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_default}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_fixed}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{any{.}convert\_extern}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{extern{.}convert\_any}}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="zh-relaxed-vector-instructions">
+<span id="zh-index-16"></span><h3>放松点 向量指令<a class="headerlink" href="changes.html#zh-relaxed-vector-instructions" title="Link to this heading">¶</a></h3>
+<p>新增 <em>放松点</em> 向量指令, (中文).
+其行为是非决定性的,并且取决于执行。 <a class="footnote-reference brackets" href="changes.html#zh-proposal-relaxed" id="zh-id17" role="doc-noteref"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>新建二进制 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec-relaxed"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.relaxed\_min}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.relaxed\_max}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.relaxed\_q15mulr\_s}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i16x8.relaxed\_dot\_i8x16\_i7x16\_s}\)</span></p></li>
+</ul>
+</li>
+<li><p>新建毒性 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec-relaxed"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.relaxed\_madd}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{f}\!N\!\mathsf{x}\!M\!\mathsf{.relaxed\_nmadd}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i}\!N\!\mathsf{x}\!M\!\mathsf{.relaxed\_laneselect}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.relaxed\_dot\_i8x16\_i7x16\_add\_s}\)</span></p></li>
+</ul>
+</li>
+<li><p>新转换 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec-relaxed"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.relaxed\_trunc\_f32x4\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i32x4.relaxed\_trunc\_f64x2\_}\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}\mathsf{\_zero}\)</span></p></li>
+</ul>
+</li>
+<li><p>重新排序新字节 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec-relaxed"><span class="std std-ref">向量指令</span></a>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\mathsf{i8x16.relaxed\_swizzle}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="zh-profiles">
+<span id="zh-index-17"></span><h3>简介<a class="headerlink" href="changes.html#zh-profiles" title="Link to this heading">¶</a></h3>
+<p>提出了 <a class="reference internal" href="profiles.html#zh-profiles"><span class="std std-ref">配置文件</span></a> 用于指定语言子集。</p>
+<ul class="simple">
+<li><p>定义 a 的新配置文件 <a class="reference internal" href="profiles.html#zh-profile-deterministic"><span class="std std-ref">决定性</span></a> 模式 执行.</p></li>
+</ul>
+</section>
+<section id="zh-custom-annotations">
+<span id="zh-index-18"></span><h3>自定义说明<a class="headerlink" href="changes.html#zh-custom-annotations" title="Link to this heading">¶</a></h3>
+<p>添加的通用 语法 用于自定义注释 文本格式, (中文).
+反映 自定义段 输入 二进制格式. <a class="footnote-reference brackets" href="changes.html#zh-proposal-annot" id="zh-id18" role="doc-noteref"><span class="fn-bracket">[</span>15<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../text/lexical.html#zh-text-annot"><span class="std std-ref">说明</span></a> 表格编号 <span class="math notranslate nohighlight">\(\def\mathdef64#1{\mbox{‘}\mathtt{#1}\mbox{’}}\mathdef64{(@id~\dots)}\)</span> 被允许在任何地方 <a class="reference internal" href="../text/index.html#zh-text"><span class="std std-ref">文本格式</span></a></p></li>
+<li><p><a class="reference internal" href="../text/values.html#zh-text-id"><span class="std std-ref">标识符</span></a> 能够作为 <span class="math notranslate nohighlight">\(\def\mathdef65#1{\mbox{‘}\mathtt{#1}\mbox{’}}\mathdef65{@"\dots"}\)</span> 专制 <a class="reference internal" href="../text/values.html#zh-text-name"><span class="std std-ref">名称</span></a></p></li>
+<li><p>定义 <a class="reference internal" href="custom.html#zh-text-nameannot"><span class="std std-ref">名称 说明</span></a> <span class="math notranslate nohighlight">\(\def\mathdef66#1{\mbox{‘}\mathtt{#1}\mbox{’}}\mathdef66{(@name~"\dots")}\)</span> 用于:</p>
+<ul>
+<li><p><a class="reference internal" href="custom.html#zh-text-modulenameannot"><span class="std std-ref">模块 名称</span></a></p></li>
+<li><p><a class="reference internal" href="custom.html#zh-text-typenameannot"><span class="std std-ref">类型 名称</span></a></p></li>
+<li><p><a class="reference internal" href="custom.html#zh-text-funcnameannot"><span class="std std-ref">函数 名称</span></a></p></li>
+<li><p><a class="reference internal" href="custom.html#zh-text-localnameannot"><span class="std std-ref">当地 名称</span></a></p></li>
+<li><p><a class="reference internal" href="custom.html#zh-text-fieldnameannot"><span class="std std-ref">字段 名称</span></a></p></li>
+</ul>
+</li>
+<li><p>定义 <a class="reference internal" href="custom.html#zh-text-customannot"><span class="std std-ref">自定义注释</span></a> <span class="math notranslate nohighlight">\(\def\mathdef67#1{\mbox{‘}\mathtt{#1}\mbox{’}}\mathdef67{(@custom~"\dots")}\)</span> 代表任意 <a class="reference internal" href="../binary/modules.html#zh-binary-customsec"><span class="std std-ref">自定义段</span></a> 输入 文本格式</p></li>
+</ul>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="zh-proposal-extconst" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id10" role="doc-backlink">7</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/extended-const/">https://github.com/ (中文(中国大陆) ).WebAssembly/谱/树/主/提议/延伸-汇/</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-tailcall" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id11" role="doc-backlink">8</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/tail-call/">https://github.com/ (中文(中国大陆) ).WebAssembly/谱/树/主/提议/尾调/</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-exn" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id12" role="doc-backlink">9</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/exception-handling/">https://github.com/ (中文(中国大陆) ).WebAssembly/谱/树/主/提议/例外处理/</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-multimem" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id13" role="doc-backlink">10</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/multi-memory/">https://github.com/ (中文(中国大陆) ).WebAssembly/谱/树/主/提议/多模/</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-addr64" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id14" role="doc-backlink">11</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/memory64/">https://github.com/ (中文(中国大陆) ).WebAssembly/谱/树/主/提议/记忆64/</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-typedref" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id15" role="doc-backlink">12</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/function-references/">https://github.com/ (中文(中国大陆) ).WebAssembly/谱/树/主/提议/功能参考/</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-gc" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id16" role="doc-backlink">13</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/gc/">https://github.com/ (中文(中国大陆) ).WebAssembly/谱/树/主/提议/gc/</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-relaxed" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id17" role="doc-backlink">14</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/relaxed-simd/">https://github.com/ (中文(中国大陆) ).WebAssembly/ spec/tree/main/ proposes/relaxed-simd/ (原始内容存档于2018-03-09) (英语).</a></p>
+</aside>
+<aside class="footnote brackets" id="zh-proposal-annot" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="changes.html#zh-id18" role="doc-backlink">15</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://github.com/WebAssembly/spec/tree/main/proposals/annotations/">https://github.com/ (中文(中国大陆) ).WebAssembly/谱/树/主/提议/说明/</a></p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/appendix/changes.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Lexical Format  / 词法格式  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="values.html" rel="next" title="Values"/>
+<link href="conventions.html" rel="prev" title="Conventions"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conventions.html"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="lexical.html#"><span class="wasm-bi-nav-en">Lexical Format</span><span class="wasm-bi-nav-zh">词法格式</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/text/lexical.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="lexical-format">
+<span id="text-lexical"></span><span id="index-0"></span><h1>Lexical Format<a class="headerlink" href="lexical.html#lexical-format" title="Link to this heading">¶</a></h1>
+<section id="characters">
+<span id="text-char"></span><span id="text-source"></span><span id="source"></span><span id="index-1"></span><h2>Characters<a class="headerlink" href="lexical.html#characters" title="Link to this heading">¶</a></h2>
+<p>The text format assigns meaning to <em>source text</em>, which consists of a sequence of <em>characters</em>.
+Characters are assumed to be represented as valid <a class="reference external" href="https://www.unicode.org/versions/latest/">Unicode</a> (Section 2.4) <em>scalar values</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/lexical.html#text-source}{\mathtt{source}}} &amp; ::= &amp; {{\href{../text/lexical.html#text-char}{\mathtt{char}}}^\ast} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-char}{\mathtt{char}}} &amp; ::= &amp; \mathrm{U{+}00} ~~|~~ \ldots ~~|~~ \mathrm{U{+}D7FF} ~~|~~ \mathrm{U{+}E000} ~~|~~ \ldots ~~|~~ \mathrm{U{+}10FFFF} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While source text may contain any Unicode character in <a class="reference internal" href="lexical.html#text-comment"><span class="std std-ref">comments</span></a> or <a class="reference internal" href="values.html#text-string"><span class="std std-ref">string</span></a> literals,
+the rest of the grammar is formed exclusively from the characters supported by the 7-bit <a class="reference external" href="https://webstore.ansi.org/RecordDetail.aspx?sku=INCITS+4-1986%5bR2012%5d">ASCII</a> subset of Unicode.</p>
+</div>
+</section>
+<section id="tokens">
+<span id="text-token"></span><span id="text-reserved"></span><span id="text-keyword"></span><span id="index-2"></span><h2>Tokens<a class="headerlink" href="lexical.html#tokens" title="Link to this heading">¶</a></h2>
+<p>The character stream in the source text is divided, from left to right, into a sequence of <em>tokens</em>, as defined by the following grammar.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/lexical.html#text-token}{\mathtt{token}}} &amp; ::= &amp; {\href{../text/lexical.html#text-keyword}{\mathtt{keyword}}} ~~|~~ {\href{../text/values.html#text-int}{\mathtt{u}\kern-0.1em}} ~~|~~ {\href{../text/values.html#text-int}{\mathtt{s}\kern-0.1em}} ~~|~~ {\href{../text/values.html#text-int}{\mathtt{f}\kern-0.1em}} ~~|~~ {\href{../text/values.html#text-string}{\mathtt{string}}} ~~|~~ {\href{../text/values.html#text-id}{\mathtt{id}}} ~~|~~ \mbox{‘\texttt{{(}}’} ~~|~~ \mbox{‘\texttt{{)}}’} ~~|~~ {\href{../text/lexical.html#text-reserved}{\mathtt{reserved}}} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-keyword}{\mathtt{keyword}}} &amp; ::= &amp; (\mbox{‘\texttt{a}’} ~~|~~ \ldots ~~|~~ \mbox{‘\texttt{z}’})~~{{\href{../text/values.html#text-idchar}{\mathtt{idchar}}}^\ast} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-reserved}{\mathtt{reserved}}} &amp; ::= &amp; {({\href{../text/values.html#text-idchar}{\mathtt{idchar}}} ~~|~~ {\href{../text/values.html#text-string}{\mathtt{string}}} ~~|~~ \mbox{‘\texttt{,}’} ~~|~~ \mbox{‘\texttt{;}’} ~~|~~ \mbox{‘\texttt{{[}}’} ~~|~~ \mbox{‘\texttt{{]}}’} ~~|~~ \mbox{‘\texttt{{\{}}’} ~~|~~ \mbox{‘\texttt{{\}}}’})^{+}} \\
+\end{array}\end{split}\]</div>
+<p>Tokens are formed from the input character stream according to the <em>longest match</em> rule.
+That is, the next token always consists of the longest possible sequence of characters that is recognized by the above lexical grammar.
+Tokens can be separated by <a class="reference internal" href="lexical.html#text-space"><span class="std std-ref">white space</span></a>,
+but except for strings, they cannot themselves contain whitespace.</p>
+<p><em>Keyword</em> tokens always start with a lower-case letter.
+The set of keywords is defined implicitly:
+only those tokens are defined to be keywords that occur as a <a class="reference internal" href="conventions.html#text-grammar"><span class="std std-ref">terminal symbol</span></a> in literal form, such as <span class="math notranslate nohighlight">\(\mbox{‘\texttt{keyword}’}\)</span>, in a <a class="reference internal" href="conventions.html#text-syntactic"><span class="std std-ref">syntactic</span></a> production of this chapter.</p>
+<p>Any token that does not fall into any of the other categories is considered <em>reserved</em>, and cannot occur in source text.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The effect of defining the set of reserved tokens is that all tokens must be separated by either parentheses, <a class="reference internal" href="lexical.html#text-space"><span class="std std-ref">white space</span></a>, or <a class="reference internal" href="lexical.html#text-comment"><span class="std std-ref">comments</span></a>.
+For example, <span class="math notranslate nohighlight">\(\mbox{‘\texttt{0\$x}’}\)</span> is a single reserved token, as is <span class="math notranslate nohighlight">\(\mbox{‘\texttt{\kern-0.02em{'}\kern-0.05em{'}\kern-0.02ema\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em\kern-0.02em{'}\kern-0.05em{'}\kern-0.02emb\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em}’}\)</span>.
+Consequently, they are not recognized as two separate tokens <span class="math notranslate nohighlight">\(\mbox{‘\texttt{0}’}\)</span> and <span class="math notranslate nohighlight">\(\mbox{‘\texttt{\$x}’}\)</span>, or <span class="math notranslate nohighlight">\(\mbox{‘\texttt{\kern-0.02em{'}\kern-0.05em{'}\kern-0.02ema\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em}’}\)</span> and <span class="math notranslate nohighlight">\(\mbox{‘\texttt{\kern-0.02em{'}\kern-0.05em{'}\kern-0.02emb\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em}’}\)</span>, respectively, but instead disallowed.
+This property of tokenization is not affected by the fact that the definition of reserved tokens overlaps with other token classes.</p>
+</div>
+</section>
+<section id="white-space">
+<span id="text-newline"></span><span id="text-format"></span><span id="text-space"></span><span id="index-3"></span><h2>White Space<a class="headerlink" href="lexical.html#white-space" title="Link to this heading">¶</a></h2>
+<p><em>White space</em> is any sequence of literal space characters, formatting characters, <a class="reference internal" href="lexical.html#text-comment"><span class="std std-ref">comments</span></a>, or <a class="reference internal" href="lexical.html#text-annot"><span class="std std-ref">annotations</span></a>.
+The allowed formatting characters correspond to a subset of the <a class="reference external" href="https://webstore.ansi.org/RecordDetail.aspx?sku=INCITS+4-1986%5bR2012%5d">ASCII</a> <em>format effectors</em>, namely, <em>horizontal tabulation</em> (<span class="math notranslate nohighlight">\(\mathrm{U{+}09}\)</span>), <em>line feed</em> (<span class="math notranslate nohighlight">\(\mathrm{U{+}0A}\)</span>), and <em>carriage return</em> (<span class="math notranslate nohighlight">\(\mathrm{U{+}0D}\)</span>).</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/lexical.html#text-space}{\mathtt{space}}} &amp; ::= &amp; {(\mbox{‘\texttt{ }’} ~~|~~ {\href{../text/lexical.html#text-format}{\mathtt{format}}} ~~|~~ {\href{../text/lexical.html#text-comment}{\mathtt{comment}}} ~~|~~ {\href{../text/lexical.html#text-annot}{\mathtt{annot}}})^\ast} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-format}{\mathtt{format}}} &amp; ::= &amp; {\href{../text/lexical.html#text-newline}{\mathtt{newline}}} ~~|~~ \mathrm{U{+}09} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-newline}{\mathtt{newline}}} &amp; ::= &amp; \mathrm{U{+}0A} ~~|~~ \mathrm{U{+}0D} ~~|~~ \mathrm{U{+}0D}~~\mathrm{U{+}0A} \\
+\end{array}\end{split}\]</div>
+<p>The only relevance of white space is to separate <a class="reference internal" href="lexical.html#text-token"><span class="std std-ref">tokens</span></a>. It is otherwise ignored.</p>
+</section>
+<section id="comments">
+<span id="text-eof"></span><span id="text-comment"></span><span id="index-4"></span><h2>Comments<a class="headerlink" href="lexical.html#comments" title="Link to this heading">¶</a></h2>
+<p>A <em>comment</em> can either be a <em>line comment</em>, started with a double semicolon <span class="math notranslate nohighlight">\(\mbox{‘\texttt{;;}’}\)</span> and extending to the end of the line,
+or a <em>block comment</em>, enclosed in delimiters <span class="math notranslate nohighlight">\(\mbox{‘\texttt{{(};}’} \ldots \mbox{‘\texttt{;{)}}’}\)</span>.
+Block comments can be nested.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/lexical.html#text-comment}{\mathtt{comment}}} &amp; ::= &amp; {\href{../text/lexical.html#text-comment}{\mathtt{linecomment}}} ~~|~~ {\href{../text/lexical.html#text-comment}{\mathtt{blockcomment}}} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-comment}{\mathtt{linecomment}}} &amp; ::= &amp; \mbox{‘\texttt{;;}’}~~{{\href{../text/lexical.html#text-comment}{\mathtt{linechar}}}^\ast}~~({\href{../text/lexical.html#text-newline}{\mathtt{newline}}} ~~|~~ {\href{../text/lexical.html#text-eof}{\mathtt{eof}}}) \\
+&amp; {\href{../text/lexical.html#text-comment}{\mathtt{linechar}}} &amp; ::= &amp; c{:}{\href{../text/lexical.html#text-char}{\mathtt{char}}} &amp; \quad \mbox{if}~ c \neq \mathrm{U{+}0A} \land c \neq \mathrm{U{+}0D} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-comment}{\mathtt{blockcomment}}} &amp; ::= &amp; \mbox{‘\texttt{{(};}’}~~{{\href{../text/lexical.html#text-comment}{\mathtt{blockchar}}}^\ast}~~\mbox{‘\texttt{;{)}}’} \\
+&amp; {\href{../text/lexical.html#text-comment}{\mathtt{blockchar}}} &amp; ::= &amp; c{:}{\href{../text/lexical.html#text-char}{\mathtt{char}}} &amp; \quad \mbox{if}~ c \neq \mbox{‘\texttt{;}’} \land c \neq \mbox{‘\texttt{{(}}’} \\
+&amp; &amp; | &amp; {\mbox{‘\texttt{;}’}^{+}}~~c{:}{\href{../text/lexical.html#text-char}{\mathtt{char}}} &amp; \quad \mbox{if}~ c \neq \mbox{‘\texttt{;}’} \land c \neq \mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; {\mbox{‘\texttt{{(}}’}^{+}}~~c{:}{\href{../text/lexical.html#text-char}{\mathtt{char}}} &amp; \quad \mbox{if}~ c \neq \mbox{‘\texttt{;}’} \land c \neq \mbox{‘\texttt{{(}}’} \\
+&amp; &amp; | &amp; {\href{../text/lexical.html#text-comment}{\mathtt{blockcomment}}} \\
+\end{array}\end{split}\]</div>
+<p>Here, the pseudo token <span class="math notranslate nohighlight">\({\href{../text/lexical.html#text-eof}{\mathtt{eof}}}\)</span> indicates the end of the input.
+The <em>look-ahead</em> restrictions on the productions for <span class="math notranslate nohighlight">\({\href{../text/lexical.html#text-comment}{\mathtt{blockchar}}}\)</span> disambiguate the grammar such that only well-bracketed uses of block comment delimiters are allowed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any formatting and control characters are allowed inside comments.</p>
+</div>
+</section>
+<section id="annotations">
+<span id="text-annot"></span><span id="index-5"></span><h2>Annotations<a class="headerlink" href="lexical.html#annotations" title="Link to this heading">¶</a></h2>
+<p>An <em>annotation</em> is a bracketed token sequence headed by an <em>annotation id</em> of the form <span class="math notranslate nohighlight">\(\mbox{‘\texttt{@id}’}\)</span> or <span class="math notranslate nohighlight">\(\mbox{‘\texttt{@\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em...\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em}’}\)</span>.
+No <a class="reference internal" href="lexical.html#text-space"><span class="std std-ref">space</span></a> is allowed between the opening parenthesis and this id.
+Annotations are intended to be used for third-party extensions;
+they can appear anywhere in a program but are ignored by the WebAssembly semantics itself, which treats them as <a class="reference internal" href="lexical.html#text-space"><span class="std std-ref">white space</span></a>.</p>
+<p>Annotations can contain other parenthesized token sequences (including nested annotations), as long as they are well-nested.
+<a class="reference internal" href="values.html#text-string"><span class="std std-ref">String literals</span></a> and <a class="reference internal" href="lexical.html#text-comment"><span class="std std-ref">comments</span></a> occurring in an annotation must also be properly nested and closed.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/lexical.html#text-annot}{\mathtt{annot}}} &amp; ::= &amp; \mbox{‘\texttt{{(}@}’}~~{\href{../text/lexical.html#text-annot}{\mathtt{annotid}}}~~{({\href{../text/lexical.html#text-space}{\mathtt{space}}} ~~|~~ {\href{../text/lexical.html#text-token}{\mathtt{token}}})^\ast}~~\mbox{‘\texttt{{)}}’} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-annot}{\mathtt{annotid}}} &amp; ::= &amp; {{\href{../text/values.html#text-idchar}{\mathtt{idchar}}}^{+}} ~~|~~ {\href{../text/values.html#text-name}{\mathtt{name}}} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The annotation id is meant to be an identifier categorising the extension, and plays a role similar to the name of a <a class="reference internal" href="../binary/modules.html#binary-customsec"><span class="std std-ref">custom section</span></a>.
+By convention, annotations corresponding to a custom section should use the custom section’s name as an id.</p>
+<p>Implementations are expected to ignore annotations with ids that they do not recognize.
+On the other hand, they may impose restrictions on annotations that they do recognize, e.g., requiring a specific structure by superimposing a more concrete grammar.
+It is up to an implementation how it deals with errors in such annotations.</p>
+</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/text/lexical.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-lexical-format">
+<span id="zh-text-lexical"></span><span id="zh-index-0"></span><h1>词法格式<a class="headerlink" href="lexical.html#zh-lexical-format" title="Link to this heading">¶</a></h1>
+<section id="zh-characters">
+<span id="zh-text-char"></span><span id="zh-text-source"></span><span id="zh-source"></span><span id="zh-index-1"></span><h2>字符<a class="headerlink" href="lexical.html#zh-characters" title="Link to this heading">¶</a></h2>
+<p>那个 文本格式 指定意义为 <em>来源文本</em>,它包含一个序列: <em>字符</em>。 。 。
+字符假定为有效 <a class="reference external" href="https://www.unicode.org/versions/latest/">统一编码</a> (段 2.4) <em>斜线 值</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/lexical.html#text-source}{\mathtt{source}}} &amp; ::= &amp; {{\href{../text/lexical.html#text-char}{\mathtt{char}}}^\ast} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-char}{\mathtt{char}}} &amp; ::= &amp; \mathrm{U{+}00} ~~|~~ \ldots ~~|~~ \mathrm{U{+}D7FF} ~~|~~ \mathrm{U{+}E000} ~~|~~ \ldots ~~|~~ \mathrm{U{+}10FFFF} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>源文本可能包含任何 Unicode 字符 。 <a class="reference internal" href="lexical.html#zh-text-comment"><span class="std std-ref">评论</span></a> 或 <a class="reference internal" href="values.html#zh-text-string"><span class="std std-ref">字符串</span></a> 字节,
+其余部分 语法 完全由 7 位支持的字符组成 <a class="reference external" href="https://webstore.ansi.org/RecordDetail.aspx?sku=INCITS+4-1986%5bR2012%5d">第二届理事会</a> Unicode 的子集。</p>
+</div>
+</section>
+<section id="zh-tokens">
+<span id="zh-text-token"></span><span id="zh-text-reserved"></span><span id="zh-text-keyword"></span><span id="zh-index-2"></span><h2>键<a class="headerlink" href="lexical.html#zh-tokens" title="Link to this heading">¶</a></h2>
+<p>源文本中的字符流从左到右分为一个序列: <em>符号</em>,定义如下: 语法.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/lexical.html#text-token}{\mathtt{token}}} &amp; ::= &amp; {\href{../text/lexical.html#text-keyword}{\mathtt{keyword}}} ~~|~~ {\href{../text/values.html#text-int}{\mathtt{u}\kern-0.1em}} ~~|~~ {\href{../text/values.html#text-int}{\mathtt{s}\kern-0.1em}} ~~|~~ {\href{../text/values.html#text-int}{\mathtt{f}\kern-0.1em}} ~~|~~ {\href{../text/values.html#text-string}{\mathtt{string}}} ~~|~~ {\href{../text/values.html#text-id}{\mathtt{id}}} ~~|~~ \mbox{‘\texttt{{(}}’} ~~|~~ \mbox{‘\texttt{{)}}’} ~~|~~ {\href{../text/lexical.html#text-reserved}{\mathtt{reserved}}} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-keyword}{\mathtt{keyword}}} &amp; ::= &amp; (\mbox{‘\texttt{a}’} ~~|~~ \ldots ~~|~~ \mbox{‘\texttt{z}’})~~{{\href{../text/values.html#text-idchar}{\mathtt{idchar}}}^\ast} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-reserved}{\mathtt{reserved}}} &amp; ::= &amp; {({\href{../text/values.html#text-idchar}{\mathtt{idchar}}} ~~|~~ {\href{../text/values.html#text-string}{\mathtt{string}}} ~~|~~ \mbox{‘\texttt{,}’} ~~|~~ \mbox{‘\texttt{;}’} ~~|~~ \mbox{‘\texttt{{[}}’} ~~|~~ \mbox{‘\texttt{{]}}’} ~~|~~ \mbox{‘\texttt{{\{}}’} ~~|~~ \mbox{‘\texttt{{\}}}’})^{+}} \\
+\end{array}\end{split}\]</div>
+<p>托肯是按 <em>最长的匹配</em> 规则。
+也就是说,下一个标志总是由 最长的字符序列组成 由上面的词典所识别 语法。 。 。
+托肯可以由 <a class="reference internal" href="lexical.html#zh-text-space"><span class="std std-ref">空白</span></a>, (中文).
+但是除了字符串,它们本身不能包含白空间.</p>
+<p><em>关键词</em> 符号总是从小写字母开始。
+关键词集隐含定义:
+只有这些令牌被定义为关键词,作为 <a class="reference internal" href="conventions.html#zh-text-grammar"><span class="std std-ref">终端符号</span></a> 字面形式,例如: <span class="math notranslate nohighlight">\(\mbox{‘\texttt{keyword}’}\)</span>,在一个 <a class="reference internal" href="conventions.html#zh-text-syntactic"><span class="std std-ref">综合</span></a> 产生式 本章</p>
+<p>不属于其他类别的任何标志均视为 <em>保留</em>,不能在源文本中发生。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>定义这一套保留符牌的效果是,所有符牌都必须用括号中的任意一个分隔, <a class="reference internal" href="lexical.html#zh-text-space"><span class="std std-ref">空白</span></a>,或 <a class="reference internal" href="lexical.html#zh-text-comment"><span class="std std-ref">评论</span></a>。 。 。
+举例来说, <span class="math notranslate nohighlight">\(\mbox{‘\texttt{0\$x}’}\)</span> 是一个单一的预留符号,如同 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{\kern-0.02em{'}\kern-0.05em{'}\kern-0.02ema\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em\kern-0.02em{'}\kern-0.05em{'}\kern-0.02emb\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em}’}\)</span>。 。 。
+因此,它们不被承认为两个单独的符号 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{0}’}\)</span> 和 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{\$x}’}\)</span>,或 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{\kern-0.02em{'}\kern-0.05em{'}\kern-0.02ema\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em}’}\)</span> 和 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{\kern-0.02em{'}\kern-0.05em{'}\kern-0.02emb\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em}’}\)</span>分别被否决。
+这种标志化的财产不受保留标志的定义与其他标志类重叠的影响.</p>
+</div>
+</section>
+<section id="zh-white-space">
+<span id="zh-text-newline"></span><span id="zh-text-format"></span><span id="zh-text-space"></span><span id="zh-index-3"></span><h2>空白空间<a class="headerlink" href="lexical.html#zh-white-space" title="Link to this heading">¶</a></h2>
+<p><em>白空间</em> 是字面空间字符,格式化字符的任何序列, <a class="reference internal" href="lexical.html#zh-text-comment"><span class="std std-ref">评论</span></a>,或 <a class="reference internal" href="lexical.html#zh-text-annot"><span class="std std-ref">说明</span></a>。 。 。
+允许格式化的字符对应 <a class="reference external" href="https://webstore.ansi.org/RecordDetail.aspx?sku=INCITS+4-1986%5bR2012%5d">第二届理事会</a> <em>格式效果器</em>,即, <em>水平列表</em> (<span class="math notranslate nohighlight">\(\mathrm{U{+}09}\)</span>), <em>线条种子</em> (<span class="math notranslate nohighlight">\(\mathrm{U{+}0A}\)</span>),以及 <em>车厢返回</em> (<span class="math notranslate nohighlight">\(\mathrm{U{+}0D}\)</span>).</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/lexical.html#text-space}{\mathtt{space}}} &amp; ::= &amp; {(\mbox{‘\texttt{ }’} ~~|~~ {\href{../text/lexical.html#text-format}{\mathtt{format}}} ~~|~~ {\href{../text/lexical.html#text-comment}{\mathtt{comment}}} ~~|~~ {\href{../text/lexical.html#text-annot}{\mathtt{annot}}})^\ast} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-format}{\mathtt{format}}} &amp; ::= &amp; {\href{../text/lexical.html#text-newline}{\mathtt{newline}}} ~~|~~ \mathrm{U{+}09} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-newline}{\mathtt{newline}}} &amp; ::= &amp; \mathrm{U{+}0A} ~~|~~ \mathrm{U{+}0D} ~~|~~ \mathrm{U{+}0D}~~\mathrm{U{+}0A} \\
+\end{array}\end{split}\]</div>
+<p>白色空间的唯一相关性是分离 <a class="reference internal" href="lexical.html#zh-text-token"><span class="std std-ref">符号</span></a>。否则就会被忽视。</p>
+</section>
+<section id="zh-comments">
+<span id="zh-text-eof"></span><span id="zh-text-comment"></span><span id="zh-index-4"></span><h2>评论<a class="headerlink" href="lexical.html#zh-comments" title="Link to this heading">¶</a></h2>
+<p>A <em>注释</em> 要么是一个 <em>线条注释</em>,从双分号开始 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{;;}’}\)</span> 并延伸至终点,
+或一个 <em>块注释</em>标记符 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{{(};}’} \ldots \mbox{‘\texttt{;{)}}’}\)</span>。 。 。
+块评论可以嵌入.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/lexical.html#text-comment}{\mathtt{comment}}} &amp; ::= &amp; {\href{../text/lexical.html#text-comment}{\mathtt{linecomment}}} ~~|~~ {\href{../text/lexical.html#text-comment}{\mathtt{blockcomment}}} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-comment}{\mathtt{linecomment}}} &amp; ::= &amp; \mbox{‘\texttt{;;}’}~~{{\href{../text/lexical.html#text-comment}{\mathtt{linechar}}}^\ast}~~({\href{../text/lexical.html#text-newline}{\mathtt{newline}}} ~~|~~ {\href{../text/lexical.html#text-eof}{\mathtt{eof}}}) \\
+&amp; {\href{../text/lexical.html#text-comment}{\mathtt{linechar}}} &amp; ::= &amp; c{:}{\href{../text/lexical.html#text-char}{\mathtt{char}}} &amp; \quad \mbox{if}~ c \neq \mathrm{U{+}0A} \land c \neq \mathrm{U{+}0D} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-comment}{\mathtt{blockcomment}}} &amp; ::= &amp; \mbox{‘\texttt{{(};}’}~~{{\href{../text/lexical.html#text-comment}{\mathtt{blockchar}}}^\ast}~~\mbox{‘\texttt{;{)}}’} \\
+&amp; {\href{../text/lexical.html#text-comment}{\mathtt{blockchar}}} &amp; ::= &amp; c{:}{\href{../text/lexical.html#text-char}{\mathtt{char}}} &amp; \quad \mbox{if}~ c \neq \mbox{‘\texttt{;}’} \land c \neq \mbox{‘\texttt{{(}}’} \\
+&amp; &amp; | &amp; {\mbox{‘\texttt{;}’}^{+}}~~c{:}{\href{../text/lexical.html#text-char}{\mathtt{char}}} &amp; \quad \mbox{if}~ c \neq \mbox{‘\texttt{;}’} \land c \neq \mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; {\mbox{‘\texttt{{(}}’}^{+}}~~c{:}{\href{../text/lexical.html#text-char}{\mathtt{char}}} &amp; \quad \mbox{if}~ c \neq \mbox{‘\texttt{;}’} \land c \neq \mbox{‘\texttt{{(}}’} \\
+&amp; &amp; | &amp; {\href{../text/lexical.html#text-comment}{\mathtt{blockcomment}}} \\
+\end{array}\end{split}\]</div>
+<p>在这里,伪证 <span class="math notranslate nohighlight">\({\href{../text/lexical.html#text-eof}{\mathtt{eof}}}\)</span> 表示输入的结束。
+那个 <em>抬头看</em> 对《公约》的限制 产生式 (单位:千美元) <span class="math notranslate nohighlight">\({\href{../text/lexical.html#text-comment}{\mathtt{blockchar}}}\)</span> 拆开 语法 因此,只允许对块评语区划器的密封使用。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>任何格式化和控制字符都可以在内部注释中使用.</p>
+</div>
+</section>
+<section id="zh-annotations">
+<span id="zh-text-annot"></span><span id="zh-index-5"></span><h2>说明<a class="headerlink" href="lexical.html#zh-annotations" title="Link to this heading">¶</a></h2>
+<p>一个 <em>注释</em> 是一个括号内的符号序列,以 <em>注解编号</em> 表格编号 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{@id}’}\)</span> 或 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{@\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em...\kern-0.02em{'}\kern-0.05em{'}\kern-0.02em}’}\)</span>。 。 。
+没有 <a class="reference internal" href="lexical.html#zh-text-space"><span class="std std-ref">空间</span></a> 允许介于开口括号和此标识之间。
+说明意在用于第三方扩展;
+它们可以在程序的任何位置出现 但被忽略 WebAssembly 语义学本身,即把它们当作 <a class="reference internal" href="lexical.html#zh-text-space"><span class="std std-ref">空白</span></a>.</p>
+<p>说明可以包含其他圆括号形的符号序列(包括嵌入式说明),只要这些序列得到很好的识别.
+<a class="reference internal" href="values.html#zh-text-string"><span class="std std-ref">字符串文字</span></a> 和 <a class="reference internal" href="lexical.html#zh-text-comment"><span class="std std-ref">评论</span></a> 在注释中发生的,也必须适当筑巢和闭合。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/lexical.html#text-annot}{\mathtt{annot}}} &amp; ::= &amp; \mbox{‘\texttt{{(}@}’}~~{\href{../text/lexical.html#text-annot}{\mathtt{annotid}}}~~{({\href{../text/lexical.html#text-space}{\mathtt{space}}} ~~|~~ {\href{../text/lexical.html#text-token}{\mathtt{token}}})^\ast}~~\mbox{‘\texttt{{)}}’} \\[0.8ex]
+&amp; {\href{../text/lexical.html#text-annot}{\mathtt{annotid}}} &amp; ::= &amp; {{\href{../text/values.html#text-idchar}{\mathtt{idchar}}}^{+}} ~~|~~ {\href{../text/values.html#text-name}{\mathtt{name}}} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>注释 id 意在作为扩展的标识分类,并起到类似于 名称 页:1 <a class="reference internal" href="../binary/modules.html#zh-binary-customsec"><span class="std std-ref">自定义 段</span></a>。 。 。
+按惯例,与习惯相对应的说明 段 应使用自定义 段’s 名称 作为身份证明。</p>
+<p>执行预计将忽略说明和它们不承认的编号。
+另一方面,它们可能会对它们确实承认的说明施加限制,例如,通过超级加固更具体的结构,要求有一个具体的结构。 语法。 。 。
+如何处理这些说明中的错误,取决于如何加以执行。</p>
+</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/text/lexical.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

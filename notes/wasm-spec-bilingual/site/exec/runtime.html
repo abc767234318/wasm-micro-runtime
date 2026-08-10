@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Runtime Structure  / 运行时结构  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="numerics.html" rel="next" title="Numerics"/>
+<link href="conventions.html" rel="prev" title="Conventions"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conventions.html"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="runtime.html#"><span class="wasm-bi-nav-en">Runtime Structure</span><span class="wasm-bi-nav-zh">运行时结构</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="numerics.html"><span class="wasm-bi-nav-en">Numerics</span><span class="wasm-bi-nav-zh">数字</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/exec/runtime.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="runtime-structure">
+<span id="syntax-runtime"></span><span id="index-0"></span><h1>Runtime Structure<a class="headerlink" href="runtime.html#runtime-structure" title="Link to this heading">¶</a></h1>
+<p><a class="reference internal" href="runtime.html#store"><span class="std std-ref">Store</span></a>, <a class="reference internal" href="runtime.html#stack"><span class="std std-ref">stack</span></a>, and other <em>runtime structure</em> forming the WebAssembly abstract machine, such as <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">values</span></a> or <a class="reference internal" href="runtime.html#syntax-moduleinst"><span class="std std-ref">module instances</span></a>, are made precise in terms of additional auxiliary syntax.</p>
+<section id="values">
+<span id="syntax-pack"></span><span id="syntax-val"></span><span id="syntax-nullref"></span><span id="syntax-ref-extern"></span><span id="syntax-ref-host"></span><span id="syntax-ref-exn"></span><span id="syntax-ref-array"></span><span id="syntax-ref-struct"></span><span id="syntax-ref-i31num"></span><span id="syntax-ref"></span><span id="syntax-vec"></span><span id="syntax-num"></span><span id="index-1"></span><h2>Values<a class="headerlink" href="runtime.html#values" title="Link to this heading">¶</a></h2>
+<p>WebAssembly computations manipulate <em>values</em> of either the four basic <a class="reference internal" href="../syntax/types.html#syntax-numtype"><span class="std std-ref">number types</span></a>, i.e., <a class="reference internal" href="../syntax/values.html#syntax-int"><span class="std std-ref">integers</span></a> and <a class="reference internal" href="../syntax/values.html#syntax-float"><span class="std std-ref">floating-point data</span></a> of 32 or 64 bit width each, or <a class="reference internal" href="../syntax/values.html#syntax-vecnum"><span class="std std-ref">vectors</span></a> of 128 bit width, or of <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a>.</p>
+<p>In most places of the semantics, values of different types can occur.
+In order to avoid ambiguities, values are therefore represented with an abstract syntax that makes their type explicit.
+It is convenient to reuse the same notation as for the <span class="math notranslate nohighlight">\(\mathsf{const}\)</span> <a class="reference internal" href="../syntax/instructions.html#syntax-const"><span class="std std-ref">instructions</span></a> and <span class="math notranslate nohighlight">\(\mathsf{ref{.}null}\)</span> producing them.</p>
+<p>References other than null are represented with additional <a class="reference internal" href="runtime.html#syntax-instr-admin"><span class="std std-ref">administrative instructions</span></a>.
+They either are <em>scalar references</em>, containing a 31-bit <a class="reference internal" href="../syntax/values.html#syntax-int"><span class="std std-ref">integer</span></a>,
+<em>null references</em>,
+<em>structure references</em>, pointing to a specific <a class="reference internal" href="runtime.html#syntax-structaddr"><span class="std std-ref">structure address</span></a>,
+<em>array references</em>, pointing to a specific <a class="reference internal" href="runtime.html#syntax-arrayaddr"><span class="std std-ref">array address</span></a>,
+<em>function references</em>, pointing to a specific <a class="reference internal" href="runtime.html#syntax-funcaddr"><span class="std std-ref">function address</span></a>,
+<em>exception references</em>, pointing to a specific <a class="reference internal" href="runtime.html#syntax-exnaddr"><span class="std std-ref">exception address</span></a>,
+or <em>host references</em> pointing to an uninterpreted form of <a class="reference internal" href="runtime.html#syntax-hostaddr"><span class="std std-ref">host address</span></a> defined by the <a class="reference internal" href="../intro/overview.html#embedder"><span class="std std-ref">embedder</span></a>.
+Any of the aformentioned references can furthermore be wrapped up as an <em>external reference</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-val}{\mathit{val}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-num}{\mathit{num}}} ~~|~~ {\href{../exec/runtime.html#syntax-vec}{\mathit{vec}}} ~~|~~ {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} \\[0.8ex]
+&amp; {\href{../exec/runtime.html#syntax-num}{\mathit{num}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~{{\href{../exec/runtime.html#syntax-num}{\mathit{num}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\[0.8ex]
+&amp; {\href{../exec/runtime.html#syntax-vec}{\mathit{vec}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{const}}~{{\href{../exec/runtime.html#syntax-vec}{\mathit{vec}}}}_{{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}} \\[0.8ex]
+&amp; {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} &amp; ::= &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}i\scriptstyle31}}~{\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em31}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}struct}}~{\href{../exec/runtime.html#syntax-structaddr}{\mathit{structaddr}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}array}}~{\href{../exec/runtime.html#syntax-arrayaddr}{\mathit{arrayaddr}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}func}}~{\href{../exec/runtime.html#syntax-funcaddr}{\mathit{funcaddr}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}exn}}~{\href{../exec/runtime.html#syntax-exnaddr}{\mathit{exnaddr}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}host}}~{\href{../exec/runtime.html#syntax-hostaddr}{\mathit{hostaddr}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}extern}}~{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Future versions of WebAssembly may add additional forms of values.</p>
+</div>
+<p id="aux-default"><a class="reference internal" href="../syntax/types.html#syntax-valtype"><span class="std std-ref">Value types</span></a> can have an associated <em>default value</em>;
+it is the respective value <span class="math notranslate nohighlight">\(0\)</span> for <a class="reference internal" href="../syntax/types.html#syntax-numtype"><span class="std std-ref">number types</span></a>, <span class="math notranslate nohighlight">\(0\)</span> for <a class="reference internal" href="../syntax/types.html#syntax-vectype"><span class="std std-ref">vector types</span></a>, and null for nullable <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference types</span></a>.
+For other references, no default value is defined, <span class="math notranslate nohighlight">\({{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{t}\)</span> hence is an optional value <span class="math notranslate nohighlight">\({{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^?}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; = &amp; ({\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~0) \\
+{{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; = &amp; ({\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~{+0}) \\
+{{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{v}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; = &amp; ({\href{../syntax/types.html#syntax-numtype}{\mathsf{v}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{const}}~0) \\
+{{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~{\mathit{ht}}} &amp; = &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}} \\
+{{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{ht}}} &amp; = &amp; \epsilon \\
+\end{array}\end{split}\]</div>
+<section id="convention">
+<h3>Convention<a class="headerlink" href="runtime.html#convention" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The meta variable <span class="math notranslate nohighlight">\(r\)</span> ranges over reference values where clear from context.</p></li>
+</ul>
+</section>
+</section>
+<section id="results">
+<span id="syntax-result"></span><span id="index-2"></span><h2>Results<a class="headerlink" href="runtime.html#results" title="Link to this heading">¶</a></h2>
+<p>A <em>result</em> is the outcome of a computation.
+It is either a sequence of <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">values</span></a>, a thrown <a class="reference internal" href="instructions.html#exec-throw-ref"><span class="std std-ref">exception</span></a>, or a <a class="reference internal" href="runtime.html#syntax-trap"><span class="std std-ref">trap</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-result}{\mathit{result}}} &amp; ::= &amp; {{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^\ast} ~~|~~ ( \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}exn}}~{\href{../exec/runtime.html#syntax-exnaddr}{\mathit{exnaddr}}} )~\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{throw\_ref}} ~~|~~ \href{../exec/runtime.html#syntax-trap}{\mathsf{trap}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="store">
+<span id="syntax-store"></span><span id="index-3"></span><span id="id1"></span><h2>Store<a class="headerlink" href="runtime.html#store" title="Link to this heading">¶</a></h2>
+<p>The <em>store</em> represents all global state that can be manipulated by WebAssembly programs.
+It consists of the runtime representation of all <em>instances</em> of
+<a class="reference internal" href="runtime.html#syntax-funcinst"><span class="std std-ref">functions</span></a>,
+<a class="reference internal" href="runtime.html#syntax-tableinst"><span class="std std-ref">tables</span></a>,
+<a class="reference internal" href="runtime.html#syntax-meminst"><span class="std std-ref">memories</span></a>,
+<a class="reference internal" href="runtime.html#syntax-globalinst"><span class="std std-ref">globals</span></a>,
+<a class="reference internal" href="runtime.html#syntax-taginst"><span class="std std-ref">tags</span></a>,
+<a class="reference internal" href="runtime.html#syntax-eleminst"><span class="std std-ref">element segments</span></a>,
+<a class="reference internal" href="runtime.html#syntax-datainst"><span class="std std-ref">data segments</span></a>,
+and
+<a class="reference internal" href="runtime.html#syntax-structinst"><span class="std std-ref">structures</span></a>,
+<a class="reference internal" href="runtime.html#syntax-arrayinst"><span class="std std-ref">arrays</span></a> or
+<a class="reference internal" href="runtime.html#syntax-exninst"><span class="std std-ref">exceptions</span></a>
+that have been <a class="reference internal" href="modules.html#alloc"><span class="std std-ref">allocated</span></a> during the life time of the abstract machine.</p>
+<p>It is an invariant of the semantics that no element or data instance is <a class="reference internal" href="runtime.html#syntax-addr"><span class="std std-ref">addressed</span></a> from anywhere else but the owning module instances.</p>
+<p>Syntactically, the store is defined as a <a class="reference internal" href="../syntax/conventions.html#notation-record"><span class="std std-ref">record</span></a> listing the existing instances of each category:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-store}{\mathit{store}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-store}{\mathsf{tags}}~{{\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}~{{\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}~{{\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}~{{\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}~{{\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{datas}}~{{\href{../exec/runtime.html#syntax-datainst}{\mathit{datainst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{elems}}~{{\href{../exec/runtime.html#syntax-eleminst}{\mathit{eleminst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{structs}}~{{\href{../exec/runtime.html#syntax-structinst}{\mathit{structinst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{arrays}}~{{\href{../exec/runtime.html#syntax-arrayinst}{\mathit{arrayinst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{exns}}~{{\href{../exec/runtime.html#syntax-exninst}{\mathit{exninst}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In practice, implementations may apply techniques like garbage collection or reference counting to remove objects from the store that are no longer referenced.
+However, such techniques are not semantically observable,
+and hence outside the scope of this specification.</p>
+</div>
+<section id="id2">
+<h3>Convention<a class="headerlink" href="runtime.html#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The meta variable <span class="math notranslate nohighlight">\(s\)</span> ranges over stores where clear from context.</p></li>
+</ul>
+</section>
+</section>
+<section id="addresses">
+<span id="syntax-addr"></span><span id="syntax-hostaddr"></span><span id="syntax-exnaddr"></span><span id="syntax-arrayaddr"></span><span id="syntax-structaddr"></span><span id="syntax-dataaddr"></span><span id="syntax-elemaddr"></span><span id="syntax-tagaddr"></span><span id="syntax-globaladdr"></span><span id="syntax-memaddr"></span><span id="syntax-tableaddr"></span><span id="syntax-funcaddr"></span><span id="index-4"></span><h2>Addresses<a class="headerlink" href="runtime.html#addresses" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="runtime.html#syntax-funcinst"><span class="std std-ref">Function instances</span></a>,
+<a class="reference internal" href="runtime.html#syntax-tableinst"><span class="std std-ref">table instances</span></a>,
+<a class="reference internal" href="runtime.html#syntax-meminst"><span class="std std-ref">memory instances</span></a>,
+<a class="reference internal" href="runtime.html#syntax-globalinst"><span class="std std-ref">global instances</span></a>,
+<a class="reference internal" href="runtime.html#syntax-taginst"><span class="std std-ref">tag instances</span></a>,
+<a class="reference internal" href="runtime.html#syntax-eleminst"><span class="std std-ref">element instances</span></a>,
+<a class="reference internal" href="runtime.html#syntax-datainst"><span class="std std-ref">data instances</span></a>
+and
+<a class="reference internal" href="runtime.html#syntax-structinst"><span class="std std-ref">structure</span></a>,
+<a class="reference internal" href="runtime.html#syntax-arrayinst"><span class="std std-ref">array</span></a> or
+<a class="reference internal" href="runtime.html#syntax-exninst"><span class="std std-ref">exception instances</span></a>
+in the <a class="reference internal" href="runtime.html#syntax-store"><span class="std std-ref">store</span></a> are referenced with abstract <em>addresses</em>.
+These are simply indices into the respective store component.
+In addition, an <a class="reference internal" href="../intro/overview.html#embedder"><span class="std std-ref">embedder</span></a> may supply an uninterpreted set of <em>host addresses</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} &amp; ::= &amp; 0 ~~|~~ 1 ~~|~~ 2 ~~|~~ \dots \\
+&amp; {\href{../exec/runtime.html#syntax-funcaddr}{\mathit{funcaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-tableaddr}{\mathit{tableaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-memaddr}{\mathit{memaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-globaladdr}{\mathit{globaladdr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-tagaddr}{\mathit{tagaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-elemaddr}{\mathit{elemaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-dataaddr}{\mathit{dataaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-structaddr}{\mathit{structaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-arrayaddr}{\mathit{arrayaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-exnaddr}{\mathit{exnaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-hostaddr}{\mathit{hostaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+\end{array}\end{split}\]</div>
+<p>An <a class="reference internal" href="../intro/overview.html#embedder"><span class="std std-ref">embedder</span></a> may assign identity to <a class="reference internal" href="../syntax/modules.html#syntax-export"><span class="std std-ref">exported</span></a> store objects corresponding to their addresses,
+even where this identity is not observable from within WebAssembly code itself
+(such as for <a class="reference internal" href="runtime.html#syntax-funcinst"><span class="std std-ref">function instances</span></a> or immutable <a class="reference internal" href="runtime.html#syntax-globalinst"><span class="std std-ref">globals</span></a>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Addresses are <em>dynamic</em>, globally unique references to runtime objects,
+in contrast to <a class="reference internal" href="../syntax/modules.html#syntax-index"><span class="std std-ref">indices</span></a>,
+which are <em>static</em>, module-local references to their original definitions.
+A <em>memory address</em> <span class="math notranslate nohighlight">\(\href{../exec/runtime.html#syntax-memaddr}{\mathit{memaddr}}\)</span> denotes the abstract address <em>of</em> a memory <em>instance</em> in the store,
+not an offset <em>inside</em> a memory instance.</p>
+<p>There is no specific limit on the number of allocations of store objects,
+hence logical addresses can be arbitrarily large natural numbers.</p>
+</div>
+<section id="conventions">
+<span id="free-addr"></span><span id="free-labeladdr"></span><span id="free-localaddr"></span><span id="free-arrayaddr"></span><span id="free-structaddr"></span><span id="free-dataaddr"></span><span id="free-elemaddr"></span><span id="free-tagaddr"></span><span id="free-globaladdr"></span><span id="free-memaddr"></span><span id="free-tableaddr"></span><span id="free-funcaddr"></span><h3>Conventions<a class="headerlink" href="runtime.html#conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The notation <span class="math notranslate nohighlight">\({\mathrm{addr}}(A)\)</span> denotes the set of addresses from address space <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}}\)</span> occurring free in <span class="math notranslate nohighlight">\(A\)</span>. We sometimes reinterpret this set as the <a class="reference internal" href="../syntax/conventions.html#syntax-list"><span class="std std-ref">list</span></a> of its elements, without assuming any particular order.</p></li>
+</ul>
+</section>
+</section>
+<section id="external-addresses">
+<span id="syntax-externaddr"></span><span id="index-5"></span><h2>External Addresses<a class="headerlink" href="runtime.html#external-addresses" title="Link to this heading">¶</a></h2>
+<p>An <em>external address</em> is the runtime <a class="reference internal" href="runtime.html#syntax-addr"><span class="std std-ref">address</span></a> of an entity that can be imported or exported.
+It is an <a class="reference internal" href="runtime.html#syntax-addr"><span class="std std-ref">address</span></a> denoting either a
+<a class="reference internal" href="runtime.html#syntax-funcinst"><span class="std std-ref">function instance</span></a>,
+<a class="reference internal" href="runtime.html#syntax-globalinst"><span class="std std-ref">global instance</span></a>,
+<a class="reference internal" href="runtime.html#syntax-tableinst"><span class="std std-ref">table instance</span></a>,
+<a class="reference internal" href="runtime.html#syntax-meminst"><span class="std std-ref">memory instance</span></a>, or
+<a class="reference internal" href="runtime.html#syntax-taginst"><span class="std std-ref">tag instance</span></a>
+in the shared <a class="reference internal" href="runtime.html#syntax-store"><span class="std std-ref">store</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}} &amp; ::= &amp; \href{../exec/runtime.html#syntax-externaddr}{\mathsf{tag}}~{\href{../exec/runtime.html#syntax-tagaddr}{\mathit{tagaddr}}} ~~|~~ \href{../exec/runtime.html#syntax-externaddr}{\mathsf{global}}~{\href{../exec/runtime.html#syntax-globaladdr}{\mathit{globaladdr}}} ~~|~~ \href{../exec/runtime.html#syntax-externaddr}{\mathsf{mem}}~{\href{../exec/runtime.html#syntax-memaddr}{\mathit{memaddr}}} ~~|~~ \href{../exec/runtime.html#syntax-externaddr}{\mathsf{table}}~{\href{../exec/runtime.html#syntax-tableaddr}{\mathit{tableaddr}}} ~~|~~ \href{../exec/runtime.html#syntax-externaddr}{\mathsf{func}}~{\href{../exec/runtime.html#syntax-funcaddr}{\mathit{funcaddr}}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="module-instances">
+<span id="syntax-moduleinst"></span><span id="index-6"></span><h2>Module Instances<a class="headerlink" href="runtime.html#module-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>module instance</em> is the runtime representation of a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.
+It is created by <a class="reference internal" href="modules.html#exec-instantiation"><span class="std std-ref">instantiating</span></a> a module,
+and collects runtime representations of all entities that are imported, defined, or exported by the module.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{types}}~{{\href{../valid/conventions.html#syntax-deftype}{\mathit{deftype}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{tags}}~{{\href{../exec/runtime.html#syntax-tagaddr}{\mathit{tagaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{globals}}~{{\href{../exec/runtime.html#syntax-globaladdr}{\mathit{globaladdr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{mems}}~{{\href{../exec/runtime.html#syntax-memaddr}{\mathit{memaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{tables}}~{{\href{../exec/runtime.html#syntax-tableaddr}{\mathit{tableaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{funcs}}~{{\href{../exec/runtime.html#syntax-funcaddr}{\mathit{funcaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{datas}}~{{\href{../exec/runtime.html#syntax-dataaddr}{\mathit{dataaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{elems}}~{{\href{../exec/runtime.html#syntax-elemaddr}{\mathit{elemaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{exports}}~{{\href{../exec/runtime.html#syntax-exportinst}{\mathit{exportinst}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>Each component references runtime instances corresponding to respective declarations from the original module – whether imported or defined – in the order of their static <a class="reference internal" href="../syntax/modules.html#syntax-index"><span class="std std-ref">indices</span></a>.
+<a class="reference internal" href="runtime.html#syntax-funcinst"><span class="std std-ref">Function instances</span></a>,
+<a class="reference internal" href="runtime.html#syntax-tableinst"><span class="std std-ref">table instances</span></a>,
+<a class="reference internal" href="runtime.html#syntax-meminst"><span class="std std-ref">memory instances</span></a>,
+<a class="reference internal" href="runtime.html#syntax-globalinst"><span class="std std-ref">global instances</span></a>, and
+<a class="reference internal" href="runtime.html#syntax-taginst"><span class="std std-ref">tag instances</span></a>
+are denoted by their respective <a class="reference internal" href="runtime.html#syntax-addr"><span class="std std-ref">addresses</span></a> in the <a class="reference internal" href="runtime.html#syntax-store"><span class="std std-ref">store</span></a>.</p>
+<p>It is an invariant of the semantics that all <a class="reference internal" href="runtime.html#syntax-exportinst"><span class="std std-ref">export instances</span></a> in a given module instance have different <a class="reference internal" href="../syntax/values.html#syntax-name"><span class="std std-ref">names</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All record fields except <span class="math notranslate nohighlight">\(\mathsf{exports}\)</span> are to be considered <em>private</em> components of a module instance.
+They are not accessible to other modules,
+only to function instances originating from the same module.</p>
+</div>
+</section>
+<section id="function-instances">
+<span id="syntax-funcinst"></span><span id="syntax-hostfunc"></span><span id="index-7"></span><h2>Function Instances<a class="headerlink" href="runtime.html#function-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>function instance</em> is the runtime representation of a <a class="reference internal" href="../syntax/modules.html#syntax-func"><span class="std std-ref">function</span></a>.
+It effectively is a <em>closure</em> of the original function over the runtime <a class="reference internal" href="runtime.html#syntax-moduleinst"><span class="std std-ref">module instance</span></a> of its originating <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.
+The module instance is used to resolve references to other definitions during execution of the function.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-funcinst}{\mathsf{type}}~{\href{../valid/conventions.html#syntax-deftype}{\mathit{deftype}}} ,  \href{../exec/runtime.html#syntax-funcinst}{\mathsf{module}}~{\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}} ,  \href{../exec/runtime.html#syntax-funcinst}{\mathsf{code}}~{{\href{../exec/runtime.html#syntax-funcinst}{\mathit{code}}}} \} \\
+\end{array} \\
+&amp; {{\href{../exec/runtime.html#syntax-funcinst}{\mathit{code}}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-func}{\mathit{func}}} ~~|~~ {\href{../exec/runtime.html#syntax-hostfunc}{\mathit{hostfunc}}} \\
+\end{array}\end{split}\]</div>
+<p>A <em>host function</em> is a function expressed outside WebAssembly but passed to a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a> as an <a class="reference internal" href="../syntax/modules.html#syntax-import"><span class="std std-ref">import</span></a>.
+The definition and behavior of host functions are outside the scope of this specification.
+For the purpose of this specification, it is assumed that when <a class="reference internal" href="instructions.html#exec-invoke-host"><span class="std std-ref">invoked</span></a>,
+a host function behaves non-deterministically,
+but within certain <a class="reference internal" href="instructions.html#exec-invoke-host"><span class="std std-ref">constraints</span></a> that ensure the integrity of the runtime.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Function instances are immutable, and their identity is not observable by WebAssembly code.
+However, an <a class="reference internal" href="../intro/overview.html#embedder"><span class="std std-ref">embedder</span></a> might provide implicit or explicit means for distinguishing their <a class="reference internal" href="runtime.html#syntax-funcaddr"><span class="std std-ref">addresses</span></a>.</p>
+</div>
+</section>
+<section id="table-instances">
+<span id="syntax-tableinst"></span><span id="index-8"></span><h2>Table Instances<a class="headerlink" href="runtime.html#table-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>table instance</em> is the runtime representation of a <a class="reference internal" href="../syntax/modules.html#syntax-table"><span class="std std-ref">table</span></a>.
+It records its <a class="reference internal" href="../syntax/types.html#syntax-tabletype"><span class="std std-ref">type</span></a> and holds a sequence of <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference values</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-tableinst}{\mathsf{type}}~{\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}} ,  \href{../exec/runtime.html#syntax-tableinst}{\mathsf{refs}}~{{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>Table elements can be mutated through <a class="reference internal" href="../syntax/instructions.html#syntax-instr-table"><span class="std std-ref">table instructions</span></a>, the execution of an active <a class="reference internal" href="../syntax/modules.html#syntax-elem"><span class="std std-ref">element segment</span></a>, or by external means provided by the <a class="reference internal" href="../intro/overview.html#embedder"><span class="std std-ref">embedder</span></a>.</p>
+<p>It is an invariant of the semantics that all table elements have a type <a class="reference internal" href="../valid/matching.html#match-reftype"><span class="std std-ref">matching</span></a> the element type of <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}}\)</span>.
+It also is an invariant that the length of the element sequence never exceeds the maximum size of <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}}\)</span>.</p>
+</section>
+<section id="memory-instances">
+<span id="syntax-meminst"></span><span id="page-size"></span><span id="index-9"></span><h2>Memory Instances<a class="headerlink" href="runtime.html#memory-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>memory instance</em> is the runtime representation of a linear <a class="reference internal" href="../syntax/modules.html#syntax-mem"><span class="std std-ref">memory</span></a>.
+It records its <a class="reference internal" href="../syntax/types.html#syntax-memtype"><span class="std std-ref">type</span></a> and holds a sequence of <a class="reference internal" href="../syntax/values.html#syntax-byte"><span class="std std-ref">bytes</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-meminst}{\mathsf{type}}~{\href{../syntax/types.html#syntax-memtype}{\mathit{memtype}}} ,  \href{../exec/runtime.html#syntax-meminst}{\mathsf{bytes}}~{{\href{../syntax/values.html#syntax-byte}{\mathit{byte}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>The length of the sequence always is a multiple of the WebAssembly <em>page size</em>, which is defined to be the constant <span class="math notranslate nohighlight">\(65536\)</span> – abbreviated <span class="math notranslate nohighlight">\(64~{\mathrm{Ki}}\)</span>.</p>
+<p>A memory’s bytes can be mutated through <a class="reference internal" href="../syntax/instructions.html#syntax-instr-memory"><span class="std std-ref">memory instructions</span></a>, the execution of an active <a class="reference internal" href="../syntax/modules.html#syntax-data"><span class="std std-ref">data segment</span></a>, or by external means provided by the <a class="reference internal" href="../intro/overview.html#embedder"><span class="std std-ref">embedder</span></a>.</p>
+<p>It is an invariant of the semantics that the length of the byte sequence, divided by page size, never exceeds the maximum size of <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-memtype}{\mathit{memtype}}}\)</span>.</p>
+</section>
+<section id="global-instances">
+<span id="syntax-globalinst"></span><span id="index-10"></span><h2>Global Instances<a class="headerlink" href="runtime.html#global-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>global instance</em> is the runtime representation of a <a class="reference internal" href="../syntax/modules.html#syntax-global"><span class="std std-ref">global</span></a> variable.
+It records its <a class="reference internal" href="../syntax/types.html#syntax-globaltype"><span class="std std-ref">type</span></a> and holds an individual <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">value</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-globalinst}{\mathsf{type}}~{\href{../syntax/types.html#syntax-globaltype}{\mathit{globaltype}}} ,  \href{../exec/runtime.html#syntax-globalinst}{\mathsf{value}}~{\href{../exec/runtime.html#syntax-val}{\mathit{val}}} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>The value of mutable globals can be mutated through <a class="reference internal" href="../syntax/instructions.html#syntax-instr-variable"><span class="std std-ref">variable instructions</span></a> or by external means provided by the <a class="reference internal" href="../intro/overview.html#embedder"><span class="std std-ref">embedder</span></a>.</p>
+<p>It is an invariant of the semantics that the value has a type <a class="reference internal" href="../valid/matching.html#match-valtype"><span class="std std-ref">matching</span></a> the <a class="reference internal" href="../syntax/types.html#syntax-valtype"><span class="std std-ref">value type</span></a> of <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-globaltype}{\mathit{globaltype}}}\)</span>.</p>
+</section>
+<section id="tag-instances">
+<span id="syntax-taginst"></span><span id="index-11"></span><h2>Tag Instances<a class="headerlink" href="runtime.html#tag-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>tag instance</em> is the runtime representation of a <a class="reference internal" href="../syntax/modules.html#syntax-tag"><span class="std std-ref">tag</span></a> definition.
+It records the <a class="reference internal" href="../valid/conventions.html#syntax-deftype"><span class="std std-ref">defined type</span></a> of the tag.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-taginst}{\mathsf{type}}~{\href{../syntax/types.html#syntax-tagtype}{\mathit{tagtype}}} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="element-instances">
+<span id="syntax-eleminst"></span><span id="index-12"></span><h2>Element Instances<a class="headerlink" href="runtime.html#element-instances" title="Link to this heading">¶</a></h2>
+<p>An <em>element instance</em> is the runtime representation of an <a class="reference internal" href="../syntax/modules.html#syntax-elem"><span class="std std-ref">element segment</span></a>.
+It holds a list of references and its <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">type</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-eleminst}{\mathit{eleminst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-eleminst}{\mathsf{type}}~{\href{../syntax/types.html#syntax-elemtype}{\mathit{elemtype}}} ,  \href{../exec/runtime.html#syntax-eleminst}{\mathsf{refs}}~{{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>It is an invariant of the semantics that all elements of a segment have a type <a class="reference internal" href="../valid/matching.html#match-reftype"><span class="std std-ref">matching</span></a> <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-elemtype}{\mathit{elemtype}}}\)</span>.</p>
+</section>
+<section id="data-instances">
+<span id="syntax-datainst"></span><span id="index-13"></span><h2>Data Instances<a class="headerlink" href="runtime.html#data-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>data instance</em> is the runtime representation of a <a class="reference internal" href="../syntax/modules.html#syntax-data"><span class="std std-ref">data segment</span></a>.
+It holds a list of <a class="reference internal" href="../syntax/values.html#syntax-byte"><span class="std std-ref">bytes</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-datainst}{\mathit{datainst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-datainst}{\mathsf{bytes}}~{{\href{../syntax/values.html#syntax-byte}{\mathit{byte}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="export-instances">
+<span id="syntax-exportinst"></span><span id="index-14"></span><h2>Export Instances<a class="headerlink" href="runtime.html#export-instances" title="Link to this heading">¶</a></h2>
+<p>An <em>export instance</em> is the runtime representation of an <a class="reference internal" href="../syntax/modules.html#syntax-export"><span class="std std-ref">export</span></a>.
+It defines the export’s <a class="reference internal" href="../syntax/values.html#syntax-name"><span class="std std-ref">name</span></a> and the associated <a class="reference internal" href="runtime.html#syntax-externaddr"><span class="std std-ref">external address</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-exportinst}{\mathit{exportinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-exportinst}{\mathsf{name}}~{\href{../syntax/values.html#syntax-name}{\mathit{name}}} ,  \href{../exec/runtime.html#syntax-exportinst}{\mathsf{addr}}~{\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<section id="id3">
+<h3>Conventions<a class="headerlink" href="runtime.html#id3" title="Link to this heading">¶</a></h3>
+<p>The following auxiliary functions are assumed on sequences of external addresses.
+They extract addresses of a specific kind in an order-preserving fashion:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathrm{funcs}}}({{\mathit{xa}}^\ast})\)</span> extracts all <a class="reference internal" href="runtime.html#syntax-funcaddr"><span class="std std-ref">function addresses</span></a> from <span class="math notranslate nohighlight">\({{\mathit{xa}}^\ast}\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathrm{tables}}}({{\mathit{xa}}^\ast})\)</span> extracts all <a class="reference internal" href="runtime.html#syntax-funcaddr"><span class="std std-ref">table addresses</span></a> from <span class="math notranslate nohighlight">\({{\mathit{xa}}^\ast}\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathrm{mems}}}({{\mathit{xa}}^\ast})\)</span> extracts all <a class="reference internal" href="runtime.html#syntax-funcaddr"><span class="std std-ref">memory addresses</span></a> from <span class="math notranslate nohighlight">\({{\mathit{xa}}^\ast}\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathrm{globals}}}({{\mathit{xa}}^\ast})\)</span> extracts all <a class="reference internal" href="runtime.html#syntax-funcaddr"><span class="std std-ref">global addresses</span></a> from <span class="math notranslate nohighlight">\({{\mathit{xa}}^\ast}\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathrm{tags}}}({{\mathit{xa}}^\ast})\)</span> extracts all <a class="reference internal" href="runtime.html#syntax-funcaddr"><span class="std std-ref">tag addresses</span></a> from <span class="math notranslate nohighlight">\({{\mathit{xa}}^\ast}\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="aggregate-instances">
+<span id="syntax-aggrinst"></span><span id="syntax-arrayinst"></span><span id="syntax-structinst"></span><span id="syntax-packval"></span><span id="syntax-fieldval"></span><span id="index-15"></span><h2>Aggregate Instances<a class="headerlink" href="runtime.html#aggregate-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>structure instance</em> is the runtime representation of a heap object allocated from a <a class="reference internal" href="../syntax/types.html#syntax-structtype"><span class="std std-ref">structure type</span></a>.
+Likewise, an <em>array instance</em> is the runtime representation of a heap object allocated from an <a class="reference internal" href="../syntax/types.html#syntax-arraytype"><span class="std std-ref">array type</span></a>.
+Both record their respective <a class="reference internal" href="../valid/conventions.html#syntax-deftype"><span class="std std-ref">defined type</span></a> and hold a list of the values of their <em>fields</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-structinst}{\mathit{structinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-structinst}{\mathsf{type}}~{\href{../valid/conventions.html#syntax-deftype}{\mathit{deftype}}} ,  \href{../exec/runtime.html#syntax-structinst}{\mathsf{fields}}~{{\href{../exec/runtime.html#syntax-fieldval}{\mathit{fieldval}}}^\ast} \} \\
+\end{array} \\
+&amp; {\href{../exec/runtime.html#syntax-arrayinst}{\mathit{arrayinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-arrayinst}{\mathsf{type}}~{\href{../valid/conventions.html#syntax-deftype}{\mathit{deftype}}} ,  \href{../exec/runtime.html#syntax-arrayinst}{\mathsf{fields}}~{{\href{../exec/runtime.html#syntax-fieldval}{\mathit{fieldval}}}^\ast} \} \\
+\end{array} \\
+&amp; {\href{../exec/runtime.html#syntax-fieldval}{\mathit{fieldval}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-val}{\mathit{val}}} ~~|~~ {\href{../exec/runtime.html#syntax-packval}{\mathit{packval}}} \\
+&amp; {\href{../exec/runtime.html#syntax-packval}{\mathit{packval}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}{.}\href{../exec/runtime.html#syntax-packval}{\mathsf{pack}}~{{\href{../syntax/values.html#syntax-int}{\mathit{i}\kern-0.1em}}}{N} \\
+\end{array}\end{split}\]</div>
+<section id="aux-unpackfield">
+<span id="aux-packfield"></span><span id="id4"></span><h3>Conventions<a class="headerlink" href="runtime.html#aux-unpackfield" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>Conversion of a regular <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">value</span></a> to a <a class="reference internal" href="runtime.html#syntax-fieldval"><span class="std std-ref">field value</span></a> is defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{\href{../exec/runtime.html#aux-packfield}{\mathrm{pack}}}}_{{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}}({\href{../exec/runtime.html#syntax-val}{\mathit{val}}}) &amp; = &amp; {\href{../exec/runtime.html#syntax-val}{\mathit{val}}} \\
+{{\href{../exec/runtime.html#aux-packfield}{\mathrm{pack}}}}_{{\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}}(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~i) &amp; = &amp; {\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}{.}\href{../exec/runtime.html#syntax-packval}{\mathsf{pack}}~{{\href{../exec/numerics.html#op-wrap}{\mathrm{wrap}}}}_{32, {|{\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}|}}(i) \\
+\end{array}\end{split}\]</div>
+</li>
+<li><p>The inverse conversion of a <a class="reference internal" href="runtime.html#syntax-fieldval"><span class="std std-ref">field value</span></a> to a regular <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">value</span></a> is defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{{{\href{../exec/runtime.html#aux-unpackfield}{\mathrm{unpack}}}}_{{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}}^{\epsilon}}}{({\href{../exec/runtime.html#syntax-val}{\mathit{val}}})} &amp; = &amp; {\href{../exec/runtime.html#syntax-val}{\mathit{val}}} \\
+{{{{\href{../exec/runtime.html#aux-unpackfield}{\mathrm{unpack}}}}_{{\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}}^{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}}}}{({\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}{.}\href{../exec/runtime.html#syntax-packval}{\mathsf{pack}}~i)} &amp; = &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~{{{{\href{../exec/numerics.html#op-extend}{\mathrm{extend}}}}_{{|{\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}|}, 32}^{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}}}}{(i)} \\
+\end{array}\end{split}\]</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="exception-instances">
+<span id="syntax-exninst"></span><span id="index-16"></span><h2>Exception Instances<a class="headerlink" href="runtime.html#exception-instances" title="Link to this heading">¶</a></h2>
+<p>An <em>exception instance</em> is the runtime representation of an <a class="reference internal" href="../syntax/instructions.html#exception"><span class="std std-ref">exception</span></a> produced by a <span class="math notranslate nohighlight">\(\mathsf{throw}\)</span> instruction.
+It holds the <a class="reference internal" href="runtime.html#syntax-tagaddr"><span class="std std-ref">address</span></a> of the respective <a class="reference internal" href="../syntax/modules.html#syntax-tag"><span class="std std-ref">tag</span></a> and the argument <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">values</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-exninst}{\mathit{exninst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-exninst}{\mathsf{tag}}~{\href{../exec/runtime.html#syntax-tagaddr}{\mathit{tagaddr}}} ,  \href{../exec/runtime.html#syntax-exninst}{\mathsf{fields}}~{{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="stack">
+<span id="handler"></span><span id="label"></span><span id="frame"></span><span id="syntax-handler"></span><span id="syntax-label"></span><span id="syntax-callframe"></span><span id="syntax-frame"></span><span id="index-17"></span><span id="id5"></span><h2>Stack<a class="headerlink" href="runtime.html#stack" title="Link to this heading">¶</a></h2>
+<p>Besides the <a class="reference internal" href="runtime.html#store"><span class="std std-ref">store</span></a>, most <a class="reference internal" href="../syntax/instructions.html#syntax-instr"><span class="std std-ref">instructions</span></a> interact with an implicit <em>stack</em>.
+The stack contains the two kinds of entries:</p>
+<ul class="simple">
+<li><p><em>Values</em>: the <em>operands</em> of instructions.</p></li>
+<li><p><em>Control Frames</em>: currently active control flow structures.</p></li>
+</ul>
+<p>The latter can in turn be one of the following:</p>
+<ul class="simple">
+<li><p><em>Labels</em>: active <a class="reference internal" href="../syntax/instructions.html#syntax-instr-control"><span class="std std-ref">structured control instructions</span></a> that can be targeted by branches.</p></li>
+<li><p><em>(Call) Frames</em>: the <em>activation records</em> of active <a class="reference internal" href="../syntax/modules.html#syntax-func"><span class="std std-ref">function</span></a> calls.</p></li>
+<li><p><em>Handlers</em>: active exception handlers.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Where clear from context, <em>call frame</em> is abbreviated to just <em>frame</em>.</p>
+</div>
+<p>All these entries can occur on the stack in any order during the execution of a program.
+Stack entries are described by abstract syntax as follows.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is possible to model the WebAssembly semantics using separate stacks for operands, control constructs, and calls.
+However, because the stacks are interdependent, additional book keeping about associated stack heights would be required.
+For the purpose of this specification, an interleaved representation is simpler.</p>
+</div>
+<section id="id6">
+<h3>Values<a class="headerlink" href="runtime.html#id6" title="Link to this heading">¶</a></h3>
+<p>Values are represented by <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">themselves</span></a>.</p>
+</section>
+<section id="labels">
+<h3>Labels<a class="headerlink" href="runtime.html#labels" title="Link to this heading">¶</a></h3>
+<p>Labels carry an argument arity <span class="math notranslate nohighlight">\(n\)</span> and their associated branch <em>target</em>, which is expressed syntactically as an <a class="reference internal" href="../syntax/instructions.html#syntax-instr"><span class="std std-ref">instruction</span></a> sequence:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-label}{\mathit{label}}} &amp; ::= &amp; {{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \}} \\
+\end{array}\end{split}\]</div>
+<p>Intuitively, <span class="math notranslate nohighlight">\({{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast}\)</span> is the <em>continuation</em> to execute when the branch is taken, in place of the original control construct.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, a loop label has the form</p>
+<div class="math notranslate nohighlight">
+\[{{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ (\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{loop}}~{\mathit{bt}}~\dots) \}}\]</div>
+<p>When performing a branch to this label, this executes the loop, effectively restarting it from the beginning.
+Conversely, a simple block label has the form</p>
+<div class="math notranslate nohighlight">
+\[{{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ \epsilon \}}\]</div>
+<p>When branching, the empty continuation ends the targeted block, such that execution can proceed with consecutive instructions.</p>
+</div>
+</section>
+<section id="call-frames">
+<h3>Call Frames<a class="headerlink" href="runtime.html#call-frames" title="Link to this heading">¶</a></h3>
+<p>Call frames carry the return arity <span class="math notranslate nohighlight">\(n\)</span> of the respective function,
+hold the values of its <a class="reference internal" href="../syntax/modules.html#syntax-local"><span class="std std-ref">locals</span></a> (including arguments) in the order corresponding to their static <a class="reference internal" href="../syntax/modules.html#syntax-localidx"><span class="std std-ref">local indices</span></a>,
+and a reference to the function’s own <a class="reference internal" href="runtime.html#syntax-moduleinst"><span class="std std-ref">module instance</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-callframe}{\mathit{callframe}}} &amp; ::= &amp; {{\href{../exec/runtime.html#syntax-frame}{\mathsf{frame}}}_{n}}{\{ {\href{../exec/runtime.html#syntax-frame}{\mathit{frame}}} \}} \\
+&amp; {\href{../exec/runtime.html#syntax-frame}{\mathit{frame}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-frame}{\mathsf{locals}}~{({{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^?})^\ast} ,  \href{../exec/runtime.html#syntax-frame}{\mathsf{module}}~{\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>Locals may be uninitialized, in which case they are empty.
+Locals are mutated by respective <a class="reference internal" href="../syntax/instructions.html#syntax-instr-variable"><span class="std std-ref">variable instructions</span></a>.</p>
+</section>
+<section id="exception-handlers">
+<h3>Exception Handlers<a class="headerlink" href="runtime.html#exception-handlers" title="Link to this heading">¶</a></h3>
+<p>Exception handlers are installed by <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{try\_table}}\)</span> instructions and record the corresponding list of <a class="reference internal" href="../syntax/instructions.html#syntax-catch"><span class="std std-ref">catch clauses</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{llllll}
+  \def\mathdef1835#1{{}}\mathdef1835{handler} &amp; \href{../exec/runtime.html#syntax-handler}{\mathit{handler}} &amp;::=&amp;
+    \href{../exec/runtime.html#syntax-handler}{\mathsf{handler}}_n\{\href{../syntax/instructions.html#syntax-catch}{\mathit{catch}}^\ast\}
+\end{array}\]</div>
+<p>The handlers on the stack are searched when an exception is <a class="reference internal" href="../syntax/instructions.html#syntax-throw"><span class="std std-ref">thrown</span></a>.</p>
+</section>
+<section id="aux-blocktype">
+<span id="id7"></span><h3>Conventions<a class="headerlink" href="runtime.html#aux-blocktype" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>The meta variable <span class="math notranslate nohighlight">\(L\)</span> ranges over labels where clear from context.</p></li>
+<li><p>The meta variable <span class="math notranslate nohighlight">\(f\)</span> ranges over frame states where clear from context.</p></li>
+<li><p>The meta variable <span class="math notranslate nohighlight">\(H\)</span> ranges over exception handlers where clear from context.</p></li>
+<li><p>The following auxiliary definition takes a <a class="reference internal" href="../syntax/types.html#syntax-blocktype"><span class="std std-ref">block type</span></a> and looks up the <a class="reference internal" href="../valid/conventions.html#syntax-instrtype"><span class="std std-ref">instruction type</span></a> that it denotes in the current frame:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{\href{../exec/runtime.html#aux-blocktype}{\mathrm{instrtype}}}}_{z}(x) &amp; = &amp; {t_1^\ast} \rightarrow {t_2^\ast} &amp; \quad \mbox{if}~ z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{types}}{}[x] \mathrel{\href{../valid/conventions.html#aux-expand-deftype}{\approx}} \href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast} \\
+{{\href{../exec/runtime.html#aux-blocktype}{\mathrm{instrtype}}}}_{z}({t^?}) &amp; = &amp; \epsilon \rightarrow {t^?} \\
+\end{array}\end{split}\]</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="administrative-instructions">
+<span id="syntax-instr-admin"></span><span id="syntax-trap"></span><span id="index-18"></span><h2>Administrative Instructions<a class="headerlink" href="runtime.html#administrative-instructions" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section is only relevant for the <a class="reference internal" href="conventions.html#exec-notation"><span class="std std-ref">formal notation</span></a>.</p>
+</div>
+<p>In order to express the reduction of <a class="reference internal" href="../intro/overview.html#trap"><span class="std std-ref">traps</span></a>, <a class="reference internal" href="../syntax/instructions.html#syntax-call"><span class="std std-ref">calls</span></a>, <a class="reference internal" href="runtime.html#syntax-handler"><span class="std std-ref">exception handling</span></a>, and <a class="reference internal" href="../syntax/instructions.html#syntax-instr-control"><span class="std std-ref">control instructions</span></a>, the syntax of instructions is extended to include the following <em>administrative instructions</em>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} \\
+&amp; &amp; | &amp; {{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; {{\href{../exec/runtime.html#syntax-frame}{\mathsf{frame}}}_{n}}{\{ {\href{../exec/runtime.html#syntax-frame}{\mathit{frame}}} \}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; {{\href{../exec/runtime.html#syntax-handler}{\mathsf{handler}}}_{n}}{\{ {{\href{../syntax/instructions.html#syntax-catch}{\mathit{catch}}}^\ast} \}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-trap}{\mathsf{trap}} \\
+\end{array}\end{split}\]</div>
+<p>A <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference</span></a> represents a <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference</span></a> value of respective form <a class="reference internal" href="conventions.html#exec-notation"><span class="std std-ref">“on the stack”</span></a>.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{label}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{frame}\)</span>, and <span class="math notranslate nohighlight">\(\mathsf{handler}\)</span> instructions model <a class="reference internal" href="runtime.html#syntax-label"><span class="std std-ref">labels</span></a>, <a class="reference internal" href="runtime.html#syntax-frame"><span class="std std-ref">frames</span></a>, and active <a class="reference internal" href="runtime.html#syntax-handler"><span class="std std-ref">exception handlers</span></a>, respectively, <a class="reference internal" href="conventions.html#exec-notation"><span class="std std-ref">“on the stack”</span></a>.
+Moreover, the administrative syntax maintains the nesting structure of the original <a class="reference internal" href="../syntax/instructions.html#syntax-instr-control"><span class="std std-ref">structured control instruction</span></a> or <a class="reference internal" href="../syntax/modules.html#syntax-func"><span class="std std-ref">function body</span></a> and their <a class="reference internal" href="../syntax/instructions.html#syntax-instrs"><span class="std std-ref">instruction sequences</span></a>.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{trap}\)</span> instruction represents the occurrence of a trap.
+Traps are bubbled up through nested instruction sequences, ultimately reducing the entire program to a single <span class="math notranslate nohighlight">\(\mathsf{trap}\)</span> instruction, signalling abrupt termination.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, the <a class="reference internal" href="instructions.html#exec-block"><span class="std std-ref">reduction rule</span></a> for <span class="math notranslate nohighlight">\(\mathsf{block}\)</span> is:</p>
+<div class="math notranslate nohighlight">
+\[(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{block}}~{\mathit{bt}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast}) \href{../exec/conventions.html#exec-notation}{\hookrightarrow} ({{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ \epsilon \}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast})\]</div>
+<p>if the <a class="reference internal" href="../syntax/types.html#syntax-blocktype"><span class="std std-ref">block type</span></a> <span class="math notranslate nohighlight">\({\mathit{bt}}\)</span> denotes a <a class="reference internal" href="../syntax/types.html#syntax-functype"><span class="std std-ref">function type</span></a> <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^{m}} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^{n}}\)</span>,
+such that <span class="math notranslate nohighlight">\(n\)</span> is the block’s result arity.
+This rule replaces the block with a label instruction,
+which can be interpreted as “pushing” the label on the stack.
+When its end is reached, i.e., the inner instruction sequence has been reduced to the empty sequence – or rather, a sequence of <span class="math notranslate nohighlight">\(n\)</span> <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">values</span></a> representing the results – then the <span class="math notranslate nohighlight">\(\mathsf{label}\)</span> instruction is eliminated courtesy of its own <a class="reference internal" href="instructions.html#exec-label"><span class="std std-ref">reduction rule</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[({{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \}}~{{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^\ast}) \href{../exec/conventions.html#exec-notation}{\hookrightarrow} {{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^\ast}\]</div>
+<p>This can be interpreted as removing the label from the stack and only leaving the locally accumulated operand values.
+Validation guarantees that <span class="math notranslate nohighlight">\(n\)</span> matches the number <span class="math notranslate nohighlight">\({|{{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^\ast}|}\)</span> of resulting values at this point.</p>
+</div>
+</section>
+<section id="configurations">
+<span id="syntax-config"></span><span id="syntax-thread"></span><span id="syntax-state"></span><span id="index-19"></span><h2>Configurations<a class="headerlink" href="runtime.html#configurations" title="Link to this heading">¶</a></h2>
+<p>A <em>configuration</em> describes the current computation.
+It consists of the computations’s <em>state</em> and the sequence of <a class="reference internal" href="../syntax/instructions.html#syntax-instr"><span class="std std-ref">instructions</span></a> left to execute.
+The state in turn consists of a global <a class="reference internal" href="runtime.html#syntax-store"><span class="std std-ref">store</span></a> and a current <a class="reference internal" href="runtime.html#syntax-frame"><span class="std std-ref">frame</span></a> referring to the <a class="reference internal" href="runtime.html#syntax-moduleinst"><span class="std std-ref">module instance</span></a> in which the computation runs, i.e., where the current function originates from.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-config}{\mathit{config}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-state}{\mathit{state}}} ; {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\[0.8ex]
+&amp; {\href{../exec/runtime.html#syntax-state}{\mathit{state}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-store}{\mathit{store}}} ; {\href{../exec/runtime.html#syntax-frame}{\mathit{frame}}} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The current version of WebAssembly is single-threaded,
+but configurations with multiple threads may be supported in the future.</p>
+</div>
+<section id="id8">
+<h3>Conventions<a class="headerlink" href="runtime.html#id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The meta variable <span class="math notranslate nohighlight">\(z\)</span> ranges over frame states where clear from context.</p></li>
+<li><p>The following shorthands are defined for accessing a state <span class="math notranslate nohighlight">\(z = (s ; f)\)</span>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{types}}{}[x] &amp; = &amp; f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{types}}{}[x] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{tags}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tags}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{tags}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{globals}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{globals}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{mems}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{mems}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{tables}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{tables}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{funcs}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{funcs}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{datas}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{datas}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{datas}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{elems}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{elems}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{elems}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{locals}}{}[x] &amp; = &amp; f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{locals}}{}[x] \\ \end{array}\)</span></p></li>
+</ul>
+</li>
+<li><p>These shorthands also extend to <a class="reference internal" href="../syntax/conventions.html#notation-replace"><span class="std std-ref">notation</span></a> for updating state:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{}[{.}\href{../exec/runtime.html#syntax-state}{\mathsf{globals}}{}[x]{.}\href{../exec/runtime.html#syntax-globalinst}{\mathsf{value}} = v] &amp; = &amp; s{}[{.}\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{globals}}{}[x]]{.}\href{../exec/runtime.html#syntax-globalinst}{\mathsf{value}} = v] ; f \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{}[{.}\href{../exec/runtime.html#syntax-state}{\mathsf{mems}}{}[x]{.}\href{../exec/runtime.html#syntax-meminst}{\mathsf{bytes}}{}[i : j] = {b^\ast}] &amp; = &amp; s{}[{.}\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{mems}}{}[x]]{.}\href{../exec/runtime.html#syntax-meminst}{\mathsf{bytes}}{}[i : j] = {b^\ast}] ; f \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{}[{.}\href{../exec/runtime.html#syntax-state}{\mathsf{tables}}{}[x]{.}\href{../exec/runtime.html#syntax-tableinst}{\mathsf{refs}}{}[i] = r] &amp; = &amp; s{}[{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{tables}}{}[x]]{.}\href{../exec/runtime.html#syntax-tableinst}{\mathsf{refs}}{}[i] = r] ; f \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{}[{.}\href{../exec/runtime.html#syntax-state}{\mathsf{locals}}{}[x] = v] &amp; = &amp; s ; f{}[{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{locals}}{}[x] = v] \\ \end{array}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/exec/runtime.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-runtime-structure">
+<span id="zh-syntax-runtime"></span><span id="zh-index-0"></span><h1>运行时结构<a class="headerlink" href="runtime.html#zh-runtime-structure" title="Link to this heading">¶</a></h1>
+<p><a class="reference internal" href="runtime.html#zh-store"><span class="std std-ref">存储</span></a>, <a class="reference internal" href="runtime.html#zh-stack"><span class="std std-ref">栈</span></a>和其他 <em>运行时结构</em> 构成 WebAssembly 抽象机器,例如 <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">值</span></a> 或 <a class="reference internal" href="runtime.html#zh-syntax-moduleinst"><span class="std std-ref">模块 实例</span></a>,在附加辅助设备方面精确化。 语法.</p>
+<section id="zh-values">
+<span id="zh-syntax-pack"></span><span id="zh-syntax-val"></span><span id="zh-syntax-nullref"></span><span id="zh-syntax-ref-extern"></span><span id="zh-syntax-ref-host"></span><span id="zh-syntax-ref-exn"></span><span id="zh-syntax-ref-array"></span><span id="zh-syntax-ref-struct"></span><span id="zh-syntax-ref-i31num"></span><span id="zh-syntax-ref"></span><span id="zh-syntax-vec"></span><span id="zh-syntax-num"></span><span id="zh-index-1"></span><h2>值<a class="headerlink" href="runtime.html#zh-values" title="Link to this heading">¶</a></h2>
+<p>WebAssembly 计算操作 <em>值</em> 4个基本 <a class="reference internal" href="../syntax/types.html#zh-syntax-numtype"><span class="std std-ref">编号 类型</span></a>, i.e., <a class="reference internal" href="../syntax/values.html#zh-syntax-int"><span class="std std-ref">整数</span></a> 和 <a class="reference internal" href="../syntax/values.html#zh-syntax-float"><span class="std std-ref">浮点数 数据</span></a> 32或64位宽,或 <a class="reference internal" href="../syntax/values.html#zh-syntax-vecnum"><span class="std std-ref">向量</span></a> 128位宽,或 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a>.</p>
+<p>在语义学的大部分地方, 值 不同 类型 可能发生。
+为了避免含糊不清, 值 因此,代表为: 抽象语法 说明他们的类型
+方便重新使用与该物质相同的标记。 <span class="math notranslate nohighlight">\(\mathsf{const}\)</span> <a class="reference internal" href="../syntax/instructions.html#zh-syntax-const"><span class="std std-ref">指令</span></a> 和 <span class="math notranslate nohighlight">\(\mathsf{ref{.}null}\)</span> 生产它们。</p>
+<p>无效的参考资料另加 <a class="reference internal" href="runtime.html#zh-syntax-instr-admin"><span class="std std-ref">管理指令</span></a>。 。 。
+他们要么是 <em>标定引用</em>,包含31位 <a class="reference internal" href="../syntax/values.html#zh-syntax-int"><span class="std std-ref">整数</span></a>,
+<em>无效引用</em>,
+<em>结构参考</em>,指具体 <a class="reference internal" href="runtime.html#zh-syntax-structaddr"><span class="std std-ref">结构 地址</span></a>,
+<em>数组引用</em>,指具体 <a class="reference internal" href="runtime.html#zh-syntax-arrayaddr"><span class="std std-ref">数组 地址</span></a>,
+<em>函数引用</em>,指具体 <a class="reference internal" href="runtime.html#zh-syntax-funcaddr"><span class="std std-ref">函数 地址</span></a>,
+<em>例外参考</em>,指具体 <a class="reference internal" href="runtime.html#zh-syntax-exnaddr"><span class="std std-ref">例外 地址</span></a>, (中文).
+或 <em>主机引用</em> 指一种未经解释的形式 <a class="reference internal" href="runtime.html#zh-syntax-hostaddr"><span class="std std-ref">东道主 地址</span></a> 定义 <a class="reference internal" href="../intro/overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a>。 。 。
+此外,上述任何参考文献都可以作为 " ``````````````````````````````````` ' ' ' ' ' ' ' ' ' '`````` ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' '' ' ' ' ' ' ' ' ' ' ' ' '' ' ' ' '' ' ''''' '''''' '''' ' ' ' ' ''''''''''''' ' ''''''''''''''''''''''''''''''' <em>外部参考</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-val}{\mathit{val}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-num}{\mathit{num}}} ~~|~~ {\href{../exec/runtime.html#syntax-vec}{\mathit{vec}}} ~~|~~ {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} \\[0.8ex]
+&amp; {\href{../exec/runtime.html#syntax-num}{\mathit{num}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~{{\href{../exec/runtime.html#syntax-num}{\mathit{num}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\[0.8ex]
+&amp; {\href{../exec/runtime.html#syntax-vec}{\mathit{vec}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{const}}~{{\href{../exec/runtime.html#syntax-vec}{\mathit{vec}}}}_{{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}} \\[0.8ex]
+&amp; {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} &amp; ::= &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}i\scriptstyle31}}~{\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em31}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}struct}}~{\href{../exec/runtime.html#syntax-structaddr}{\mathit{structaddr}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}array}}~{\href{../exec/runtime.html#syntax-arrayaddr}{\mathit{arrayaddr}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}func}}~{\href{../exec/runtime.html#syntax-funcaddr}{\mathit{funcaddr}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}exn}}~{\href{../exec/runtime.html#syntax-exnaddr}{\mathit{exnaddr}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}host}}~{\href{../exec/runtime.html#syntax-hostaddr}{\mathit{hostaddr}}} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}extern}}~{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>未来版本 WebAssembly 可能增加额外的表格 值.</p>
+</div>
+<p id="zh-aux-default"><a class="reference internal" href="../syntax/types.html#zh-syntax-valtype"><span class="std std-ref">数值 类型</span></a> 可以有一个关联 <em>默认值</em>· ;
+这是各自的价值 <span class="math notranslate nohighlight">\(0\)</span> (单位:千美元) <a class="reference internal" href="../syntax/types.html#zh-syntax-numtype"><span class="std std-ref">编号 类型</span></a>, <span class="math notranslate nohighlight">\(0\)</span> (单位:千美元) <a class="reference internal" href="../syntax/types.html#zh-syntax-vectype"><span class="std std-ref">矢量 类型</span></a>无效 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">参考文献 类型</span></a>。 。 。
+对于其他参考文献,没有定义默认值, <span class="math notranslate nohighlight">\({{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{t}\)</span> 因此是一个可选值 <span class="math notranslate nohighlight">\({{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^?}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; = &amp; ({\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~0) \\
+{{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; = &amp; ({\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~{+0}) \\
+{{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{v}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; = &amp; ({\href{../syntax/types.html#syntax-numtype}{\mathsf{v}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{const}}~0) \\
+{{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~{\mathit{ht}}} &amp; = &amp; \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}} \\
+{{\href{../exec/runtime.html#aux-default}{\mathrm{default}}}}_{\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{ht}}} &amp; = &amp; \epsilon \\
+\end{array}\end{split}\]</div>
+<section id="zh-convention">
+<h3>公约<a class="headerlink" href="runtime.html#zh-convention" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>元变量 <span class="math notranslate nohighlight">\(r\)</span> 参比区域 值 从上下文看很清楚</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-results">
+<span id="zh-syntax-result"></span><span id="zh-index-2"></span><h2>结果<a class="headerlink" href="runtime.html#zh-results" title="Link to this heading">¶</a></h2>
+<p>A <em>结果</em> 是计算的结果。
+要么是一个序列 <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">值</span></a>,一个掷出 <a class="reference internal" href="instructions.html#zh-exec-throw-ref"><span class="std std-ref">例外</span></a>,或一个 <a class="reference internal" href="runtime.html#zh-syntax-trap"><span class="std std-ref">陷阱</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-result}{\mathit{result}}} &amp; ::= &amp; {{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^\ast} ~~|~~ ( \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}exn}}~{\href{../exec/runtime.html#syntax-exnaddr}{\mathit{exnaddr}}} )~\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{throw\_ref}} ~~|~~ \href{../exec/runtime.html#syntax-trap}{\mathsf{trap}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-store">
+<span id="zh-syntax-store"></span><span id="zh-index-3"></span><span id="zh-id1"></span><h2>存储<a class="headerlink" href="runtime.html#zh-store" title="Link to this heading">¶</a></h2>
+<p>那个 <em>存储</em> 代表所有可被 WebAssembly 程序。
+它包括所有代表的运行时间。 <em>实例</em> 页:1
+<a class="reference internal" href="runtime.html#zh-syntax-funcinst"><span class="std std-ref">函数</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-tableinst"><span class="std std-ref">图表</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-meminst"><span class="std std-ref">回忆</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-globalinst"><span class="std std-ref">全球</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-taginst"><span class="std std-ref">标记</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-eleminst"><span class="std std-ref">元素段</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-datainst"><span class="std std-ref">数据段</span></a>, (中文).
+和
+<a class="reference internal" href="runtime.html#zh-syntax-structinst"><span class="std std-ref">结构</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-arrayinst"><span class="std std-ref">数组</span></a> 或
+<a class="reference internal" href="runtime.html#zh-syntax-exninst"><span class="std std-ref">例外情况</span></a>
+已经是 <a class="reference internal" href="modules.html#zh-alloc"><span class="std std-ref">拨款</span></a> 在抽象机器的生命期。</p>
+<p>无元素或数据实例是语义学的一个不变量 <a class="reference internal" href="runtime.html#zh-syntax-addr"><span class="std std-ref">已处理</span></a> 除了拥有的任何地方 模块 实例。</p>
+<p>在战术上, 存储 定义为: <a class="reference internal" href="../syntax/conventions.html#zh-notation-record"><span class="std std-ref">记录</span></a> 列出每个类别的现有实例:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-store}{\mathit{store}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-store}{\mathsf{tags}}~{{\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}~{{\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}~{{\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}~{{\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}~{{\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{datas}}~{{\href{../exec/runtime.html#syntax-datainst}{\mathit{datainst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{elems}}~{{\href{../exec/runtime.html#syntax-eleminst}{\mathit{eleminst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{structs}}~{{\href{../exec/runtime.html#syntax-structinst}{\mathit{structinst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{arrays}}~{{\href{../exec/runtime.html#syntax-arrayinst}{\mathit{arrayinst}}}^\ast} \\
+\href{../exec/runtime.html#syntax-store}{\mathsf{exns}}~{{\href{../exec/runtime.html#syntax-exninst}{\mathit{exninst}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>在实际操作中,实施时可能采用垃圾收集或参考计数等技术,从中清除物体。 存储 不再引用。
+然而,这些技术并非可观察到的,
+并因此不属于此范围 规范.</p>
+</div>
+<section id="zh-id2">
+<h3>公约<a class="headerlink" href="runtime.html#zh-id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>元变量 <span class="math notranslate nohighlight">\(s\)</span> 在从上下文看清楚的商店中显示范围。</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-addresses">
+<span id="zh-syntax-addr"></span><span id="zh-syntax-hostaddr"></span><span id="zh-syntax-exnaddr"></span><span id="zh-syntax-arrayaddr"></span><span id="zh-syntax-structaddr"></span><span id="zh-syntax-dataaddr"></span><span id="zh-syntax-elemaddr"></span><span id="zh-syntax-tagaddr"></span><span id="zh-syntax-globaladdr"></span><span id="zh-syntax-memaddr"></span><span id="zh-syntax-tableaddr"></span><span id="zh-syntax-funcaddr"></span><span id="zh-index-4"></span><h2>地址<a class="headerlink" href="runtime.html#zh-addresses" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="runtime.html#zh-syntax-funcinst"><span class="std std-ref">函数实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-tableinst"><span class="std std-ref">表格实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-meminst"><span class="std std-ref">内存实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-globalinst"><span class="std std-ref">全球实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-taginst"><span class="std std-ref">标记实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-eleminst"><span class="std std-ref">元素实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-datainst"><span class="std std-ref">数据实例</span></a>
+和
+<a class="reference internal" href="runtime.html#zh-syntax-structinst"><span class="std std-ref">结构</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-arrayinst"><span class="std std-ref">数组</span></a> 或
+<a class="reference internal" href="runtime.html#zh-syntax-exninst"><span class="std std-ref">例外情况</span></a>
+输入 <a class="reference internal" href="runtime.html#zh-syntax-store"><span class="std std-ref">存储</span></a> 以抽象方式引用 <em>地址</em>。 。 。
+这些只是各自指数中的指数。 存储 组件。
+此外,还有: <a class="reference internal" href="../intro/overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a> 可能提供一套未经解释的 <em>主机地址</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} &amp; ::= &amp; 0 ~~|~~ 1 ~~|~~ 2 ~~|~~ \dots \\
+&amp; {\href{../exec/runtime.html#syntax-funcaddr}{\mathit{funcaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-tableaddr}{\mathit{tableaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-memaddr}{\mathit{memaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-globaladdr}{\mathit{globaladdr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-tagaddr}{\mathit{tagaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-elemaddr}{\mathit{elemaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-dataaddr}{\mathit{dataaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-structaddr}{\mathit{structaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-arrayaddr}{\mathit{arrayaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-exnaddr}{\mathit{exnaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+&amp; {\href{../exec/runtime.html#syntax-hostaddr}{\mathit{hostaddr}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}} \\
+\end{array}\end{split}\]</div>
+<p>一个 <a class="reference internal" href="../intro/overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a> 可指定身份给 <a class="reference internal" href="../syntax/modules.html#zh-syntax-export"><span class="std std-ref">导出</span></a> 存储 与其地址相对应的物体,
+即使在内部无法观察到这种身份的地方 WebAssembly 代码本身
+(例如: <a class="reference internal" href="runtime.html#zh-syntax-funcinst"><span class="std std-ref">函数实例</span></a> 或不可改变 <a class="reference internal" href="runtime.html#zh-syntax-globalinst"><span class="std std-ref">全球</span></a>).</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>地址为 <em>动态</em>,全球独特的引用运行时对象,
+相对 <a class="reference internal" href="../syntax/modules.html#zh-syntax-index"><span class="std std-ref">指数</span></a>, (中文).
+它们是: <em>静态</em>, 模块- 当地参考其原始定义。
+页:1 <em>内存 地址</em> <span class="math notranslate nohighlight">\(\href{../exec/runtime.html#syntax-memaddr}{\mathit{memaddr}}\)</span> 表示抽象 地址 <em>页:1</em> 一个记忆 <em>实例</em> 输入 存储, (中文).
+页:1 <em>内部</em> a 内存实例.</p>
+<p>拨款数量没有具体限制。 存储 对象,
+因此,逻辑地址可以是任意的大规模自然数字。</p>
+</div>
+<section id="zh-conventions">
+<span id="zh-free-addr"></span><span id="zh-free-labeladdr"></span><span id="zh-free-localaddr"></span><span id="zh-free-arrayaddr"></span><span id="zh-free-structaddr"></span><span id="zh-free-dataaddr"></span><span id="zh-free-elemaddr"></span><span id="zh-free-tagaddr"></span><span id="zh-free-globaladdr"></span><span id="zh-free-memaddr"></span><span id="zh-free-tableaddr"></span><span id="zh-free-funcaddr"></span><h3>约定<a class="headerlink" href="runtime.html#zh-conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>标记 <span class="math notranslate nohighlight">\({\mathrm{addr}}(A)\)</span> 表示一组地址 地址 空间 <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-addr}{\mathit{addr}}}\)</span> 免费在 <span class="math notranslate nohighlight">\(A\)</span>我们有时将本集重新解释为 <a class="reference internal" href="../syntax/conventions.html#zh-syntax-list"><span class="std std-ref">列表</span></a> ,而不假定任何特定顺序。</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-external-addresses">
+<span id="zh-syntax-externaddr"></span><span id="zh-index-5"></span><h2>外部地址<a class="headerlink" href="runtime.html#zh-external-addresses" title="Link to this heading">¶</a></h2>
+<p>一个 <em>外部 地址</em> 是运行时间 <a class="reference internal" href="runtime.html#zh-syntax-addr"><span class="std std-ref">地址</span></a> 可进出口的实体。
+这是一个 <a class="reference internal" href="runtime.html#zh-syntax-addr"><span class="std std-ref">地址</span></a> 表示一个
+<a class="reference internal" href="runtime.html#zh-syntax-funcinst"><span class="std std-ref">函数实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-globalinst"><span class="std std-ref">全球实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-tableinst"><span class="std std-ref">表实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-meminst"><span class="std std-ref">内存实例</span></a>,或
+<a class="reference internal" href="runtime.html#zh-syntax-taginst"><span class="std std-ref">标签实例</span></a>
+共享 <a class="reference internal" href="runtime.html#zh-syntax-store"><span class="std std-ref">存储</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}} &amp; ::= &amp; \href{../exec/runtime.html#syntax-externaddr}{\mathsf{tag}}~{\href{../exec/runtime.html#syntax-tagaddr}{\mathit{tagaddr}}} ~~|~~ \href{../exec/runtime.html#syntax-externaddr}{\mathsf{global}}~{\href{../exec/runtime.html#syntax-globaladdr}{\mathit{globaladdr}}} ~~|~~ \href{../exec/runtime.html#syntax-externaddr}{\mathsf{mem}}~{\href{../exec/runtime.html#syntax-memaddr}{\mathit{memaddr}}} ~~|~~ \href{../exec/runtime.html#syntax-externaddr}{\mathsf{table}}~{\href{../exec/runtime.html#syntax-tableaddr}{\mathit{tableaddr}}} ~~|~~ \href{../exec/runtime.html#syntax-externaddr}{\mathsf{func}}~{\href{../exec/runtime.html#syntax-funcaddr}{\mathit{funcaddr}}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-module-instances">
+<span id="zh-syntax-moduleinst"></span><span id="zh-index-6"></span><h2>模块 实例<a class="headerlink" href="runtime.html#zh-module-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>模块实例</em> a 的运行时间代表 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>。 。 。
+这是由 <a class="reference internal" href="modules.html#zh-exec-instantiation"><span class="std std-ref">即时</span></a> a 模块, (中文).
+并收集所有进出口实体的运行时间说明 模块.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{types}}~{{\href{../valid/conventions.html#syntax-deftype}{\mathit{deftype}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{tags}}~{{\href{../exec/runtime.html#syntax-tagaddr}{\mathit{tagaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{globals}}~{{\href{../exec/runtime.html#syntax-globaladdr}{\mathit{globaladdr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{mems}}~{{\href{../exec/runtime.html#syntax-memaddr}{\mathit{memaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{tables}}~{{\href{../exec/runtime.html#syntax-tableaddr}{\mathit{tableaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{funcs}}~{{\href{../exec/runtime.html#syntax-funcaddr}{\mathit{funcaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{datas}}~{{\href{../exec/runtime.html#syntax-dataaddr}{\mathit{dataaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{elems}}~{{\href{../exec/runtime.html#syntax-elemaddr}{\mathit{elemaddr}}}^\ast} \\
+\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{exports}}~{{\href{../exec/runtime.html#syntax-exportinst}{\mathit{exportinst}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>每个组件参考运行时间实例,对应原声明 模块 - 无论是进口还是定义的 - 按其静态顺序 <a class="reference internal" href="../syntax/modules.html#zh-syntax-index"><span class="std std-ref">指数</span></a>.
+<a class="reference internal" href="runtime.html#zh-syntax-funcinst"><span class="std std-ref">函数实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-tableinst"><span class="std std-ref">表格实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-meminst"><span class="std std-ref">内存实例</span></a>,
+<a class="reference internal" href="runtime.html#zh-syntax-globalinst"><span class="std std-ref">全球实例</span></a>,以及
+<a class="reference internal" href="runtime.html#zh-syntax-taginst"><span class="std std-ref">标记实例</span></a>
+以各自的 <a class="reference internal" href="runtime.html#zh-syntax-addr"><span class="std std-ref">地址</span></a> 输入 <a class="reference internal" href="runtime.html#zh-syntax-store"><span class="std std-ref">存储</span></a>.</p>
+<p>这是语义学的不常变体,所有 <a class="reference internal" href="runtime.html#zh-syntax-exportinst"><span class="std std-ref">导出 实例</span></a> 在给定中 模块实例 不一样 <a class="reference internal" href="../syntax/values.html#zh-syntax-name"><span class="std std-ref">名称</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>所有记录字段除外 <span class="math notranslate nohighlight">\(\mathsf{exports}\)</span> 将考虑 <em>私营</em> a 包含 模块实例。 。 。
+其他人无法进入 模块, (中文).
+仅用于函数来自相同的实例 模块.</p>
+</div>
+</section>
+<section id="zh-function-instances">
+<span id="zh-syntax-funcinst"></span><span id="zh-syntax-hostfunc"></span><span id="zh-index-7"></span><h2>函数实例<a class="headerlink" href="runtime.html#zh-function-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>函数实例</em> a 的运行时间代表 <a class="reference internal" href="../syntax/modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a>。 。 。
+它实际上是一个 <em>结束</em> 用于运行时间的原始函数 <a class="reference internal" href="runtime.html#zh-syntax-moduleinst"><span class="std std-ref">模块实例</span></a> 原产地 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>。 。 。
+那个 模块实例 用于解决在 执行 函数。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-funcinst}{\mathsf{type}}~{\href{../valid/conventions.html#syntax-deftype}{\mathit{deftype}}} ,  \href{../exec/runtime.html#syntax-funcinst}{\mathsf{module}}~{\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}} ,  \href{../exec/runtime.html#syntax-funcinst}{\mathsf{code}}~{{\href{../exec/runtime.html#syntax-funcinst}{\mathit{code}}}} \} \\
+\end{array} \\
+&amp; {{\href{../exec/runtime.html#syntax-funcinst}{\mathit{code}}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-func}{\mathit{func}}} ~~|~~ {\href{../exec/runtime.html#syntax-hostfunc}{\mathit{hostfunc}}} \\
+\end{array}\end{split}\]</div>
+<p>A <em>宿主函数</em> 是外部表达的函数 WebAssembly 但传到一个 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a> 作为 <a class="reference internal" href="../syntax/modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a>。 。 。
+主机函数的定义和行为不属于此范围 规范。 。 。
+为此 规范,则假定: <a class="reference internal" href="instructions.html#zh-exec-invoke-host"><span class="std std-ref">引用</span></a>,
+a 宿主函数 行为是非决定性的,
+但在特定范围内 <a class="reference internal" href="instructions.html#zh-exec-invoke-host"><span class="std std-ref">限制</span></a> 保证运行时间的完整性。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>函数实例是不可改变的,其特性无法观察到 WebAssembly 代码。
+不过, <a class="reference internal" href="../intro/overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a> 可能为区分它们提供隐含或明确的手段。 <a class="reference internal" href="runtime.html#zh-syntax-funcaddr"><span class="std std-ref">地址</span></a>.</p>
+</div>
+</section>
+<section id="zh-table-instances">
+<span id="zh-syntax-tableinst"></span><span id="zh-index-8"></span><h2>表格实例<a class="headerlink" href="runtime.html#zh-table-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>表实例</em> a 的运行时间代表 <a class="reference internal" href="../syntax/modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a>。 。 。
+它记录其 <a class="reference internal" href="../syntax/types.html#zh-syntax-tabletype"><span class="std std-ref">类型</span></a> 并拥有一个顺序 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考文献 值</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-tableinst}{\mathsf{type}}~{\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}} ,  \href{../exec/runtime.html#syntax-tableinst}{\mathsf{refs}}~{{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>表元素可以通过 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-table"><span class="std std-ref">表指令</span></a>,则 执行 活动者 <a class="reference internal" href="../syntax/modules.html#zh-syntax-elem"><span class="std std-ref">元素段</span></a>,或由 <a class="reference internal" href="../intro/overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a>.</p>
+<p>所有表单元素都有一个类型,这是语义学的不变量 <a class="reference internal" href="../valid/matching.html#zh-match-reftype"><span class="std std-ref">匹配</span></a> 元素类型 <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}}\)</span>。 。 。
+元素序列的长度从未超过最大体积,这也是一种无变数. <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}}\)</span>.</p>
+</section>
+<section id="zh-memory-instances">
+<span id="zh-syntax-meminst"></span><span id="zh-page-size"></span><span id="zh-index-9"></span><h2>内存实例<a class="headerlink" href="runtime.html#zh-memory-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>内存实例</em> 是线性表达式的运行时间 <a class="reference internal" href="../syntax/modules.html#zh-syntax-mem"><span class="std std-ref">内存</span></a>。 。 。
+它记录其 <a class="reference internal" href="../syntax/types.html#zh-syntax-memtype"><span class="std std-ref">类型</span></a> 并拥有一个顺序 <a class="reference internal" href="../syntax/values.html#zh-syntax-byte"><span class="std std-ref">字节</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-meminst}{\mathsf{type}}~{\href{../syntax/types.html#syntax-memtype}{\mathit{memtype}}} ,  \href{../exec/runtime.html#syntax-meminst}{\mathsf{bytes}}~{{\href{../syntax/values.html#syntax-byte}{\mathit{byte}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>序列的长度总是一个倍数 WebAssembly <em>页面大小</em>,定义为常数 <span class="math notranslate nohighlight">\(65536\)</span> - 缩写 <span class="math notranslate nohighlight">\(64~{\mathrm{Ki}}\)</span>.</p>
+<p>一个记忆 字节 可以通过 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-memory"><span class="std std-ref">内存指令</span></a>,则 执行 活动者 <a class="reference internal" href="../syntax/modules.html#zh-syntax-data"><span class="std std-ref">数据段</span></a>,或由 <a class="reference internal" href="../intro/overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a>.</p>
+<p>语义上的一个不变量是: 字节序列,按页面大小除以,从未超过最大大小 <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-memtype}{\mathit{memtype}}}\)</span>.</p>
+</section>
+<section id="zh-global-instances">
+<span id="zh-syntax-globalinst"></span><span id="zh-index-10"></span><h2>全球实例<a class="headerlink" href="runtime.html#zh-global-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>全球实例</em> a 的运行时间代表 <a class="reference internal" href="../syntax/modules.html#zh-syntax-global"><span class="std std-ref">全球</span></a> 变量。
+它记录其 <a class="reference internal" href="../syntax/types.html#zh-syntax-globaltype"><span class="std std-ref">类型</span></a> 拥有个人 <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">价值</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-globalinst}{\mathsf{type}}~{\href{../syntax/types.html#syntax-globaltype}{\mathit{globaltype}}} ,  \href{../exec/runtime.html#syntax-globalinst}{\mathsf{value}}~{\href{../exec/runtime.html#syntax-val}{\mathit{val}}} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>可变全球值可以通过 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-variable"><span class="std std-ref">变量指令</span></a> 或通过下列外部手段提供的 <a class="reference internal" href="../intro/overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a>.</p>
+<p>值具有一个类型是语义学的不变量 <a class="reference internal" href="../valid/matching.html#zh-match-valtype"><span class="std std-ref">匹配</span></a> 联合国 <a class="reference internal" href="../syntax/types.html#zh-syntax-valtype"><span class="std std-ref">值类型</span></a> 页:1 <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-globaltype}{\mathit{globaltype}}}\)</span>.</p>
+</section>
+<section id="zh-tag-instances">
+<span id="zh-syntax-taginst"></span><span id="zh-index-11"></span><h2>标记实例<a class="headerlink" href="runtime.html#zh-tag-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>标签实例</em> a 的运行时间代表 <a class="reference internal" href="../syntax/modules.html#zh-syntax-tag"><span class="std std-ref">标签</span></a> 定义。
+它记录 <a class="reference internal" href="../valid/conventions.html#zh-syntax-deftype"><span class="std std-ref">定义类型</span></a> 标记。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-taginst}{\mathsf{type}}~{\href{../syntax/types.html#syntax-tagtype}{\mathit{tagtype}}} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-element-instances">
+<span id="zh-syntax-eleminst"></span><span id="zh-index-12"></span><h2>元素实例<a class="headerlink" href="runtime.html#zh-element-instances" title="Link to this heading">¶</a></h2>
+<p>一个 <em>元素实例</em> 运行时间代表 。 <a class="reference internal" href="../syntax/modules.html#zh-syntax-elem"><span class="std std-ref">元素段</span></a>。 。 。
+它有一份参考文献清单及其 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">类型</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-eleminst}{\mathit{eleminst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-eleminst}{\mathsf{type}}~{\href{../syntax/types.html#syntax-elemtype}{\mathit{elemtype}}} ,  \href{../exec/runtime.html#syntax-eleminst}{\mathsf{refs}}~{{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>片段的所有元素都具有一个类型,这是语义的不变量 <a class="reference internal" href="../valid/matching.html#zh-match-reftype"><span class="std std-ref">匹配</span></a> <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-elemtype}{\mathit{elemtype}}}\)</span>.</p>
+</section>
+<section id="zh-data-instances">
+<span id="zh-syntax-datainst"></span><span id="zh-index-13"></span><h2>数据实例<a class="headerlink" href="runtime.html#zh-data-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>数据实例</em> a 的运行时间代表 <a class="reference internal" href="../syntax/modules.html#zh-syntax-data"><span class="std std-ref">数据段</span></a>。 。 。
+它有一份清单 <a class="reference internal" href="../syntax/values.html#zh-syntax-byte"><span class="std std-ref">字节</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-datainst}{\mathit{datainst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-datainst}{\mathsf{bytes}}~{{\href{../syntax/values.html#syntax-byte}{\mathit{byte}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-export-instances">
+<span id="zh-syntax-exportinst"></span><span id="zh-index-14"></span><h2>导出 实例<a class="headerlink" href="runtime.html#zh-export-instances" title="Link to this heading">¶</a></h2>
+<p>一个 <em>导出 实例</em> 运行时间代表 。 <a class="reference internal" href="../syntax/modules.html#zh-syntax-export"><span class="std std-ref">导出</span></a>。 。 。
+它定义了 导出’s <a class="reference internal" href="../syntax/values.html#zh-syntax-name"><span class="std std-ref">名称</span></a> 和相关的 <a class="reference internal" href="runtime.html#zh-syntax-externaddr"><span class="std std-ref">外部 地址</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-exportinst}{\mathit{exportinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-exportinst}{\mathsf{name}}~{\href{../syntax/values.html#syntax-name}{\mathit{name}}} ,  \href{../exec/runtime.html#syntax-exportinst}{\mathsf{addr}}~{\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<section id="zh-id3">
+<h3>约定<a class="headerlink" href="runtime.html#zh-id3" title="Link to this heading">¶</a></h3>
+<p>以下辅助功能在外部地址的序列上承担.
+它们以保持秩序的方式提取特定类型的地址:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathrm{funcs}}}({{\mathit{xa}}^\ast})\)</span> 全部提取 <a class="reference internal" href="runtime.html#zh-syntax-funcaddr"><span class="std std-ref">函数地址</span></a> 从 <span class="math notranslate nohighlight">\({{\mathit{xa}}^\ast}\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathrm{tables}}}({{\mathit{xa}}^\ast})\)</span> 全部提取 <a class="reference internal" href="runtime.html#zh-syntax-funcaddr"><span class="std std-ref">表格地址</span></a> 从 <span class="math notranslate nohighlight">\({{\mathit{xa}}^\ast}\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathrm{mems}}}({{\mathit{xa}}^\ast})\)</span> 全部提取 <a class="reference internal" href="runtime.html#zh-syntax-funcaddr"><span class="std std-ref">内存地址</span></a> 从 <span class="math notranslate nohighlight">\({{\mathit{xa}}^\ast}\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathrm{globals}}}({{\mathit{xa}}^\ast})\)</span> 全部提取 <a class="reference internal" href="runtime.html#zh-syntax-funcaddr"><span class="std std-ref">全球地址</span></a> 从 <span class="math notranslate nohighlight">\({{\mathit{xa}}^\ast}\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathrm{tags}}}({{\mathit{xa}}^\ast})\)</span> 全部提取 <a class="reference internal" href="runtime.html#zh-syntax-funcaddr"><span class="std std-ref">标签地址</span></a> 从 <span class="math notranslate nohighlight">\({{\mathit{xa}}^\ast}\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-aggregate-instances">
+<span id="zh-syntax-aggrinst"></span><span id="zh-syntax-arrayinst"></span><span id="zh-syntax-structinst"></span><span id="zh-syntax-packval"></span><span id="zh-syntax-fieldval"></span><span id="zh-index-15"></span><h2>总计实例<a class="headerlink" href="runtime.html#zh-aggregate-instances" title="Link to this heading">¶</a></h2>
+<p>A <em>结构实例</em> 是从 a 分配的堆积对象的运行时间表示符 <a class="reference internal" href="../syntax/types.html#zh-syntax-structtype"><span class="std std-ref">结构类型</span></a>。 。 。
+同样,一个 <em>数组实例</em> 是从 an 分配的堆积对象的运行时间表示符 <a class="reference internal" href="../syntax/types.html#zh-syntax-arraytype"><span class="std std-ref">数组类型</span></a>。 。 。
+两人分别记录 <a class="reference internal" href="../valid/conventions.html#zh-syntax-deftype"><span class="std std-ref">定义类型</span></a> 并持有一份清单 值 联合国 <em>字段</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-structinst}{\mathit{structinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-structinst}{\mathsf{type}}~{\href{../valid/conventions.html#syntax-deftype}{\mathit{deftype}}} ,  \href{../exec/runtime.html#syntax-structinst}{\mathsf{fields}}~{{\href{../exec/runtime.html#syntax-fieldval}{\mathit{fieldval}}}^\ast} \} \\
+\end{array} \\
+&amp; {\href{../exec/runtime.html#syntax-arrayinst}{\mathit{arrayinst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-arrayinst}{\mathsf{type}}~{\href{../valid/conventions.html#syntax-deftype}{\mathit{deftype}}} ,  \href{../exec/runtime.html#syntax-arrayinst}{\mathsf{fields}}~{{\href{../exec/runtime.html#syntax-fieldval}{\mathit{fieldval}}}^\ast} \} \\
+\end{array} \\
+&amp; {\href{../exec/runtime.html#syntax-fieldval}{\mathit{fieldval}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-val}{\mathit{val}}} ~~|~~ {\href{../exec/runtime.html#syntax-packval}{\mathit{packval}}} \\
+&amp; {\href{../exec/runtime.html#syntax-packval}{\mathit{packval}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}{.}\href{../exec/runtime.html#syntax-packval}{\mathsf{pack}}~{{\href{../syntax/values.html#syntax-int}{\mathit{i}\kern-0.1em}}}{N} \\
+\end{array}\end{split}\]</div>
+<section id="zh-aux-unpackfield">
+<span id="zh-aux-packfield"></span><span id="zh-id4"></span><h3>约定<a class="headerlink" href="runtime.html#zh-aux-unpackfield" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>经常预算的改划 <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">价值</span></a> 改为: <a class="reference internal" href="runtime.html#zh-syntax-fieldval"><span class="std std-ref">字段数值</span></a> 定义如下:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{\href{../exec/runtime.html#aux-packfield}{\mathrm{pack}}}}_{{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}}({\href{../exec/runtime.html#syntax-val}{\mathit{val}}}) &amp; = &amp; {\href{../exec/runtime.html#syntax-val}{\mathit{val}}} \\
+{{\href{../exec/runtime.html#aux-packfield}{\mathrm{pack}}}}_{{\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}}(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~i) &amp; = &amp; {\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}{.}\href{../exec/runtime.html#syntax-packval}{\mathsf{pack}}~{{\href{../exec/numerics.html#op-wrap}{\mathrm{wrap}}}}_{32, {|{\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}|}}(i) \\
+\end{array}\end{split}\]</div>
+</li>
+<li><p>反向转换 a <a class="reference internal" href="runtime.html#zh-syntax-fieldval"><span class="std std-ref">字段数值</span></a> 改为经常预算 <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">价值</span></a> 定义如下:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{{{\href{../exec/runtime.html#aux-unpackfield}{\mathrm{unpack}}}}_{{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}}^{\epsilon}}}{({\href{../exec/runtime.html#syntax-val}{\mathit{val}}})} &amp; = &amp; {\href{../exec/runtime.html#syntax-val}{\mathit{val}}} \\
+{{{{\href{../exec/runtime.html#aux-unpackfield}{\mathrm{unpack}}}}_{{\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}}^{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}}}}{({\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}{.}\href{../exec/runtime.html#syntax-packval}{\mathsf{pack}}~i)} &amp; = &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~{{{{\href{../exec/numerics.html#op-extend}{\mathrm{extend}}}}_{{|{\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}}|}, 32}^{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}}}}{(i)} \\
+\end{array}\end{split}\]</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="zh-exception-instances">
+<span id="zh-syntax-exninst"></span><span id="zh-index-16"></span><h2>例外情况<a class="headerlink" href="runtime.html#zh-exception-instances" title="Link to this heading">¶</a></h2>
+<p>一个 <em>例外实例</em> 运行时间代表 。 <a class="reference internal" href="../syntax/instructions.html#zh-exception"><span class="std std-ref">例外</span></a> 生产 <span class="math notranslate nohighlight">\(\mathsf{throw}\)</span> 指令。 。 。
+它拿着 <a class="reference internal" href="runtime.html#zh-syntax-tagaddr"><span class="std std-ref">地址</span></a> 报告 <a class="reference internal" href="../syntax/modules.html#zh-syntax-tag"><span class="std std-ref">标签</span></a> 和争论 <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">值</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-exninst}{\mathit{exninst}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-exninst}{\mathsf{tag}}~{\href{../exec/runtime.html#syntax-tagaddr}{\mathit{tagaddr}}} ,  \href{../exec/runtime.html#syntax-exninst}{\mathsf{fields}}~{{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-stack">
+<span id="zh-handler"></span><span id="zh-label"></span><span id="zh-frame"></span><span id="zh-syntax-handler"></span><span id="zh-syntax-label"></span><span id="zh-syntax-callframe"></span><span id="zh-syntax-frame"></span><span id="zh-index-17"></span><span id="zh-id5"></span><h2>栈<a class="headerlink" href="runtime.html#zh-stack" title="Link to this heading">¶</a></h2>
+<p>再说 <a class="reference internal" href="runtime.html#zh-store"><span class="std std-ref">存储</span></a>,大多数 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr"><span class="std std-ref">指令</span></a> 与隐含的相互作用 <em>栈</em>。 。 。
+那个 栈 包含两种条目:</p>
+<ul class="simple">
+<li><p><em>值</em>编号: <em>操作</em> 页:1 指令.</p></li>
+<li><p><em>控制框架</em>: 当前活动控制流结构.</p></li>
+</ul>
+<p>后者又可以是以下之一:</p>
+<ul class="simple">
+<li><p><em>标签</em>活动 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-control"><span class="std std-ref">结构化 控制指令</span></a> 可以被树枝锁定</p></li>
+<li><p><em>(呼叫)框架</em>编号: <em>激活记录</em> 活动 <a class="reference internal" href="../syntax/modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a> 电话</p></li>
+<li><p><em>处理器</em>: 活动例外处理器.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>只要从上下文看清楚 <em>电话 栈帧</em> 缩写为 <em>栈帧</em>.</p>
+</div>
+<p>所有这些条目都可以发生在 栈 期间的任何顺序 执行 一个程序。
+栈 条目由 抽象语法 现如下。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>可以模拟 WebAssembly 语义学使用单独的堆栈进行操作,控制构造,和调用.
+然而,由于堆栈是相互依存的, 额外的书保持关联 栈 需要高点。
+为此 规范,相互间代表比较简单.</p>
+</div>
+<section id="zh-id6">
+<h3>值<a class="headerlink" href="runtime.html#zh-id6" title="Link to this heading">¶</a></h3>
+<p>值 代表为: <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">本身</span></a>.</p>
+</section>
+<section id="zh-labels">
+<h3>标签<a class="headerlink" href="runtime.html#zh-labels" title="Link to this heading">¶</a></h3>
+<p>标签带有一个参数存在性 <span class="math notranslate nohighlight">\(n\)</span> 及其联系分支 <em>目标</em>,在实际中将其表述为 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr"><span class="std std-ref">指令</span></a> 顺序 :</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-label}{\mathit{label}}} &amp; ::= &amp; {{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \}} \\
+\end{array}\end{split}\]</div>
+<p>直觉上 <span class="math notranslate nohighlight">\({{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast}\)</span> 这是 <em>继续</em> ,以取代原来的控制构造。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>例如,循环 标签 带有窗体</p>
+<div class="math notranslate nohighlight">
+\[{{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ (\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{loop}}~{\mathit{bt}}~\dots) \}}\]</div>
+<p>当执行此分支时 标签,此选项将执行循环,从头有效重新启动循环。
+相反,一个简单的块 标签 带有窗体</p>
+<div class="math notranslate nohighlight">
+\[{{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ \epsilon \}}\]</div>
+<p>当分枝时,空续结束目标块,例如 执行 可以继续连续 指令.</p>
+</div>
+</section>
+<section id="zh-call-frames">
+<h3>调用框架<a class="headerlink" href="runtime.html#zh-call-frames" title="Link to this heading">¶</a></h3>
+<p>调用框架带有返回的比值 <span class="math notranslate nohighlight">\(n\)</span> 履行各自的职能,
+拿着 值 联 合 国 <a class="reference internal" href="../syntax/modules.html#zh-syntax-local"><span class="std std-ref">当地人</span></a> (包括论据)按其静态排列 <a class="reference internal" href="../syntax/modules.html#zh-syntax-localidx"><span class="std std-ref">当地指数</span></a>, (中文).
+并提及该职能本身 <a class="reference internal" href="runtime.html#zh-syntax-moduleinst"><span class="std std-ref">模块实例</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-callframe}{\mathit{callframe}}} &amp; ::= &amp; {{\href{../exec/runtime.html#syntax-frame}{\mathsf{frame}}}_{n}}{\{ {\href{../exec/runtime.html#syntax-frame}{\mathit{frame}}} \}} \\
+&amp; {\href{../exec/runtime.html#syntax-frame}{\mathit{frame}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../exec/runtime.html#syntax-frame}{\mathsf{locals}}~{({{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^?})^\ast} ,  \href{../exec/runtime.html#syntax-frame}{\mathsf{module}}~{\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>当地人可能未初始化,在这种情况下是空的.
+当地人由各自变化 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-variable"><span class="std std-ref">变量指令</span></a>.</p>
+</section>
+<section id="zh-exception-handlers">
+<h3>处理器除外<a class="headerlink" href="runtime.html#zh-exception-handlers" title="Link to this heading">¶</a></h3>
+<p>例外处理器由 <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{try\_table}}\)</span> 指令 并记录相应的列表 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-catch"><span class="std std-ref">渔获条款</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{llllll}
+  \def\mathdef1835#1{{}}\mathdef1835{handler} &amp; \href{../exec/runtime.html#syntax-handler}{\mathit{handler}} &amp;::=&amp;
+    \href{../exec/runtime.html#syntax-handler}{\mathsf{handler}}_n\{\href{../syntax/instructions.html#syntax-catch}{\mathit{catch}}^\ast\}
+\end{array}\]</div>
+<p>管理者们 栈 当一个例外被搜索时 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-throw"><span class="std std-ref">丢弃</span></a>.</p>
+</section>
+<section id="zh-aux-blocktype">
+<span id="zh-id7"></span><h3>约定<a class="headerlink" href="runtime.html#zh-aux-blocktype" title="Link to this heading">¶</a></h3>
+<ul>
+<li><p>元变量 <span class="math notranslate nohighlight">\(L\)</span> 横跨从上下文清晰的标签。</p></li>
+<li><p>元变量 <span class="math notranslate nohighlight">\(f\)</span> 宽度 栈帧 从上下文看清楚。</p></li>
+<li><p>元变量 <span class="math notranslate nohighlight">\(H\)</span> 从上下文看清楚的例外处理器。</p></li>
+<li><p>以下辅助定义需要 <a class="reference internal" href="../syntax/types.html#zh-syntax-blocktype"><span class="std std-ref">块类型</span></a> 抬头看 <a class="reference internal" href="../valid/conventions.html#zh-syntax-instrtype"><span class="std std-ref">指令 类型</span></a> 表示当前 栈帧:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{\href{../exec/runtime.html#aux-blocktype}{\mathrm{instrtype}}}}_{z}(x) &amp; = &amp; {t_1^\ast} \rightarrow {t_2^\ast} &amp; \quad \mbox{if}~ z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{types}}{}[x] \mathrel{\href{../valid/conventions.html#aux-expand-deftype}{\approx}} \href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast} \\
+{{\href{../exec/runtime.html#aux-blocktype}{\mathrm{instrtype}}}}_{z}({t^?}) &amp; = &amp; \epsilon \rightarrow {t^?} \\
+\end{array}\end{split}\]</div>
+</li>
+</ul>
+</section>
+</section>
+<section id="zh-administrative-instructions">
+<span id="zh-syntax-instr-admin"></span><span id="zh-syntax-trap"></span><span id="zh-index-18"></span><h2>管理指令<a class="headerlink" href="runtime.html#zh-administrative-instructions" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>这个 段 仅与 <a class="reference internal" href="conventions.html#zh-exec-notation"><span class="std std-ref">正式标注</span></a>.</p>
+</div>
+<p>为了表示减少 <a class="reference internal" href="../intro/overview.html#zh-trap"><span class="std std-ref">陷阱</span></a>, <a class="reference internal" href="../syntax/instructions.html#zh-syntax-call"><span class="std std-ref">电话</span></a>, <a class="reference internal" href="runtime.html#zh-syntax-handler"><span class="std std-ref">例外处理</span></a>,以及 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-control"><span class="std std-ref">控制指令</span></a>,则 语法 页:1 指令 扩展如下: <em>管理指令</em>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} \\
+&amp; &amp; | &amp; {{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; {{\href{../exec/runtime.html#syntax-frame}{\mathsf{frame}}}_{n}}{\{ {\href{../exec/runtime.html#syntax-frame}{\mathit{frame}}} \}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; {{\href{../exec/runtime.html#syntax-handler}{\mathsf{handler}}}_{n}}{\{ {{\href{../syntax/instructions.html#syntax-catch}{\mathit{catch}}}^\ast} \}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; \href{../exec/runtime.html#syntax-trap}{\mathsf{trap}} \\
+\end{array}\end{split}\]</div>
+<p>A <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考文献</span></a> 代表一个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考文献</span></a> 表格的数值 <a class="reference internal" href="conventions.html#zh-exec-notation"><span class="std std-ref">“关于 栈”</span></a>.</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{label}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{frame}\)</span>,以及 <span class="math notranslate nohighlight">\(\mathsf{handler}\)</span> 指令 模式 <a class="reference internal" href="runtime.html#zh-syntax-label"><span class="std std-ref">标签</span></a>, <a class="reference internal" href="runtime.html#zh-syntax-frame"><span class="std std-ref">边框</span></a>活动 <a class="reference internal" href="runtime.html#zh-syntax-handler"><span class="std std-ref">例外处理器</span></a>分别, <a class="reference internal" href="conventions.html#zh-exec-notation"><span class="std std-ref">“关于 栈”</span></a>。 。 。
+此外,行政权 语法 保持原始的嵌入结构 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-control"><span class="std std-ref">结构化 控制指令</span></a> 或 <a class="reference internal" href="../syntax/modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a> 联合国 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instrs"><span class="std std-ref">指令 顺序</span></a>.</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{trap}\)</span> 指令 表示一个 陷阱。 。 。
+陷阱在巢穴中飞扬 指令 序列,最终将整个程序缩小为单个 <span class="math notranslate nohighlight">\(\mathsf{trap}\)</span> 指令信号突然终止</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>例如, <a class="reference internal" href="instructions.html#zh-exec-block"><span class="std std-ref">减少规则</span></a> (单位:千美元) <span class="math notranslate nohighlight">\(\mathsf{block}\)</span> 为:</p>
+<div class="math notranslate nohighlight">
+\[(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{block}}~{\mathit{bt}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast}) \href{../exec/conventions.html#exec-notation}{\hookrightarrow} ({{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ \epsilon \}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast})\]</div>
+<p>如果 <a class="reference internal" href="../syntax/types.html#zh-syntax-blocktype"><span class="std std-ref">块类型</span></a> <span class="math notranslate nohighlight">\({\mathit{bt}}\)</span> 表示一个 <a class="reference internal" href="../syntax/types.html#zh-syntax-functype"><span class="std std-ref">函数类型</span></a> <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^{m}} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^{n}}\)</span>, (中文).
+这样 <span class="math notranslate nohighlight">\(n\)</span> 是该区块的结果均等性。
+本规则用 标签 指令, (中文).
+可被解释为“推开” 标签 编辑 栈。 。 。
+当它到达尽头,即内在 指令 序列被缩小为空序列,或者更确切地说,一个序列: <span class="math notranslate nohighlight">\(n\)</span> <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">值</span></a> 代表结果,然后是 <span class="math notranslate nohighlight">\(\mathsf{label}\)</span> 指令 被取消自己的礼貌 <a class="reference internal" href="instructions.html#zh-exec-label"><span class="std std-ref">减少规则</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[({{\href{../exec/runtime.html#syntax-label}{\mathsf{label}}}_{n}}{\{ {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \}}~{{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^\ast}) \href{../exec/conventions.html#exec-notation}{\hookrightarrow} {{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^\ast}\]</div>
+<p>这可以解释为删除 标签 从 栈 并且只离开当地积累的操作 值.
+验证 保证 <span class="math notranslate nohighlight">\(n\)</span> 匹配数字 <span class="math notranslate nohighlight">\({|{{\href{../exec/runtime.html#syntax-val}{\mathit{val}}}^\ast}|}\)</span> 成果 值 此时此刻</p>
+</div>
+</section>
+<section id="zh-configurations">
+<span id="zh-syntax-config"></span><span id="zh-syntax-thread"></span><span id="zh-syntax-state"></span><span id="zh-index-19"></span><h2>配置<a class="headerlink" href="runtime.html#zh-configurations" title="Link to this heading">¶</a></h2>
+<p>A <em>配置</em> 描述当前计算。
+它由计算组成 <em>状态</em> 和顺序 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr"><span class="std std-ref">指令</span></a> 留待执行。
+国家又由全球 <a class="reference internal" href="runtime.html#zh-syntax-store"><span class="std std-ref">存储</span></a> 和当前 <a class="reference internal" href="runtime.html#zh-syntax-frame"><span class="std std-ref">栈帧</span></a> 提及 <a class="reference internal" href="runtime.html#zh-syntax-moduleinst"><span class="std std-ref">模块实例</span></a> 其中计算运行,即当前函数来源于何处。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../exec/runtime.html#syntax-config}{\mathit{config}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-state}{\mathit{state}}} ; {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\[0.8ex]
+&amp; {\href{../exec/runtime.html#syntax-state}{\mathit{state}}} &amp; ::= &amp; {\href{../exec/runtime.html#syntax-store}{\mathit{store}}} ; {\href{../exec/runtime.html#syntax-frame}{\mathit{frame}}} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>当前版本 WebAssembly 是单行的,
+但未来可能会支持多个线程的配置.</p>
+</div>
+<section id="zh-id8">
+<h3>约定<a class="headerlink" href="runtime.html#zh-id8" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>元变量 <span class="math notranslate nohighlight">\(z\)</span> 宽度 栈帧 从上下文看清楚。</p></li>
+<li><p>用于访问状态的以下简称 <span class="math notranslate nohighlight">\(z = (s ; f)\)</span>:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{types}}{}[x] &amp; = &amp; f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{types}}{}[x] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{tags}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tags}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{tags}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{globals}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{globals}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{mems}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{mems}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{tables}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{tables}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{funcs}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{funcs}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{datas}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{datas}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{datas}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{elems}}{}[x] &amp; = &amp; s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{elems}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{elems}}{}[x]] \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{.}\href{../exec/runtime.html#syntax-state}{\mathsf{locals}}{}[x] &amp; = &amp; f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{locals}}{}[x] \\ \end{array}\)</span></p></li>
+</ul>
+</li>
+<li><p>这些简称还延伸到: <a class="reference internal" href="../syntax/conventions.html#zh-notation-replace"><span class="std std-ref">标记</span></a> 用于更新状态 :</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{}[{.}\href{../exec/runtime.html#syntax-state}{\mathsf{globals}}{}[x]{.}\href{../exec/runtime.html#syntax-globalinst}{\mathsf{value}} = v] &amp; = &amp; s{}[{.}\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{globals}}{}[x]]{.}\href{../exec/runtime.html#syntax-globalinst}{\mathsf{value}} = v] ; f \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{}[{.}\href{../exec/runtime.html#syntax-state}{\mathsf{mems}}{}[x]{.}\href{../exec/runtime.html#syntax-meminst}{\mathsf{bytes}}{}[i : j] = {b^\ast}] &amp; = &amp; s{}[{.}\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{mems}}{}[x]]{.}\href{../exec/runtime.html#syntax-meminst}{\mathsf{bytes}}{}[i : j] = {b^\ast}] ; f \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{}[{.}\href{../exec/runtime.html#syntax-state}{\mathsf{tables}}{}[x]{.}\href{../exec/runtime.html#syntax-tableinst}{\mathsf{refs}}{}[i] = r] &amp; = &amp; s{}[{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}{}[f{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{tables}}{}[x]]{.}\href{../exec/runtime.html#syntax-tableinst}{\mathsf{refs}}{}[i] = r] ; f \\ \end{array}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} z{}[{.}\href{../exec/runtime.html#syntax-state}{\mathsf{locals}}{}[x] = v] &amp; = &amp; s ; f{}[{.}\href{../exec/runtime.html#syntax-frame}{\mathsf{locals}}{}[x] = v] \\ \end{array}\)</span></p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/exec/runtime.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

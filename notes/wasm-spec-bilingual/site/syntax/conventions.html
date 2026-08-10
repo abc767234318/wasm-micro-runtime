@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Conventions  / 约定  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="values.html" rel="next" title="Values"/>
+<link href="index.html" rel="prev" title="Structure"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="conventions.html#"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/syntax/conventions.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="conventions">
+<span id="index-0"></span><h1>Conventions<a class="headerlink" href="conventions.html#conventions" title="Link to this heading">¶</a></h1>
+<p>WebAssembly is a programming language that has multiple concrete representations
+(its <a class="reference internal" href="../binary/index.html#binary"><span class="std std-ref">binary format</span></a> and the <a class="reference internal" href="../text/index.html#text"><span class="std std-ref">text format</span></a>).
+Both map to a common structure.
+For conciseness, this structure is described in the form of an <em>abstract syntax</em>.
+All parts of this specification are defined in terms of this abstract syntax.</p>
+<section id="grammar-notation">
+<span id="grammar"></span><span id="index-1"></span><h2>Grammar Notation<a class="headerlink" href="conventions.html#grammar-notation" title="Link to this heading">¶</a></h2>
+<p>The following conventions are adopted in defining grammar rules for abstract syntax.</p>
+<ul class="simple">
+<li><p>Terminal symbols (atoms) are written in sans-serif font or in symbolic form: <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 32}}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{nop}\)</span>, <span class="math notranslate nohighlight">\(\rightarrow\)</span>, <span class="math notranslate nohighlight">\({}[ , ]\)</span>.</p></li>
+<li><p>Nonterminal symbols are written in italic font: <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}\)</span>, <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({A^{n}}\)</span> is a sequence of <span class="math notranslate nohighlight">\(n \geq 0\)</span> iterations of <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({A^\ast}\)</span> is a possibly empty sequence of iterations of <span class="math notranslate nohighlight">\(A\)</span>.
+(This is a shorthand for <span class="math notranslate nohighlight">\({A^{n}}\)</span> used where <span class="math notranslate nohighlight">\(n\)</span> is not relevant.)</p></li>
+<li><p><span class="math notranslate nohighlight">\({A^{+}}\)</span> is a non-empty sequence of iterations of <span class="math notranslate nohighlight">\(A\)</span>.
+(This is a shorthand for <span class="math notranslate nohighlight">\({A^{n}}\)</span> where <span class="math notranslate nohighlight">\(n \geq 1\)</span>.)</p></li>
+<li><p><span class="math notranslate nohighlight">\({A^?}\)</span> is an optional occurrence of <span class="math notranslate nohighlight">\(A\)</span>.
+(This is a shorthand for <span class="math notranslate nohighlight">\({A^{n}}\)</span> where <span class="math notranslate nohighlight">\(n \leq 1\)</span>.)</p></li>
+<li><p>Productions are written <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}} &amp; {\mathit{sym}} &amp; ::= &amp; A_1 ~~|~~ \ldots ~~|~~ A_n \\ \end{array}\)</span>.</p></li>
+<li><p>Large productions may be split into multiple definitions, indicated by ending the first one with explicit ellipses, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}} &amp; {\mathit{sym}} &amp; ::= &amp; A_1 ~~|~~ \dots \\ \end{array}\)</span>, and starting continuations with ellipses, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}} &amp; {\mathit{sym}} &amp; ::= &amp; \dots ~~|~~ A_2 \\ \end{array}\)</span>.</p></li>
+<li><p>Some productions are augmented with side conditions, “<span class="math notranslate nohighlight">\(\mathrel{\mbox{if}} \mathit{condition}\)</span>”, that provide a shorthand for a combinatorial expansion of the production into many separate cases.</p></li>
+<li><p>If the same meta variable or non-terminal symbol appears multiple times in a production, then all those occurrences must have the same instantiation.
+(This is a shorthand for a side condition requiring multiple different variables to be equal.)</p></li>
+</ul>
+</section>
+<section id="auxiliary-notation">
+<span id="notation-compose"></span><span id="notation-concat"></span><span id="notation-project"></span><span id="notation-record"></span><span id="notation-replace"></span><span id="notation-slice"></span><span id="notation-index"></span><span id="notation-length"></span><span id="notation-epsilon"></span><h2>Auxiliary Notation<a class="headerlink" href="conventions.html#auxiliary-notation" title="Link to this heading">¶</a></h2>
+<p>When dealing with syntactic constructs the following notation is also used:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span> denotes the empty sequence.</p></li>
+<li><p><span class="math notranslate nohighlight">\({|s|}\)</span> denotes the length of a sequence <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s{}[i]\)</span> denotes the <span class="math notranslate nohighlight">\(i\)</span>-th element of a sequence <span class="math notranslate nohighlight">\(s\)</span>, starting from <span class="math notranslate nohighlight">\(0\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s{}[i : n]\)</span> denotes the sub-sequence <span class="math notranslate nohighlight">\(s{}[i] \ldots s{}[i + n - 1]\)</span> of a sequence <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s{}[{}[i] = A]\)</span> denotes the same sequence as <span class="math notranslate nohighlight">\(s\)</span>,
+except that the <span class="math notranslate nohighlight">\(i\)</span>-th element is replaced with <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s{}[{}[i : n] = {A^{n}}]\)</span> denotes the same sequence as <span class="math notranslate nohighlight">\(s\)</span>,
+except that the sub-sequence <span class="math notranslate nohighlight">\(s{}[i : n]\)</span> is replaced with <span class="math notranslate nohighlight">\({A^{n}}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s_1 \oplus s_2\)</span> denotes the sequence <span class="math notranslate nohighlight">\(s_1\)</span> concatenated with <span class="math notranslate nohighlight">\(s_2\)</span>;
+this is equivalent to <span class="math notranslate nohighlight">\(s_1~s_2\)</span>, but used for clarity.</p></li>
+<li><p><span class="math notranslate nohighlight">\({\bigoplus}\, {s^\ast}\)</span> denotes the flattened sequence, formed by concatenating all sequences <span class="math notranslate nohighlight">\(s_i\)</span> in <span class="math notranslate nohighlight">\({s^\ast}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(A \in s\)</span> denotes that <span class="math notranslate nohighlight">\(A\)</span> is a member of the sequence <span class="math notranslate nohighlight">\(s\)</span>, that is, <span class="math notranslate nohighlight">\(s\)</span> is of the form <span class="math notranslate nohighlight">\(s_1~A~s_2\)</span> for some sequences <span class="math notranslate nohighlight">\(s_1\)</span>, <span class="math notranslate nohighlight">\(s_2\)</span>.</p></li>
+</ul>
+<p>Moreover, the following conventions are employed:</p>
+<ul class="simple">
+<li><p>The notation <span class="math notranslate nohighlight">\({x^{n}}\)</span>, where <span class="math notranslate nohighlight">\(x\)</span> is a non-terminal symbol, is treated as a meta variable ranging over respective sequences of <span class="math notranslate nohighlight">\(x\)</span> (similarly for <span class="math notranslate nohighlight">\({x^\ast}\)</span>, <span class="math notranslate nohighlight">\({x^{+}}\)</span>, <span class="math notranslate nohighlight">\({x^?}\)</span>).</p></li>
+<li><p>When given a sequence <span class="math notranslate nohighlight">\({x^{n}}\)</span>,
+then the occurrences of <span class="math notranslate nohighlight">\(x\)</span> in an iterated sequence <span class="math notranslate nohighlight">\({( \ldots x \ldots )^{n}}\)</span> are assumed to denote the individual elements of <span class="math notranslate nohighlight">\({x^{n}}\)</span>, respectively
+(similarly for <span class="math notranslate nohighlight">\({x^\ast}\)</span>, <span class="math notranslate nohighlight">\({x^{+}}\)</span>, <span class="math notranslate nohighlight">\({x^?}\)</span>).
+This implicitly expresses a form of mapping syntactic constructions over a sequence.</p></li>
+<li><p><span class="math notranslate nohighlight">\({e^{i&lt;n}}\)</span> denotes the same sequence as <span class="math notranslate nohighlight">\({e^{n}}\)</span>,
+but implicitly also defines <span class="math notranslate nohighlight">\({i^{n}}\)</span> to be the sequence of values <span class="math notranslate nohighlight">\(0\)</span> to <span class="math notranslate nohighlight">\((n - 1)\)</span>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, if <span class="math notranslate nohighlight">\({x^{n}}\)</span> is the sequence <span class="math notranslate nohighlight">\(a~b~c\)</span>, then <span class="math notranslate nohighlight">\({({\mathrm{f}}(x) + 1)^{n}}\)</span> denotes the sequence <span class="math notranslate nohighlight">\(({\mathrm{f}}(a) + 1)~({\mathrm{f}}(b) + 1)~({\mathrm{f}}(c) + 1)\)</span>.</p>
+<p>The form <span class="math notranslate nohighlight">\({e^{i&lt;n}}\)</span> additionally gives access to an index variable inside the iteration.
+For example, <span class="math notranslate nohighlight">\({({\mathrm{f}}(x) + i)^{i&lt;n}}\)</span> denotes the sequence <span class="math notranslate nohighlight">\(({\mathrm{f}}(a) + 0)~({\mathrm{f}}(b) + 1)~({\mathrm{f}}(c) + 2)\)</span>.</p>
+</div>
+<p>Productions of the following form are interpreted as <em>records</em> that map a fixed set of fields <span class="math notranslate nohighlight">\({\mathsf{field}}_{i}\)</span> to “values” <span class="math notranslate nohighlight">\(A_i\)</span>, respectively:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; r &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+{\mathsf{field}}_{1}~A_1 ,  {\mathsf{field}}_{2}~A_2 ,  \ldots~ \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>The following notation is adopted for manipulating such records:</p>
+<ul>
+<li><p>Where the type of a record is clear from context, empty fields with value <span class="math notranslate nohighlight">\(\epsilon\)</span> are often omitted.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r{.}\mathsf{field}\)</span> denotes the contents of the <span class="math notranslate nohighlight">\(\mathsf{field}\)</span> component of <span class="math notranslate nohighlight">\(r\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r{}[{.}\mathsf{field} = A]\)</span> denotes the same record as <span class="math notranslate nohighlight">\(r\)</span>,
+except that the value of the <span class="math notranslate nohighlight">\(\mathsf{field}\)</span> component is replaced with <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r{}[{.}\mathsf{field} \mathrel{{=}{\oplus}} {A^\ast}]\)</span> denotes the same record as <span class="math notranslate nohighlight">\(r\)</span>,
+except that <span class="math notranslate nohighlight">\({A^\ast}\)</span> is appended to the sequence value of the <span class="math notranslate nohighlight">\(\mathsf{field}\)</span> component,
+that is, it is short for <span class="math notranslate nohighlight">\(r{}[{.}\mathsf{field} = r{.}\mathsf{field} \oplus {A^\ast}]\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r_1 \oplus r_2\)</span> denotes the composition of two identically shaped records by concatenating each field of sequences point-wise:</p>
+<div class="math notranslate nohighlight">
+\[\{ {\mathsf{field}}_{1}\,{A_1^\ast}, {\mathsf{field}}_{2}\,{A_2^\ast}, \ldots \} \oplus \{ {\mathsf{field}}_{1}\,{B_1^\ast}, {\mathsf{field}}_{2}\,{B_2^\ast}, \ldots \} = \{ {\mathsf{field}}_{1}\,({A_1^\ast} \oplus {B_1^\ast}), {\mathsf{field}}_{2}\,({A_2^\ast} \oplus {B_2^\ast}), \ldots \}\]</div>
+</li>
+<li><p><span class="math notranslate nohighlight">\({\bigoplus}\, {r^\ast}\)</span> denotes the composition of a sequence of records, respectively; if the sequence is empty, then all fields of the resulting record are empty.</p></li>
+</ul>
+<p>The update notation for sequences and records generalizes recursively to nested components accessed by “paths” <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}} &amp; {\mathit{pth}} &amp; ::= &amp; {({}[ i ]~\mid~{.}\mathsf{field})^{+}} \\ \end{array}\)</span>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(s{}[{{}[ i ]}{{\mathit{pth}}} = A]\)</span> is short for <span class="math notranslate nohighlight">\(s{}[{}[i] = s{}[i]{}[{\mathit{pth}} = A]]\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(r{}[{.}\mathsf{field}~{\mathit{pth}} = A]\)</span> is short for <span class="math notranslate nohighlight">\(r{}[{.}\mathsf{field} = r{.}\mathsf{field}{}[{\mathit{pth}} = A]]\)</span>.</p></li>
+</ul>
+</section>
+<section id="lists">
+<span id="syntax-list"></span><span id="index-2"></span><h2>Lists<a class="headerlink" href="conventions.html#lists" title="Link to this heading">¶</a></h2>
+<p><em>Lists</em> are bounded sequences of the form <span class="math notranslate nohighlight">\({A^{n}}\)</span> (or <span class="math notranslate nohighlight">\({A^\ast}\)</span>),
+where the <span class="math notranslate nohighlight">\(A\)</span> can either be values or complex constructions.
+A list can have at most <span class="math notranslate nohighlight">\({2^{32}} - 1\)</span> elements.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}(X) &amp; ::= &amp; {X^\ast} &amp; \quad \mbox{if}~ {|{X^\ast}|} &lt; {2^{32}} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/syntax/conventions.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-conventions">
+<span id="zh-index-0"></span><h1>约定<a class="headerlink" href="conventions.html#zh-conventions" title="Link to this heading">¶</a></h1>
+<p>WebAssembly 是一种程序语言,具有多种具体表达方式
+(数目) <a class="reference internal" href="../binary/index.html#zh-binary"><span class="std std-ref">二进制格式</span></a> 页:1 <a class="reference internal" href="../text/index.html#zh-text"><span class="std std-ref">文本格式</span></a>) (中文(简体) ).
+两者都映射到一个共同的结构.
+关于简洁性,这一结构的描述形式是: <em>抽象语法</em>。 。 。
+这一切 规范 定义在此 抽象语法.</p>
+<section id="zh-grammar-notation">
+<span id="zh-grammar"></span><span id="zh-index-1"></span><h2>语法 标记<a class="headerlink" href="conventions.html#zh-grammar-notation" title="Link to this heading">¶</a></h2>
+<p>以下是: 约定 用于定义 语法 规则 抽象语法.</p>
+<ul class="simple">
+<li><p>终端符号(原子)以sans-serif字体或符号形式书写: <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 32}}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{nop}\)</span>, <span class="math notranslate nohighlight">\(\rightarrow\)</span>, <span class="math notranslate nohighlight">\({}[ , ]\)</span>.</p></li>
+<li><p>非绝对符号用斜体字体写成: <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}\)</span>, <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({A^{n}}\)</span> 是一个序列 <span class="math notranslate nohighlight">\(n \geq 0\)</span> 重复次数 <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({A^\ast}\)</span> 可能是重复的空序数 <span class="math notranslate nohighlight">\(A\)</span>。 。 。
+(此简称为 <span class="math notranslate nohighlight">\({A^{n}}\)</span> 用于何处 <span class="math notranslate nohighlight">\(n\)</span> 无关。 )</p></li>
+<li><p><span class="math notranslate nohighlight">\({A^{+}}\)</span> 是一个非空序的迭代 <span class="math notranslate nohighlight">\(A\)</span>。 。 。
+(此简称为 <span class="math notranslate nohighlight">\({A^{n}}\)</span> 地点 <span class="math notranslate nohighlight">\(n \geq 1\)</span>.)</p></li>
+<li><p><span class="math notranslate nohighlight">\({A^?}\)</span> 是可选发生的 <span class="math notranslate nohighlight">\(A\)</span>。 。 。
+(此简称为 <span class="math notranslate nohighlight">\({A^{n}}\)</span> 地点 <span class="math notranslate nohighlight">\(n \leq 1\)</span>.)</p></li>
+<li><p>产生式 已写入 <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}} &amp; {\mathit{sym}} &amp; ::= &amp; A_1 ~~|~~ \ldots ~~|~~ A_n \\ \end{array}\)</span>.</p></li>
+<li><p>大块 产生式 可分为多个定义,以第一个定义结尾处有明确的椭圆表示, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}} &amp; {\mathit{sym}} &amp; ::= &amp; A_1 ~~|~~ \dots \\ \end{array}\)</span>,然后用椭圆开始继续, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}} &amp; {\mathit{sym}} &amp; ::= &amp; \dots ~~|~~ A_2 \\ \end{array}\)</span>.</p></li>
+<li><p>有点 产生式 附加条件,<span class="math notranslate nohighlight">\(\mathrel{\mbox{if}} \mathit{condition}\)</span>这为组合扩大《公约》的范围提供了简表。 产生式 在很多不同的情况下</p></li>
+<li><p>如果同一元变量或非绝对符号在a中多次出现 产生式,那么所有这些事件必须具有同样的即时性。
+(这是一个侧式条件的缩写,要求多个不同的变量是相等的. )</p></li>
+</ul>
+</section>
+<section id="zh-auxiliary-notation">
+<span id="zh-notation-compose"></span><span id="zh-notation-concat"></span><span id="zh-notation-project"></span><span id="zh-notation-record"></span><span id="zh-notation-replace"></span><span id="zh-notation-slice"></span><span id="zh-notation-index"></span><span id="zh-notation-length"></span><span id="zh-notation-epsilon"></span><h2>辅助标记<a class="headerlink" href="conventions.html#zh-auxiliary-notation" title="Link to this heading">¶</a></h2>
+<p>在处理合成构造时,也使用下列标记:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span> 表示空序列。</p></li>
+<li><p><span class="math notranslate nohighlight">\({|s|}\)</span> 表示序列的长度 <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s{}[i]\)</span> 表示 <span class="math notranslate nohighlight">\(i\)</span>- 序列的第1个元素 <span class="math notranslate nohighlight">\(s\)</span>,从 <span class="math notranslate nohighlight">\(0\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s{}[i : n]\)</span> 表示子顺序 <span class="math notranslate nohighlight">\(s{}[i] \ldots s{}[i + n - 1]\)</span> 顺序 <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s{}[{}[i] = A]\)</span> 表示与 <span class="math notranslate nohighlight">\(s\)</span>, (中文).
+但是, <span class="math notranslate nohighlight">\(i\)</span>- 元素替换为 <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s{}[{}[i : n] = {A^{n}}]\)</span> 表示与 <span class="math notranslate nohighlight">\(s\)</span>, (中文).
+但是,子顺序 <span class="math notranslate nohighlight">\(s{}[i : n]\)</span> 替换为 <span class="math notranslate nohighlight">\({A^{n}}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(s_1 \oplus s_2\)</span> 表示顺序 <span class="math notranslate nohighlight">\(s_1\)</span> 与 <span class="math notranslate nohighlight">\(s_2\)</span>· ;
+这相当于 <span class="math notranslate nohighlight">\(s_1~s_2\)</span>,但用于清晰。</p></li>
+<li><p><span class="math notranslate nohighlight">\({\bigoplus}\, {s^\ast}\)</span> 表示平整的序列,通过调整所有序列而形成 <span class="math notranslate nohighlight">\(s_i\)</span> 输入 <span class="math notranslate nohighlight">\({s^\ast}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(A \in s\)</span> 表示 <span class="math notranslate nohighlight">\(A\)</span> 是序列中的一员 <span class="math notranslate nohighlight">\(s\)</span>也就是说, <span class="math notranslate nohighlight">\(s\)</span> 形式为 <span class="math notranslate nohighlight">\(s_1~A~s_2\)</span> 用于某些序列 <span class="math notranslate nohighlight">\(s_1\)</span>, <span class="math notranslate nohighlight">\(s_2\)</span>.</p></li>
+</ul>
+<p>此外,以下内容: 约定 就业情况:</p>
+<ul class="simple">
+<li><p>标记 <span class="math notranslate nohighlight">\({x^{n}}\)</span>时, <span class="math notranslate nohighlight">\(x\)</span> 是一个非刻度符号,作为元变量处理,其范围为: <span class="math notranslate nohighlight">\(x\)</span> (类似: <span class="math notranslate nohighlight">\({x^\ast}\)</span>, <span class="math notranslate nohighlight">\({x^{+}}\)</span>, <span class="math notranslate nohighlight">\({x^?}\)</span>).</p></li>
+<li><p>当给定序列时 <span class="math notranslate nohighlight">\({x^{n}}\)</span>, (中文).
+然后发生 <span class="math notranslate nohighlight">\(x\)</span> 顺序 <span class="math notranslate nohighlight">\({( \ldots x \ldots )^{n}}\)</span> 被假定表示 <span class="math notranslate nohighlight">\({x^{n}}\)</span>页:1
+(类似: <span class="math notranslate nohighlight">\({x^\ast}\)</span>, <span class="math notranslate nohighlight">\({x^{+}}\)</span>, <span class="math notranslate nohighlight">\({x^?}\)</span>) (中文(简体) ).
+这隐含地表达了一种在序列之上的绘图合成构造形式.</p></li>
+<li><p><span class="math notranslate nohighlight">\({e^{i&lt;n}}\)</span> 表示与 <span class="math notranslate nohighlight">\({e^{n}}\)</span>, (中文).
+但也暗含着定义 <span class="math notranslate nohighlight">\({i^{n}}\)</span> 作为顺序 值 <span class="math notranslate nohighlight">\(0\)</span> 改为: <span class="math notranslate nohighlight">\((n - 1)\)</span>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>例如,如果 <span class="math notranslate nohighlight">\({x^{n}}\)</span> 是顺序 <span class="math notranslate nohighlight">\(a~b~c\)</span>,则 <span class="math notranslate nohighlight">\({({\mathrm{f}}(x) + 1)^{n}}\)</span> 表示顺序 <span class="math notranslate nohighlight">\(({\mathrm{f}}(a) + 1)~({\mathrm{f}}(b) + 1)~({\mathrm{f}}(c) + 1)\)</span>.</p>
+<p>表格 <span class="math notranslate nohighlight">\({e^{i&lt;n}}\)</span> 此外,还可以访问迭代内部的索引变量。
+举例来说, <span class="math notranslate nohighlight">\({({\mathrm{f}}(x) + i)^{i&lt;n}}\)</span> 表示顺序 <span class="math notranslate nohighlight">\(({\mathrm{f}}(a) + 0)~({\mathrm{f}}(b) + 1)~({\mathrm{f}}(c) + 2)\)</span>.</p>
+</div>
+<p>产生式 下列形式解释为: <em>记录</em> 绘制一组固定的字段 <span class="math notranslate nohighlight">\({\mathsf{field}}_{i}\)</span> 改为:值” <span class="math notranslate nohighlight">\(A_i\)</span>分别:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; r &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+{\mathsf{field}}_{1}~A_1 ,  {\mathsf{field}}_{2}~A_2 ,  \ldots~ \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>下列标记用于操纵这种记录:</p>
+<ul>
+<li><p>记录类型从上下文中清晰可见的空字段 <span class="math notranslate nohighlight">\(\epsilon\)</span> 经常被省略。</p></li>
+<li><p><span class="math notranslate nohighlight">\(r{.}\mathsf{field}\)</span> 表示该表格的内容 <span class="math notranslate nohighlight">\(\mathsf{field}\)</span> 构成部分 <span class="math notranslate nohighlight">\(r\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r{}[{.}\mathsf{field} = A]\)</span> 表示与 <span class="math notranslate nohighlight">\(r\)</span>, (中文).
+但其价值 <span class="math notranslate nohighlight">\(\mathsf{field}\)</span> 组件替换为 <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r{}[{.}\mathsf{field} \mathrel{{=}{\oplus}} {A^\ast}]\)</span> 表示与 <span class="math notranslate nohighlight">\(r\)</span>, (中文).
+除外 <span class="math notranslate nohighlight">\({A^\ast}\)</span> 附于该定义的序列值 <span class="math notranslate nohighlight">\(\mathsf{field}\)</span> 构成部分,
+也就是说,这是短的 <span class="math notranslate nohighlight">\(r{}[{.}\mathsf{field} = r{.}\mathsf{field} \oplus {A^\ast}]\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(r_1 \oplus r_2\)</span> 表示两个形状相同的记录的构成,通过逐点排列每个序列域:</p>
+<div class="math notranslate nohighlight">
+\[\{ {\mathsf{field}}_{1}\,{A_1^\ast}, {\mathsf{field}}_{2}\,{A_2^\ast}, \ldots \} \oplus \{ {\mathsf{field}}_{1}\,{B_1^\ast}, {\mathsf{field}}_{2}\,{B_2^\ast}, \ldots \} = \{ {\mathsf{field}}_{1}\,({A_1^\ast} \oplus {B_1^\ast}), {\mathsf{field}}_{2}\,({A_2^\ast} \oplus {B_2^\ast}), \ldots \}\]</div>
+</li>
+<li><p><span class="math notranslate nohighlight">\({\bigoplus}\, {r^\ast}\)</span> 分别表示一个记录序列的构成;如果序列是空的,那么所产生的记录的所有字段都是空的.</p></li>
+</ul>
+<p>序列的更新标记和记录将“路径”访问的嵌套组件循环化 <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}} &amp; {\mathit{pth}} &amp; ::= &amp; {({}[ i ]~\mid~{.}\mathsf{field})^{+}} \\ \end{array}\)</span>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(s{}[{{}[ i ]}{{\mathit{pth}}} = A]\)</span> 简称为 <span class="math notranslate nohighlight">\(s{}[{}[i] = s{}[i]{}[{\mathit{pth}} = A]]\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(r{}[{.}\mathsf{field}~{\mathit{pth}} = A]\)</span> 简称为 <span class="math notranslate nohighlight">\(r{}[{.}\mathsf{field} = r{.}\mathsf{field}{}[{\mathit{pth}} = A]]\)</span>.</p></li>
+</ul>
+</section>
+<section id="zh-lists">
+<span id="zh-syntax-list"></span><span id="zh-index-2"></span><h2>列表<a class="headerlink" href="conventions.html#zh-lists" title="Link to this heading">¶</a></h2>
+<p><em>列表</em> 构成的边框序列 <span class="math notranslate nohighlight">\({A^{n}}\)</span> (或 <span class="math notranslate nohighlight">\({A^\ast}\)</span>), (中文(简体) ).
+地点 <span class="math notranslate nohighlight">\(A\)</span> 也可以是,也许 值 或复杂建筑。
+列表最多可以有 <span class="math notranslate nohighlight">\({2^{32}} - 1\)</span> 元素。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}(X) &amp; ::= &amp; {X^\ast} &amp; \quad \mbox{if}~ {|{X^\ast}|} &lt; {2^{32}} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/syntax/conventions.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Overview  / 概览  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../syntax/index.html" rel="next" title="Structure"/>
+<link href="introduction.html" rel="prev" title="Introduction"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="overview.html#"><span class="wasm-bi-nav-en">Overview</span><span class="wasm-bi-nav-zh">概览</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/intro/overview.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="overview">
+<h1>Overview<a class="headerlink" href="overview.html#overview" title="Link to this heading">¶</a></h1>
+<section id="concepts">
+<span id="index-0"></span><span id="id1"></span><h2>Concepts<a class="headerlink" href="overview.html#concepts" title="Link to this heading">¶</a></h2>
+<p>WebAssembly encodes a low-level, assembly-like programming language.
+This language is structured around the following concepts.</p>
+<dl id="value">
+<dt><strong>Values</strong></dt><dd><p>WebAssembly provides only four basic <em>number types</em>.
+These are integers and <a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754</a> numbers,
+each in 32 and 64 bit width.
+32-bit integers also serve as Booleans and as memory addresses.
+The usual operations on these types are available,
+including the full matrix of conversions between them.
+There is no distinction between signed and unsigned integer types.
+Instead, integers are interpreted by respective operations
+as either unsigned or signed in two’s complement representation.</p>
+<p>In addition to these basic number types, there is a single 128 bit wide
+vector type representing different types of packed data.
+The supported representations are four 32-bit, or two 64-bit
+<a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754</a> numbers, or different widths of packed integer values,
+specifically two 64-bit integers, four 32-bit integers, eight
+16-bit integers, or sixteen 8-bit integers.</p>
+<p>Finally, values can consist of opaque <em>references</em> that represent pointers towards different sorts of entities.
+Unlike with other types, their size or representation is not observable.</p>
+</dd>
+</dl>
+<dl class="simple" id="instruction">
+<dt><strong>Instructions</strong></dt><dd><p>The computational model of WebAssembly is based on a <em>stack machine</em>.
+Code consists of sequences of <em>instructions</em> that are executed in order.
+Instructions manipulate values on an implicit <em>operand stack</em> <a class="footnote-reference brackets" href="overview.html#stackmachine" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>
+and fall into two main categories.
+<em>Simple</em> instructions perform basic operations on data.
+They pop arguments from the operand stack and push results back to it.
+<em>Control</em> instructions alter control flow.
+Control flow is <em>structured</em>, meaning it is expressed with well-nested constructs such as blocks, loops, and conditionals.
+Branches can only target such constructs.</p>
+</dd>
+</dl>
+<dl class="simple" id="trap">
+<dt><strong>Traps</strong></dt><dd><p>Under some conditions, certain instructions may produce a <em>trap</em>,
+which immediately aborts execution.
+Traps cannot be handled by WebAssembly code,
+but are reported to the outside environment,
+where they typically can be caught.</p>
+</dd>
+</dl>
+<dl class="simple" id="function">
+<dt><strong>Functions</strong></dt><dd><p>Code is organized into separate <em>functions</em>.
+Each function takes a sequence of values as parameters
+and returns a sequence of values as results.
+Functions can call each other, including recursively,
+resulting in an implicit call stack that cannot be accessed directly.
+Functions may also declare mutable <em>local variables</em> that are usable as virtual registers.</p>
+</dd>
+</dl>
+<dl class="simple" id="table">
+<dt><strong>Tables</strong></dt><dd><p>A <em>table</em> is an array of opaque values of a particular <em>reference type</em>.
+It allows programs to select such values indirectly through a dynamic index operand.
+Thereby, for example, a program can call functions indirectly through a dynamic index into a table.
+This allows emulating function pointers by way of table indices.</p>
+</dd>
+</dl>
+<dl class="simple" id="memory">
+<dt><strong>Linear Memory</strong></dt><dd><p>A <em>linear memory</em> is a contiguous, mutable array of raw bytes.
+Such a memory is created with an initial size but can be grown dynamically.
+A program can load and store values from/to a linear memory at any byte address (including unaligned).
+Integer loads and stores can specify a <em>storage size</em> which is smaller than the size of the respective value type.
+A trap occurs if an access is not within the bounds of the current memory size.</p>
+</dd>
+</dl>
+<dl class="simple" id="module">
+<dt><strong>Modules</strong></dt><dd><p>A WebAssembly binary takes the form of a <em>module</em>
+that contains definitions for functions, tables, and linear memories,
+as well as mutable or immutable <em>global variables</em>.
+Definitions can also be <em>imported</em>, specifying a module/name pair and a suitable type.
+Each definition can optionally be <em>exported</em> under one or more names.
+In addition to definitions, modules can define initialization data for their memories or tables
+that takes the form of <em>segments</em> copied to given offsets.
+They can also define a <em>start function</em> that is automatically executed.</p>
+</dd>
+</dl>
+<dl class="simple" id="embedder">
+<dt><strong>Embedder</strong></dt><dd><p>A WebAssembly implementation will typically be <em>embedded</em> into a <em>host</em> environment.
+This environment defines how loading of modules is initiated,
+how imports are provided (including host-side definitions), and how exports can be accessed.
+However, the details of any particular embedding are beyond the scope of this specification, and will instead be provided by complementary, environment-specific API definitions.</p>
+</dd>
+</dl>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="stackmachine" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="overview.html#id2" role="doc-backlink">1</a><span class="fn-bracket">]</span></span>
+<p>In practice, implementations need not maintain an actual operand stack. Instead, the stack can be viewed as a set of anonymous registers that are implicitly referenced by instructions. The <a class="reference internal" href="overview.html#validation"><span class="std std-ref">type system</span></a> ensures that the stack height, and thus any referenced register, is always known statically.</p>
+</aside>
+</aside>
+</section>
+<section id="semantic-phases">
+<span id="index-1"></span><h2>Semantic Phases<a class="headerlink" href="overview.html#semantic-phases" title="Link to this heading">¶</a></h2>
+<p>Conceptually, the semantics of WebAssembly is divided into three phases.
+For each part of the language, the specification specifies each of them.</p>
+<dl class="simple" id="decoding">
+<dt><strong>Decoding</strong></dt><dd><p>WebAssembly modules are distributed in a <em>binary format</em>.
+<em>Decoding</em> processes that format and converts it into an internal representation of a module.
+In this specification, this representation is modelled by <em>abstract syntax</em>, but a real implementation could compile directly to machine code instead.</p>
+</dd>
+</dl>
+<dl class="simple" id="validation">
+<dt><strong>Validation</strong></dt><dd><p>A decoded module has to be <em>valid</em>.
+Validation checks a number of well-formedness conditions to guarantee that the module is meaningful and safe.
+In particular, it performs <em>type checking</em> of functions and the instruction sequences in their bodies, ensuring for example that the operand stack is used consistently.</p>
+</dd>
+</dl>
+<span id="instantiation"></span><span id="execution"></span><dl id="invocation">
+<dt><strong>Execution</strong></dt><dd><p>Finally, a valid module can be <em>executed</em>.
+Execution can be further divided into two phases:</p>
+<p><strong>Instantiation</strong>.
+A module <em>instance</em> is the dynamic representation of a module,
+complete with its own state and execution stack.
+Instantiation executes the module body itself, given definitions for all its imports.
+It initializes globals, memories and tables and invokes the module’s start function if defined.
+It returns the instances of the module’s exports.</p>
+<p><strong>Invocation</strong>.
+Once instantiated, further WebAssembly computations can be initiated by <em>invoking</em> an exported function on a module instance.
+Given the required arguments, that executes the respective function and returns its results.</p>
+<p>Instantiation and invocation are operations within the embedding environment.</p>
+</dd>
+</dl>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/intro/overview.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-overview">
+<h1>概览<a class="headerlink" href="overview.html#zh-overview" title="Link to this heading">¶</a></h1>
+<section id="zh-concepts">
+<span id="zh-index-0"></span><span id="zh-id1"></span><h2>概念<a class="headerlink" href="overview.html#zh-concepts" title="Link to this heading">¶</a></h2>
+<p>WebAssembly 编码一种低级,集合式编程语言.
+这一语言的结构围绕以下概念.</p>
+<dl id="zh-value">
+<dt><strong>值</strong></dt><dd><p>WebAssembly 仅提供四项基本 <em>编号 类型</em>。 。 。
+这些是 整数 和 <a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754 (英语).</a> 数字,
+在32和64位宽度。
+32 位数 整数 也作为布尔斯和内存地址。
+通常的操作这些 类型 提供,
+包括它们之间转换的全部矩阵。
+签字和未签字之间没有区别 整数 类型。 。 。
+相反, 整数 由相关业务解释
+或以两个补充代表身份签署。</p>
+<p>除了这些基本数字 类型,有一个128比特宽
+向量类型 代表不同的 类型 数据组。
+支持的表示器为4个32位或2个64位
+<a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754 (英语).</a> 数字,或包装的不同宽度 整数 值, (中文).
+特别是两个 64 位 整数四个32位 整数,八个
+16 位数 整数,或16个8位 整数.</p>
+<p>终于 值 可包含不透明 <em>参考文献</em> 指向不同类型的实体。
+不同于其他 类型,其大小或代表性是无法观察到的。</p>
+</dd>
+</dl>
+<dl class="simple" id="zh-instruction">
+<dt><strong>指令</strong></dt><dd><p>计算模型 WebAssembly 基础是 <em>栈 机器</em>。 。 。
+代码由下列序列组成: <em>指令</em> 执行顺序。
+指令 操纵 值 暗含着 <em>操作 栈</em> <a class="footnote-reference brackets" href="overview.html#zh-stackmachine" id="zh-id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>
+并分为两大类。
+<em>简单</em> 指令 执行数据上的基本操作。
+他们从剧本里引起争论 栈 把结果推回去
+<em>控件</em> 指令 改变控制流。
+控制流量为 <em>结构化</em>,意思是用区块,环线和条件等深沉的构造来表示它.
+分支只能针对这种构造.</p>
+</dd>
+</dl>
+<dl class="simple" id="zh-trap">
+<dt><strong>陷阱</strong></dt><dd><p>在某些条件下, 指令 可产生 <em>陷阱</em>, (中文).
+立即终止 执行。 。 。
+陷阱无法处理 WebAssembly 代码,
+但向外界报告,
+他们通常会被抓住的地方。</p>
+</dd>
+</dl>
+<dl class="simple" id="zh-function">
+<dt><strong>职能</strong></dt><dd><p>代码是分开的 <em>函数</em>。 。 。
+每个函数都按顺序排列 值 作为参数
+返回顺序 值 作为结果。
+功能可以互相调用,包括递归,
+导致暗中呼叫 栈 无法直接访问。
+函数也可宣布可变 <em>本地变量</em> 用作虚拟登记册。</p>
+</dd>
+</dl>
+<dl class="simple" id="zh-table">
+<dt><strong>表格</strong></dt><dd><p>A <em>图表</em> 是一组不透明 值 特定国家 <em>引用类型</em>。 。 。
+它允许程序选择这样的 值 间接通过动态索引操作。
+例如,因此,一个程序可以通过动态索引间接将函数调用到表格中.
+这样就可以通过表格索引来模拟函数指针。</p>
+</dd>
+</dl>
+<dl class="simple" id="zh-memory">
+<dt><strong>线性内存</strong></dt><dd><p>A <em>线性内存</em> 是一个毗连、可变的原始数组 字节。 。 。
+这种内存是用初始大小创建的,但可以动态生长.
+一个程序可以加载和 存储 值 从/改为a 线性内存 在任意字节 地址 (包括不结盟).
+整数 负载和存储可指定 <em>存储大小</em> 大小小于相应的 值类型.
+A 陷阱 如果访问不在当前内存大小范围内,则发生。</p>
+</dd>
+</dl>
+<dl class="simple" id="zh-module">
+<dt><strong>模块</strong></dt><dd><p>A WebAssembly 二进制形式为 <em>模块</em>
+包含函数、表格和线性记忆的定义,
+以及可变或不可变 <em>全球变量</em>。 。 。
+定义也可以是: <em>进口</em>,指定一个 模块/名称 配对和一个合适的类型。
+每个定义都可以是 <em>导出</em> 一个或多个 名称。 。 。
+除定义外, 模块 可以定义其记忆或表格的初始化数据
+形式为: <em>段数</em> 页:1
+它们也可以界定 <em>启动函数</em> 自动执行。</p>
+</dd>
+</dl>
+<dl class="simple" id="zh-embedder">
+<dt><strong>嵌入器</strong></dt><dd><p>A WebAssembly 执行一般为: <em>内嵌</em> 改为 a <em>东道主</em> 环境。
+此环境定义了加载方式 模块 启动,
+怎么样 导入 提供(包括东道方定义),以及如何提供 导出 可访问。
+然而,任何特定嵌入的细节都超出了本准则的范围。 规范,而将由互补的、针对环境的API定义提供。</p>
+</dd>
+</dl>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="zh-stackmachine" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="overview.html#zh-id2" role="doc-backlink">1</a><span class="fn-bracket">]</span></span>
+<p>在实践中,执行不需要维持实际运作 栈相反, 栈 可视为一套匿名登记册,其中含蓄地提到: 指令编辑 <a class="reference internal" href="overview.html#zh-validation"><span class="std std-ref">类型系统</span></a> 确保 栈 高度,因此,任何引用的登记册,总是静态的。</p>
+</aside>
+</aside>
+</section>
+<section id="zh-semantic-phases">
+<span id="zh-index-1"></span><h2>语义阶段<a class="headerlink" href="overview.html#zh-semantic-phases" title="Link to this heading">¶</a></h2>
+<p>从概念上讲, WebAssembly 分为三个阶段。
+对于语言的每一部分, 规范 指定其中每一个。</p>
+<dl class="simple" id="zh-decoding">
+<dt><strong>解码</strong></dt><dd><p>WebAssembly 模块 以a形式分发 <em>二进制格式</em>.
+<em>解码</em> 将格式化并转化为内部代表 模块。 。 。
+在这 规范,这种表述模式为: <em>抽象语法</em>,但真正的执行可以直接编译为机器代码。</p>
+</dd>
+</dl>
+<dl class="simple" id="zh-validation">
+<dt><strong>验证</strong></dt><dd><p>解码器 模块 必须是 <em>无效</em>.
+验证 检查若干良好条件,以保证 模块 是有意义的和安全的。
+特别是,它履行 <em>类型检查</em> 职能的行使 指令 身体中的序列,例如确保操作 栈 使用一致。</p>
+</dd>
+</dl>
+<span id="zh-instantiation"></span><span id="zh-execution"></span><dl id="zh-invocation">
+<dt><strong>执行</strong></dt><dd><p>最后,一个有效的 模块 可能会是 <em>已执行</em>.
+执行 还可进一步分为两个阶段:</p>
+<p><strong>证据</strong>.
+A 模块 <em>实例</em> 是一个动态代表 模块, (中文).
+完成自己的状态, 执行 栈。 。 。
+证据执行 模块 定义的定义 导入。 。 。
+它初始化全球、记忆和表格,并引用 模块如果定义了启动函数 。
+它返回 模块’s 导出.</p>
+<p><strong>召集</strong>。 。 。
+一经即决,再进一步 WebAssembly 计算可以由 <em>引用</em> 导出函数于 a 模块实例。 。 。
+考虑到所需的论据,该参数将执行相应的函数并返回其结果。</p>
+<p>证明和援引是嵌入环境内的操作.</p>
+</dd>
+</dl>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/intro/overview.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

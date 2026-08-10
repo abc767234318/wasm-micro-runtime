@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Conventions  / 约定  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="lexical.html" rel="next" title="Lexical Format"/>
+<link href="index.html" rel="prev" title="Text Format"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="conventions.html#"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexical.html"><span class="wasm-bi-nav-en">Lexical Format</span><span class="wasm-bi-nav-zh">词法格式</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/text/conventions.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="conventions">
+<span id="index-0"></span><h1>Conventions<a class="headerlink" href="conventions.html#conventions" title="Link to this heading">¶</a></h1>
+<p>The textual format for WebAssembly <a class="reference internal" href="../intro/overview.html#module"><span class="std std-ref">modules</span></a> is a rendering of their <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">abstract syntax</span></a> into <a class="reference external" href="https://en.wikipedia.org/wiki/S-expression">S-expressions</a>.</p>
+<p>Like the <a class="reference internal" href="../binary/index.html#binary"><span class="std std-ref">binary format</span></a>, the text format is defined by an <em>attribute grammar</em>.
+A text string is a well-formed description of a module if and only if it is generated by the grammar.
+Each production of this grammar has at most one synthesized attribute: the abstract syntax that the respective character sequence expresses.
+Thus, the attribute grammar implicitly defines a <em>parsing</em> function.
+Some productions also take a <a class="reference internal" href="conventions.html#text-context"><span class="std std-ref">context</span></a> as an inherited attribute
+that records bound <a class="reference internal" href="values.html#text-id"><span class="std std-ref">identifiers</span></a>.</p>
+<p>Except for a few exceptions, the core of the text grammar closely mirrors the grammar of the abstract syntax.
+However, it also defines a number of <em>abbreviations</em> that are “syntactic sugar” over the core syntax.</p>
+<p>The recommended extension for files containing WebAssembly modules in text format is “<code class="docutils literal notranslate"><span class="pre">.wat</span></code>”.
+Files with this extension are assumed to be encoded in UTF-8, as per <a class="reference external" href="https://www.unicode.org/versions/latest/">Unicode</a> (Section 2.5).</p>
+<section id="grammar">
+<span id="text-grammar"></span><span id="index-1"></span><h2>Grammar<a class="headerlink" href="conventions.html#grammar" title="Link to this heading">¶</a></h2>
+<p>The following conventions are adopted in defining grammar rules of the text format.
+They mirror the conventions used for <a class="reference internal" href="../syntax/conventions.html#grammar"><span class="std std-ref">abstract syntax</span></a> and for the <a class="reference internal" href="../binary/index.html#binary"><span class="std std-ref">binary format</span></a>.
+In order to distinguish symbols of the textual syntax from symbols of the abstract syntax, <span class="math notranslate nohighlight">\({\mathtt{typewriter}}\)</span> font is adopted for the former.</p>
+<ul class="simple">
+<li><p>Terminal symbols are either literal strings of characters enclosed in quotes
+or expressed as <a class="reference external" href="https://www.unicode.org/versions/latest/">Unicode</a> scalar values: <span class="math notranslate nohighlight">\(\mbox{‘\texttt{module}’}\)</span>, <span class="math notranslate nohighlight">\(\mathrm{U{+}0A}\)</span>.
+(All characters written literally are unambiguously drawn from the 7-bit <a class="reference external" href="https://webstore.ansi.org/RecordDetail.aspx?sku=INCITS+4-1986%5bR2012%5d">ASCII</a> subset of Unicode.)</p></li>
+<li><p>Nonterminal symbols are written in typewriter font: <span class="math notranslate nohighlight">\({\mathtt{valtype}}\)</span>, <span class="math notranslate nohighlight">\({\mathtt{instr}}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({T^{n}}\)</span> is a sequence of <span class="math notranslate nohighlight">\(n \geq 0\)</span> iterations of <span class="math notranslate nohighlight">\(T\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({T^\ast}\)</span> is a possibly empty sequence of iterations of <span class="math notranslate nohighlight">\(T\)</span>.
+(This is a shorthand for <span class="math notranslate nohighlight">\({T^{n}}\)</span> used where <span class="math notranslate nohighlight">\(n\)</span> is not relevant.)</p></li>
+<li><p><span class="math notranslate nohighlight">\({T^{+}}\)</span> is a non-empty sequence of iterations of <span class="math notranslate nohighlight">\(T\)</span>.
+(This is a shorthand for <span class="math notranslate nohighlight">\({T^{n}}\)</span> where <span class="math notranslate nohighlight">\(n \geq 1\)</span>.)</p></li>
+<li><p><span class="math notranslate nohighlight">\({T^?}\)</span> is an optional occurrence of <span class="math notranslate nohighlight">\(T\)</span>.
+(This is a shorthand for <span class="math notranslate nohighlight">\({T^{n}}\)</span> where <span class="math notranslate nohighlight">\(n \leq 1\)</span>.)</p></li>
+<li><p><span class="math notranslate nohighlight">\(x{:}T\)</span> denotes the same language as the nonterminal <span class="math notranslate nohighlight">\(T\)</span>, but also binds the variable <span class="math notranslate nohighlight">\(x\)</span> to the attribute synthesized for <span class="math notranslate nohighlight">\(T\)</span>.
+A pattern may also be used instead of a variable, e.g., <span class="math notranslate nohighlight">\(7{:}T\)</span>.</p></li>
+<li><p>Productions are written <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; T_1 ~\Rightarrow~ A_1 ~~|~~ \ldots ~~|~~ T_n ~\Rightarrow~ A_n \\ \end{array}\)</span>, where each <span class="math notranslate nohighlight">\(A_i\)</span> is the attribute that is synthesized for <span class="math notranslate nohighlight">\({\mathtt{sym}}\)</span> in the given case, usually from attribute variables bound in <span class="math notranslate nohighlight">\(T_i\)</span>.</p></li>
+<li><p>Large productions may be split into multiple definitions, indicated by ending the first one with explicit ellipses, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; B_1 \\ \end{array}\)</span>, and starting continuations with ellipses, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; \dots ~~|~~ B_2 \\ \end{array}\)</span>.</p></li>
+<li><p>Some productions are augmented by side conditions in parentheses, which restrict the applicability of the production. They provide a shorthand for a combinatorial expansion of the production into many separate cases.</p></li>
+<li><p>If the same meta variable or non-terminal symbol appears multiple times in a production (in the syntax or in an attribute), then all those occurrences must have the same instantiation.</p></li>
+</ul>
+<ul class="simple" id="text-syntactic">
+<li><p>A distinction is made between <em>lexical</em> and <em>syntactic</em> productions. For the latter, arbitrary <a class="reference internal" href="lexical.html#text-space"><span class="std std-ref">white space</span></a> is allowed in any place where the grammar contains spaces. The productions defining <a class="reference internal" href="lexical.html#text-lexical"><span class="std std-ref">lexical syntax</span></a> and the syntax of <a class="reference internal" href="values.html#text-value"><span class="std std-ref">values</span></a> are considered lexical, all others are syntactic.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, the <a class="reference internal" href="types.html#text-numtype"><span class="std std-ref">textual grammar</span></a> for <a class="reference internal" href="../syntax/types.html#syntax-numtype"><span class="std std-ref">number types</span></a> is given as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-numtype}{\mathtt{numtype}}} &amp; ::= &amp; \mbox{‘\texttt{i32}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i64}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{f32}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle32}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{f64}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} \\
+\end{array}\end{split}\]</div>
+<p>The <a class="reference internal" href="types.html#text-limits"><span class="std std-ref">textual grammar</span></a> for <a class="reference internal" href="../syntax/types.html#syntax-limits"><span class="std std-ref">limits</span></a> is defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-limits}{\mathtt{limits}}} &amp; ::= &amp; n{:}{\href{../text/values.html#text-int}{\mathtt{u64}}} &amp; \quad\Rightarrow\quad{} &amp; {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} \epsilon ] \\
+&amp; &amp; | &amp; n{:}{\href{../text/values.html#text-int}{\mathtt{u64}}}~~m{:}{\href{../text/values.html#text-int}{\mathtt{u64}}} &amp; \quad\Rightarrow\quad{} &amp; {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} m ] \\
+\end{array}\end{split}\]</div>
+<p>The variables <span class="math notranslate nohighlight">\(n\)</span> and <span class="math notranslate nohighlight">\(m\)</span> name the attributes of the respective <span class="math notranslate nohighlight">\({\href{../text/values.html#text-int}{\mathtt{u64}}}\)</span> nonterminals, which in this case are the actual <a class="reference internal" href="../syntax/values.html#syntax-uint"><span class="std std-ref">unsigned integers</span></a> those parse into.
+The attribute of the complete production then is the abstract syntax for the limit, expressed in terms of the former values.</p>
+</div>
+</section>
+<section id="abbreviations">
+<span id="text-abbreviations"></span><span id="index-2"></span><h2>Abbreviations<a class="headerlink" href="conventions.html#abbreviations" title="Link to this heading">¶</a></h2>
+<p>In addition to the core grammar, which corresponds directly to the <a class="reference internal" href="../syntax/index.html#syntax"><span class="std std-ref">abstract syntax</span></a>, the textual syntax also defines a number of <em>abbreviations</em> that can be used for convenience and readability.</p>
+<p>Abbreviations are defined by <em>rewrite rules</em> specifying their expansion into the core syntax:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\mathtt{sym}} &amp; ::= &amp; {\mathit{abbreviated}}~~{\mathit{syntax}} &amp; \quad\equiv\quad{} &amp; {\mathit{expanded}}~~{\mathit{syntax}} \\
+\end{array}\end{split}\]</div>
+<p>These expansions are assumed to be applied, recursively and in order of appearance, before applying the core grammar rules to construct the abstract syntax.</p>
+</section>
+<section id="contexts">
+<span id="text-context"></span><span id="text-context-wf"></span><span id="index-3"></span><h2>Contexts<a class="headerlink" href="conventions.html#contexts" title="Link to this heading">¶</a></h2>
+<p>The text format allows the use of symbolic <a class="reference internal" href="values.html#text-id"><span class="std std-ref">identifiers</span></a> in place of <a class="reference internal" href="../syntax/modules.html#syntax-index"><span class="std std-ref">indices</span></a>.
+To resolve these identifiers into concrete indices,
+some grammar productions are indexed by an <em>identifier context</em> <span class="math notranslate nohighlight">\({\href{../text/conventions.html#text-context}{I}}\)</span> as a synthesized attribute that records the declared identifiers in each <a class="reference internal" href="../syntax/modules.html#syntax-index"><span class="std std-ref">index space</span></a>.
+In addition, the context records the types defined in the module, so that <a class="reference internal" href="types.html#text-param"><span class="std std-ref">parameter</span></a> indices can be computed for <a class="reference internal" href="modules.html#text-func"><span class="std std-ref">functions</span></a>.</p>
+<p>It is convenient to define identifier contexts as <a class="reference internal" href="../syntax/conventions.html#notation-record"><span class="std std-ref">records</span></a> <span class="math notranslate nohighlight">\({\href{../text/conventions.html#text-context}{I}}\)</span> with abstract syntax as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../text/conventions.html#text-context}{I}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../text/conventions.html#text-context}{\mathsf{types}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{tags}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{globals}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{mems}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{tables}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{funcs}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{datas}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{elems}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{locals}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{labels}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{fields}}~{({({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{typedefs}}~{({{\href{../valid/conventions.html#syntax-deftype}{\mathit{deftype}}}^?})^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>For each index space, such a context contains the list of <a class="reference internal" href="../syntax/values.html#syntax-name"><span class="std std-ref">names</span></a> assigned to the defined indices,
+which were denoted by the corresponding <a class="reference internal" href="values.html#text-id"><span class="std std-ref">identifiers</span></a>.
+Unnamed indices are associated with empty (<span class="math notranslate nohighlight">\(\epsilon\)</span>) entries in these lists.
+Fields have <em>dependent</em> name spaces, and hence a separate list of field identifiers per type.</p>
+<p>In addition, the field <span class="math notranslate nohighlight">\(\mathsf{typedefs}\)</span> records the <a class="reference internal" href="../valid/conventions.html#syntax-deftype"><span class="std std-ref">defined type</span></a> associated with each <a class="reference internal" href="../syntax/modules.html#syntax-typeidx"><span class="std std-ref">type index</span></a>.
+They are needed to look up the number of parameters of <a class="reference internal" href="../syntax/types.html#syntax-functype"><span class="std std-ref">function types</span></a> when used in a <a class="reference internal" href="modules.html#text-func"><span class="std std-ref">function definition</span></a>,
+in order to produce the correct indices for <a class="reference internal" href="../syntax/modules.html#syntax-local"><span class="std std-ref">locals</span></a>.</p>
+<p>An identifier context is <em>well-formed</em> if no index space contains duplicate identifiers.
+For fields, names need only be unique within a single type.</p>
+<section id="id1">
+<h3>Conventions<a class="headerlink" href="conventions.html#id1" title="Link to this heading">¶</a></h3>
+<p>To avoid unnecessary clutter, empty components are omitted when writing out identifier contexts.
+For example, the record <span class="math notranslate nohighlight">\(\{  \}\)</span> is shorthand for an <a class="reference internal" href="conventions.html#text-context"><span class="std std-ref">identifier context</span></a> whose components are all empty.</p>
+</section>
+</section>
+<section id="lists">
+<span id="text-list"></span><span id="index-4"></span><h2>Lists<a class="headerlink" href="conventions.html#lists" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="../syntax/conventions.html#syntax-list"><span class="std std-ref">Lists</span></a> are written as plain sequences, but with a restriction on the length of these sequence.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/conventions.html#text-list}{\mathtt{list}}}({\mathtt{X}}) &amp; ::= &amp; {({\mathit{el}}{:}{\mathtt{X}})^\ast} &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{el}}^\ast} &amp; \quad \mbox{if}~ {|{{\mathit{el}}^\ast}|} &lt; {2^{32}} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/text/conventions.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-conventions">
+<span id="zh-index-0"></span><h1>约定<a class="headerlink" href="conventions.html#zh-conventions" title="Link to this heading">¶</a></h1>
+<p>文字格式用于: WebAssembly <a class="reference internal" href="../intro/overview.html#zh-module"><span class="std std-ref">模块</span></a> 表现为 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">抽象语法</span></a> 输入 <a class="reference external" href="https://en.wikipedia.org/wiki/S-expression">S 表达式</a>.</p>
+<p>喜欢 <a class="reference internal" href="../binary/index.html#zh-binary"><span class="std std-ref">二进制格式</span></a>,则 文本格式 定义为: <em>属性语法</em>。 。 。
+文本字符串是一个很好的描述 模块 如果并且只有在由 语法。 。 。
+每个 产生式 这个 语法 最多有一个综合属性: 抽象语法 表示相应的字符序列。
+因此, 属性语法 隐含定义 a <em>解析</em> 函数。
+有点 产生式 还要一个 <a class="reference internal" href="conventions.html#zh-text-context"><span class="std std-ref">上下文</span></a> 作为继承属性
+记录绑定 <a class="reference internal" href="values.html#zh-text-id"><span class="std std-ref">标识符</span></a>.</p>
+<p>除了少数例外,案文的核心 语法 近距离反射 语法 会 议 日 程 和 议 程 抽象语法。 。 。
+然而,它也界定了下列几个方面: <em>缩略语</em> 核心的“合成糖” 语法.</p>
+<p>建议的文件扩展名 WebAssembly 模块 输入 文本格式 “<code class="docutils literal notranslate"><span class="pre">.wat</span></code>“......”。
+带有此扩展名的文件被假定为在 UTF-8 中编码 。 <a class="reference external" href="https://www.unicode.org/versions/latest/">统一编码</a> (段 2.5).</p>
+<section id="zh-grammar">
+<span id="zh-text-grammar"></span><span id="zh-index-1"></span><h2>语法<a class="headerlink" href="conventions.html#zh-grammar" title="Link to this heading">¶</a></h2>
+<p>以下是: 约定 用于定义 语法 议事规则 文本格式。 。 。
+他们照镜子 约定 用于 <a class="reference internal" href="../syntax/conventions.html#zh-grammar"><span class="std std-ref">抽象语法</span></a> 联合国 <a class="reference internal" href="../binary/index.html#zh-binary"><span class="std std-ref">二进制格式</span></a>。 。 。
+为了区分文字符号 语法 从编号 抽象语法, <span class="math notranslate nohighlight">\({\mathtt{typewriter}}\)</span> 为前者采用字体。</p>
+<ul class="simple">
+<li><p>终端符号是引文中字符的字串
+或以 <a class="reference external" href="https://www.unicode.org/versions/latest/">统一编码</a> 斜线 值: <span class="math notranslate nohighlight">\(\mbox{‘\texttt{module}’}\)</span>, <span class="math notranslate nohighlight">\(\mathrm{U{+}0A}\)</span>。 。 。
+(所有字面写作的字符都毫不含糊地取自7位) <a class="reference external" href="https://webstore.ansi.org/RecordDetail.aspx?sku=INCITS+4-1986%5bR2012%5d">第二届理事会</a> Unicode 的子集. )</p></li>
+<li><p>非绝对符号用打字机字体写: <span class="math notranslate nohighlight">\({\mathtt{valtype}}\)</span>, <span class="math notranslate nohighlight">\({\mathtt{instr}}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({T^{n}}\)</span> 是一个序列 <span class="math notranslate nohighlight">\(n \geq 0\)</span> 重复次数 <span class="math notranslate nohighlight">\(T\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({T^\ast}\)</span> 可能是重复的空序数 <span class="math notranslate nohighlight">\(T\)</span>。 。 。
+(此简称为 <span class="math notranslate nohighlight">\({T^{n}}\)</span> 用于何处 <span class="math notranslate nohighlight">\(n\)</span> 无关。 )</p></li>
+<li><p><span class="math notranslate nohighlight">\({T^{+}}\)</span> 是一个非空序的迭代 <span class="math notranslate nohighlight">\(T\)</span>。 。 。
+(此简称为 <span class="math notranslate nohighlight">\({T^{n}}\)</span> 地点 <span class="math notranslate nohighlight">\(n \geq 1\)</span>.)</p></li>
+<li><p><span class="math notranslate nohighlight">\({T^?}\)</span> 是可选发生的 <span class="math notranslate nohighlight">\(T\)</span>。 。 。
+(此简称为 <span class="math notranslate nohighlight">\({T^{n}}\)</span> 地点 <span class="math notranslate nohighlight">\(n \leq 1\)</span>.)</p></li>
+<li><p><span class="math notranslate nohighlight">\(x{:}T\)</span> 表示与非绝对语言相同的语言 <span class="math notranslate nohighlight">\(T\)</span>,但也会绑定变量 <span class="math notranslate nohighlight">\(x\)</span> 的属性 <span class="math notranslate nohighlight">\(T\)</span>。 。 。
+也可以使用一个图案代替变量,例如, <span class="math notranslate nohighlight">\(7{:}T\)</span>.</p></li>
+<li><p>产生式 已写入 <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; T_1 ~\Rightarrow~ A_1 ~~|~~ \ldots ~~|~~ T_n ~\Rightarrow~ A_n \\ \end{array}\)</span>时, <span class="math notranslate nohighlight">\(A_i\)</span> 是用于合成的属性 <span class="math notranslate nohighlight">\({\mathtt{sym}}\)</span> 在给定的情况下,通常从绑定在 <span class="math notranslate nohighlight">\(T_i\)</span>.</p></li>
+<li><p>大块 产生式 可分为多个定义,以第一个定义结尾处有明确的椭圆表示, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; B_1 \\ \end{array}\)</span>,然后用椭圆开始继续, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; \dots ~~|~~ B_2 \\ \end{array}\)</span>.</p></li>
+<li><p>有点 产生式 括号内附加条件,限制适用 产生式它们为组合式扩大 产生式 在很多不同的情况下</p></li>
+<li><p>如果同一元变量或非绝对符号在a中多次出现 产生式 (单位:千美元) 语法 因此,所有这些事件都必须具有同样的即时性。</p></li>
+</ul>
+<ul class="simple" id="zh-text-syntactic">
+<li><p>区分 <em>词典</em> 和 <em>综合</em> 产生式对于后者,任意性 <a class="reference internal" href="lexical.html#zh-text-space"><span class="std std-ref">空白</span></a> 允许在任何地方使用 语法 包含空格。 那个 产生式 定义 <a class="reference internal" href="lexical.html#zh-text-lexical"><span class="std std-ref">词典 语法</span></a> 页:1 语法 页:1 <a class="reference internal" href="values.html#zh-text-value"><span class="std std-ref">值</span></a> 被视作词汇, 所有其他都是协同的。</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>例如, <a class="reference internal" href="types.html#zh-text-numtype"><span class="std std-ref">文字 语法</span></a> (单位:千美元) <a class="reference internal" href="../syntax/types.html#zh-syntax-numtype"><span class="std std-ref">编号 类型</span></a> 现将情况说明如下:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-numtype}{\mathtt{numtype}}} &amp; ::= &amp; \mbox{‘\texttt{i32}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i64}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{f32}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle32}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{f64}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} \\
+\end{array}\end{split}\]</div>
+<p>那个 <a class="reference internal" href="types.html#zh-text-limits"><span class="std std-ref">文字 语法</span></a> (单位:千美元) <a class="reference internal" href="../syntax/types.html#zh-syntax-limits"><span class="std std-ref">限制</span></a> 定义如下:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-limits}{\mathtt{limits}}} &amp; ::= &amp; n{:}{\href{../text/values.html#text-int}{\mathtt{u64}}} &amp; \quad\Rightarrow\quad{} &amp; {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} \epsilon ] \\
+&amp; &amp; | &amp; n{:}{\href{../text/values.html#text-int}{\mathtt{u64}}}~~m{:}{\href{../text/values.html#text-int}{\mathtt{u64}}} &amp; \quad\Rightarrow\quad{} &amp; {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} m ] \\
+\end{array}\end{split}\]</div>
+<p>变量 <span class="math notranslate nohighlight">\(n\)</span> 和 <span class="math notranslate nohighlight">\(m\)</span> 名称 各自的属性 <span class="math notranslate nohighlight">\({\href{../text/values.html#text-int}{\mathtt{u64}}}\)</span> 非定数,在这种情况下是实际的 <a class="reference internal" href="../syntax/values.html#zh-syntax-uint"><span class="std std-ref">未签名 整数</span></a> 这些解析。
+完整的属性 产生式 那么这是 抽象语法 限值,以前者表示 值.</p>
+</div>
+</section>
+<section id="zh-abbreviations">
+<span id="zh-text-abbreviations"></span><span id="zh-index-2"></span><h2>简称<a class="headerlink" href="conventions.html#zh-abbreviations" title="Link to this heading">¶</a></h2>
+<p>何况是核心 语法,直接对应 <a class="reference internal" href="../syntax/index.html#zh-syntax"><span class="std std-ref">抽象语法</span></a>文字 语法 也定义了一些 <em>缩略语</em> 可用于方便和可读性。</p>
+<p>简称定义如下: <em>重写规则</em> 指定其扩展为核心 语法:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\mathtt{sym}} &amp; ::= &amp; {\mathit{abbreviated}}~~{\mathit{syntax}} &amp; \quad\equiv\quad{} &amp; {\mathit{expanded}}~~{\mathit{syntax}} \\
+\end{array}\end{split}\]</div>
+<p>假设这些扩展在应用核心之前,按外观顺序、递归和排列。 语法 规则 抽象语法.</p>
+</section>
+<section id="zh-contexts">
+<span id="zh-text-context"></span><span id="zh-text-context-wf"></span><span id="zh-index-3"></span><h2>背景情况<a class="headerlink" href="conventions.html#zh-contexts" title="Link to this heading">¶</a></h2>
+<p>那个 文本格式 允许使用符号 <a class="reference internal" href="values.html#zh-text-id"><span class="std std-ref">标识符</span></a> 替换 <a class="reference internal" href="../syntax/modules.html#zh-syntax-index"><span class="std std-ref">指数</span></a>。 。 。
+为了把这些识别资料变成具体的指数,
+有点 语法 产生式 以 <em>标识符上下文</em> <span class="math notranslate nohighlight">\({\href{../text/conventions.html#text-context}{I}}\)</span> 作为综合属性,用于记录每个文件中申报的标识符 <a class="reference internal" href="../syntax/modules.html#zh-syntax-index"><span class="std std-ref">索引空间</span></a>。 。 。
+此外,上下文还记录 类型 定义 模块,这样 <a class="reference internal" href="types.html#zh-text-param"><span class="std std-ref">参数</span></a> 指数可以计算为: <a class="reference internal" href="modules.html#zh-text-func"><span class="std std-ref">函数</span></a>.</p>
+<p>将标识语境定义为: <a class="reference internal" href="../syntax/conventions.html#zh-notation-record"><span class="std std-ref">记录</span></a> <span class="math notranslate nohighlight">\({\href{../text/conventions.html#text-context}{I}}\)</span> 与 抽象语法 内容如下:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../text/conventions.html#text-context}{I}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../text/conventions.html#text-context}{\mathsf{types}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{tags}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{globals}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{mems}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{tables}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{funcs}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{datas}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{elems}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{locals}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{labels}}~{({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{fields}}~{({({{\href{../syntax/values.html#syntax-name}{\mathit{name}}}^?})^\ast})^\ast} \\
+\href{../text/conventions.html#text-context}{\mathsf{typedefs}}~{({{\href{../valid/conventions.html#syntax-deftype}{\mathit{deftype}}}^?})^\ast} \} \\
+\end{array} \\
+\end{array}\end{split}\]</div>
+<p>每笔 索引空间,这种上下文包含 <a class="reference internal" href="../syntax/values.html#zh-syntax-name"><span class="std std-ref">名称</span></a> 分配给定义的指数,
+以相应的 <a class="reference internal" href="values.html#zh-text-id"><span class="std std-ref">标识符</span></a>。 。 。
+未命名索引与空( Q)<span class="math notranslate nohighlight">\(\epsilon\)</span>这些清单中的条目。
+领域 <em>依赖</em> 名称 空格,因此每个类型都有单独的字段标识符列表。</p>
+<p>此外,外地 <span class="math notranslate nohighlight">\(\mathsf{typedefs}\)</span> 记录 <a class="reference internal" href="../valid/conventions.html#zh-syntax-deftype"><span class="std std-ref">定义类型</span></a> 与每个项目有关的 <a class="reference internal" href="../syntax/modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a>。 。 。
+需要它们来查查 <a class="reference internal" href="../syntax/types.html#zh-syntax-functype"><span class="std std-ref">函数 类型</span></a> 当使用在一个 <a class="reference internal" href="modules.html#zh-text-func"><span class="std std-ref">函数定义</span></a>, (中文).
+编制正确的指数 <a class="reference internal" href="../syntax/modules.html#zh-syntax-local"><span class="std std-ref">当地人</span></a>.</p>
+<p>一个标识符上下文是 <em>结构良好</em> 如果没有 索引空间 包含重复的标识符。
+对于田间, 名称 只需在单一类型内独有。</p>
+<section id="zh-id1">
+<h3>约定<a class="headerlink" href="conventions.html#zh-id1" title="Link to this heading">¶</a></h3>
+<p>为避免不必要的拼凑,在写入标识符上下文时会省略空组件.
+比如记录 <span class="math notranslate nohighlight">\(\{  \}\)</span> 是一个 <a class="reference internal" href="conventions.html#zh-text-context"><span class="std std-ref">标识符上下文</span></a> 它们的组件都是空的。</p>
+</section>
+</section>
+<section id="zh-lists">
+<span id="zh-text-list"></span><span id="zh-index-4"></span><h2>列表<a class="headerlink" href="conventions.html#zh-lists" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="../syntax/conventions.html#zh-syntax-list"><span class="std std-ref">列表</span></a> 被写成普通序列,但对这些序列的长度有限制.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/conventions.html#text-list}{\mathtt{list}}}({\mathtt{X}}) &amp; ::= &amp; {({\mathit{el}}{:}{\mathtt{X}})^\ast} &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{el}}^\ast} &amp; \quad \mbox{if}~ {|{{\mathit{el}}^\ast}|} &lt; {2^{32}} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/text/conventions.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

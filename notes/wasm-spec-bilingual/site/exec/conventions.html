@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Conventions  / 约定  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="runtime.html" rel="next" title="Runtime Structure"/>
+<link href="index.html" rel="prev" title="Execution"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="conventions.html#"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime.html"><span class="wasm-bi-nav-en">Runtime Structure</span><span class="wasm-bi-nav-zh">运行时结构</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="numerics.html"><span class="wasm-bi-nav-en">Numerics</span><span class="wasm-bi-nav-zh">数字</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/exec/conventions.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="conventions">
+<span id="index-0"></span><h1>Conventions<a class="headerlink" href="conventions.html#conventions" title="Link to this heading">¶</a></h1>
+<p>WebAssembly code is <em>executed</em> when <a class="reference internal" href="modules.html#exec-instantiation"><span class="std std-ref">instantiating</span></a> a module or <a class="reference internal" href="modules.html#exec-invocation"><span class="std std-ref">invoking</span></a> an <a class="reference internal" href="../syntax/modules.html#syntax-export"><span class="std std-ref">exported</span></a> function on the resulting module <a class="reference internal" href="runtime.html#syntax-moduleinst"><span class="std std-ref">instance</span></a>.</p>
+<p>Execution behavior is defined in terms of an <em>abstract machine</em> that models the <em>program state</em>.
+It includes a <em>stack</em>, which records operand values and control constructs, and an abstract <em>store</em> containing global state.</p>
+<p>For each instruction, there is a rule that specifies the effect of its execution on the program state.
+Furthermore, there are rules describing the instantiation of a module.
+As with <a class="reference internal" href="../intro/overview.html#validation"><span class="std std-ref">validation</span></a>, all rules are given in two <em>equivalent</em> forms:</p>
+<ol class="arabic simple">
+<li><p>In <em>prose</em>, describing the execution in intuitive form.</p></li>
+<li><p>In <em>formal notation</em>, describing the rule in mathematical form. <a class="footnote-reference brackets" href="conventions.html#cite-pldi2017" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As with validation, the prose and formal rules are equivalent,
+so that understanding of the formal notation is <em>not</em> required to read this specification.
+The formalism offers a more concise description in notation that is used widely in programming languages semantics and is readily amenable to mathematical proof.</p>
+</div>
+<section id="prose-notation">
+<span id="exec-notation-textual"></span><h2>Prose Notation<a class="headerlink" href="conventions.html#prose-notation" title="Link to this heading">¶</a></h2>
+<p>Execution is specified by stylised, step-wise rules for each <a class="reference internal" href="../syntax/instructions.html#syntax-instr"><span class="std std-ref">instruction</span></a> of the <a class="reference internal" href="../syntax/index.html#syntax"><span class="std std-ref">abstract syntax</span></a>.
+The following conventions are adopted in stating these rules.</p>
+<ul class="simple">
+<li><p>The execution rules implicitly assume a given <a class="reference internal" href="runtime.html#store"><span class="std std-ref">store</span></a> <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
+<li><p>The execution rules also assume the presence of an implicit <a class="reference internal" href="runtime.html#stack"><span class="std std-ref">stack</span></a>
+that is modified by <em>pushing</em> or <em>popping</em>
+<a class="reference internal" href="../syntax/values.html#syntax-value"><span class="std std-ref">values</span></a>, <a class="reference internal" href="runtime.html#syntax-label"><span class="std std-ref">labels</span></a>, and <a class="reference internal" href="runtime.html#syntax-frame"><span class="std std-ref">frames</span></a>.</p></li>
+<li><p>Certain rules require the stack to contain at least one frame.
+The most recent frame is referred to as the <em>current</em> frame.</p></li>
+<li><p>Both the store and the current frame are mutated by <em>replacing</em> some of their components.
+Such replacement is assumed to apply globally.</p></li>
+<li><p>The execution of an instruction may <em>trap</em>,
+in which case the entire computation is aborted and no further modifications to the store are performed by it. (Other computations can still be initiated afterwards.)</p></li>
+<li><p>The execution of an instruction may also end in a <em>jump</em> to a designated target,
+which defines the next instruction to execute.</p></li>
+<li><p>Execution can <em>enter</em> and <em>exit</em> <a class="reference internal" href="../syntax/instructions.html#syntax-instrs"><span class="std std-ref">instruction sequences</span></a> that form <a class="reference internal" href="../syntax/instructions.html#syntax-instr-control"><span class="std std-ref">blocks</span></a>.</p></li>
+<li><p><a class="reference internal" href="../syntax/instructions.html#syntax-instrs"><span class="std std-ref">Instruction sequences</span></a> are implicitly executed in order, unless a trap, jump, or exception occurs.</p></li>
+<li><p>In various places the rules contain <em>assertions</em> expressing crucial invariants about the program state.</p></li>
+</ul>
+</section>
+<section id="formal-notation">
+<span id="exec-notation"></span><span id="index-1"></span><h2>Formal Notation<a class="headerlink" href="conventions.html#formal-notation" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section gives a brief explanation of the notation for specifying execution formally.
+For the interested reader, a more thorough introduction can be found in respective text books. <a class="footnote-reference brackets" href="conventions.html#cite-tapl" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
+</div>
+<p>The formal execution rules use a standard approach for specifying operational semantics, rendering them into <em>reduction rules</em>.
+Every rule has the following general form:</p>
+<div class="math notranslate nohighlight">
+\[{\mathit{configuration}} \hookrightarrow {\mathit{configuration}}\]</div>
+<p>A <em>configuration</em> is a syntactic description of a program state.
+Each rule specifies one <em>step</em> of execution.
+As long as there is at most one reduction rule applicable to a given configuration, reduction – and thereby execution – is <em>deterministic</em>.
+WebAssembly has only very few exceptions to this, which are noted explicitly in this specification.</p>
+<p>For WebAssembly, a configuration typically is a tuple <span class="math notranslate nohighlight">\((s ; f ; {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast})\)</span> consisting of the current <a class="reference internal" href="runtime.html#store"><span class="std std-ref">store</span></a> <span class="math notranslate nohighlight">\(s\)</span>, the <a class="reference internal" href="runtime.html#frame"><span class="std std-ref">call frame</span></a> <span class="math notranslate nohighlight">\(f\)</span> of the current function, and the sequence of <a class="reference internal" href="../syntax/instructions.html#syntax-instr"><span class="std std-ref">instructions</span></a> that is to be executed.
+(A more precise definition is given <a class="reference internal" href="runtime.html#syntax-config"><span class="std std-ref">later</span></a>.)</p>
+<p>To avoid unnecessary clutter, the store <span class="math notranslate nohighlight">\(s\)</span> and the frame <span class="math notranslate nohighlight">\(f\)</span> are often combined into a <em>state</em> <span class="math notranslate nohighlight">\(z\)</span>, which is a pair <span class="math notranslate nohighlight">\((s ; f)\)</span>.
+Moreover, <span class="math notranslate nohighlight">\(z\)</span> is omitted from reduction rules that do not touch them.</p>
+<p>There is no separate representation of the <a class="reference internal" href="runtime.html#stack"><span class="std std-ref">stack</span></a>.
+Instead, it is conveniently represented as part of the configuration’s instruction sequence.
+In particular, <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">values</span></a> are defined to coincide with <span class="math notranslate nohighlight">\(\mathsf{const}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{ref}\)</span> instructions,
+and a sequence of such instructions can be interpreted as an operand “stack” that grows to the right.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, the <a class="reference internal" href="instructions.html#exec-binop"><span class="std std-ref">reduction rule</span></a> for the <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}}\)</span> instruction can be given as follows:</p>
+<div class="math notranslate nohighlight">
+\[(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~n_1)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~n_2)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}}) \href{../exec/conventions.html#exec-notation}{\hookrightarrow} (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~(n_1 + n_2) \mathbin{\mathrm{mod}} {2^{32}})\]</div>
+<p>Per this rule, two <span class="math notranslate nohighlight">\(\mathsf{const}\)</span> instructions and the <span class="math notranslate nohighlight">\(\mathsf{add}\)</span> instruction itself are removed from the instruction stream and replaced with one new <span class="math notranslate nohighlight">\(\mathsf{const}\)</span> instruction.
+This can be interpreted as popping two values off the stack and pushing the result.</p>
+<p>When no result is produced, an instruction reduces to the empty sequence:</p>
+<div class="math notranslate nohighlight">
+\[\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{nop}} \href{../exec/conventions.html#exec-notation}{\hookrightarrow} \epsilon\]</div>
+</div>
+<p><a class="reference internal" href="runtime.html#label"><span class="std std-ref">Labels</span></a> and <a class="reference internal" href="runtime.html#frame"><span class="std std-ref">frames</span></a> are similarly <a class="reference internal" href="runtime.html#syntax-instr-admin"><span class="std std-ref">defined</span></a> to be part of an instruction sequence.</p>
+<p>The order of reduction is determined by the details of the reduction rules.
+Usually, the left-most instruction that is not a constant will be the subject of the next reduction <em>step</em>.</p>
+<p>Reduction <em>terminates</em> when no more reduction rules are applicable.
+<a class="reference internal" href="../appendix/properties.html#soundness"><span class="std std-ref">Soundness</span></a> of the WebAssembly <a class="reference internal" href="../valid/conventions.html#type-system"><span class="std std-ref">type system</span></a> guarantees that this is only the case when the original instruction sequence has either been reduced to a sequence of <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">value</span></a> instructions, which can be interpreted as the <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">values</span></a> of the resulting operand stack,
+or if an <a class="reference internal" href="../syntax/instructions.html#exception"><span class="std std-ref">exception</span></a> or <a class="reference internal" href="../intro/overview.html#trap"><span class="std std-ref">trap</span></a> occurred.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, the following instruction sequence,</p>
+<div class="math notranslate nohighlight">
+\[(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_1)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_2)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{neg}})~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_3)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}})~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{mul}})\]</div>
+<p>terminates after three steps:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rcl@{}l@{}}
+&amp; &amp; \hookrightarrow &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_1)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_4)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_3)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}})~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{mul}}) \\
+&amp; &amp; \hookrightarrow &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_1)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_5)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{mul}}) \\
+&amp; &amp; \hookrightarrow &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_6) \\
+\end{array}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(q_4 = {-q_2}\)</span> and <span class="math notranslate nohighlight">\(q_5 = {-q_2} + q_3\)</span> and <span class="math notranslate nohighlight">\(q_6 = q_1 \cdot ({-q_2} + q_3)\)</span>.</p>
+</div>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="cite-pldi2017" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="conventions.html#id1" role="doc-backlink">1</a><span class="fn-bracket">]</span></span>
+<p>The semantics is derived from the following article:
+Andreas Haas, Andreas Rossberg, Derek Schuff, Ben Titzer, Dan Gohman, Luke Wagner, Alon Zakai, JF Bastien, Michael Holman. <a class="reference external" href="https://dl.acm.org/citation.cfm?doid=3062341.3062363">Bringing the Web up to Speed with WebAssembly</a>. Proceedings of the 38th ACM SIGPLAN Conference on Programming Language Design and Implementation (PLDI 2017). ACM 2017.</p>
+</aside>
+<aside class="footnote brackets" id="cite-tapl" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="conventions.html#id2" role="doc-backlink">2</a><span class="fn-bracket">]</span></span>
+<p>For example: Benjamin Pierce. <a class="reference external" href="https://www.cis.upenn.edu/~bcpierce/tapl/">Types and Programming Languages</a>. The MIT Press 2002</p>
+</aside>
+</aside>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/exec/conventions.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-conventions">
+<span id="zh-index-0"></span><h1>约定<a class="headerlink" href="conventions.html#zh-conventions" title="Link to this heading">¶</a></h1>
+<p>WebAssembly 代码为 <em>已执行</em> 何时 <a class="reference internal" href="modules.html#zh-exec-instantiation"><span class="std std-ref">即时</span></a> a 模块 或 <a class="reference internal" href="modules.html#zh-exec-invocation"><span class="std std-ref">引用</span></a> a 一个 <a class="reference internal" href="../syntax/modules.html#zh-syntax-export"><span class="std std-ref">导出</span></a> 对结果的函数 模块 <a class="reference internal" href="runtime.html#zh-syntax-moduleinst"><span class="std std-ref">实例</span></a>.</p>
+<p>执行 行为的定义是: <em>抽象机器</em> 这个模型 <em>程序状态</em>。 。 。
+它包括一个 <em>栈</em>,记录操作 值 以及一个抽象的 <em>存储</em> 包含全球状态。</p>
+<p>每笔 指令,有一条规则具体规定了它的作用。 执行 在程序状态。
+此外,还有一些规则,说明对一项条约的即时适用。 模块。 。 。
+一样 <a class="reference internal" href="../intro/overview.html#zh-validation"><span class="std std-ref">验证</span></a>所有规则都分为两部分 <em>等值单位</em> 窗体:</p>
+<ol class="arabic simple">
+<li><p>内 <em>口语</em>,描述 执行 以直观的形式。</p></li>
+<li><p>内 <em>正式标注</em>,以数学形式描述规则。 <a class="footnote-reference brackets" href="conventions.html#zh-cite-pldi2017" id="zh-id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>一样 验证流言和正式规则是相当的,
+因此,对正式注解的理解是: <em>没有</em> 需要读取此内容 规范。 。 。
+形式主义在注解中提供了更为简洁的描述,在编程语言语义学中被广泛使用,并且很容易被数学证明.</p>
+</div>
+<section id="zh-prose-notation">
+<span id="zh-exec-notation-textual"></span><h2>标注<a class="headerlink" href="conventions.html#zh-prose-notation" title="Link to this heading">¶</a></h2>
+<p>执行 由逐级规则指定 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr"><span class="std std-ref">指令</span></a> 会 议 日 程 和 议 程 <a class="reference internal" href="../syntax/index.html#zh-syntax"><span class="std std-ref">抽象语法</span></a>。 。 。
+以下是: 约定 在说明这些规则时通过。</p>
+<ul class="simple">
+<li><p>那个 执行 规则默示假定 <a class="reference internal" href="runtime.html#zh-store"><span class="std std-ref">存储</span></a> <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
+<li><p>那个 执行 规则还假定存在默示的 <a class="reference internal" href="runtime.html#zh-stack"><span class="std std-ref">栈</span></a>
+由 <em>推进</em> 或 <em>弹出</em>
+<a class="reference internal" href="../syntax/values.html#zh-syntax-value"><span class="std std-ref">值</span></a>, <a class="reference internal" href="runtime.html#zh-syntax-label"><span class="std std-ref">标签</span></a>,以及 <a class="reference internal" href="runtime.html#zh-syntax-frame"><span class="std std-ref">边框</span></a>.</p></li>
+<li><p>某些规则要求 栈 包含至少一个 栈帧。 。 。
+最近一个 栈帧 称为 <em>当前</em> 栈帧.</p></li>
+<li><p>两个 存储 和当前 栈帧 由 <em>替换</em> 他们的一些组件。
+这种替换假设适用于全球。</p></li>
+<li><p>那个 执行 一、导 言 指令 可能 <em>陷阱</em>, (中文).
+在这种情况下,整个计算中止,不再修改 存储 由它执行。 (其他计算仍可在之后启动. )</p></li>
+<li><p>那个 执行 一、导 言 指令 也可能会在 <em>跳转</em> 目标,
+定义下一个 指令 执行。</p></li>
+<li><p>执行 能够 <em>输入</em> 和 <em>退出</em> <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instrs"><span class="std std-ref">指令 顺序</span></a> 该表格式 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-control"><span class="std std-ref">块</span></a>.</p></li>
+<li><p><a class="reference internal" href="../syntax/instructions.html#zh-syntax-instrs"><span class="std std-ref">指令 顺序</span></a> 除非 陷阱,跳动,或出现例外。</p></li>
+<li><p>在各种地方,规则包含 <em>主张</em> 表达关于程序状态的关键变化。</p></li>
+</ul>
+</section>
+<section id="zh-formal-notation">
+<span id="zh-exec-notation"></span><span id="zh-index-1"></span><h2>正式标记<a class="headerlink" href="conventions.html#zh-formal-notation" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>这个 段 简要说明说明 执行 正式地说
+对于感兴趣的读者,可在各自的教科书中找到更详尽的介绍。 <a class="footnote-reference brackets" href="conventions.html#zh-cite-tapl" id="zh-id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
+</div>
+<p>正式协议 执行 规则使用标准方法来指定操作语义,使其成为 <em>裁减规则</em>。 。 。
+每项规则都有以下一般形式:</p>
+<div class="math notranslate nohighlight">
+\[{\mathit{configuration}} \hookrightarrow {\mathit{configuration}}\]</div>
+<p>A <em>配置</em> 是一个程序状态的合成描述。
+每条规则都指定一条 <em>步骤</em> 页:1 执行。 。 。
+只要最多有一个削减规则适用于一个特定的配置,减少——从而减少 执行 - 是,这是 <em>决定性</em>.
+WebAssembly 只有极少数例外,这一点在本文中已明确指出。 规范.</p>
+<p>对于 WebAssembly,配置通常为 Tuple <span class="math notranslate nohighlight">\((s ; f ; {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast})\)</span> 由当前 <a class="reference internal" href="runtime.html#zh-store"><span class="std std-ref">存储</span></a> <span class="math notranslate nohighlight">\(s\)</span>,则 <a class="reference internal" href="runtime.html#zh-frame"><span class="std std-ref">电话 栈帧</span></a> <span class="math notranslate nohighlight">\(f\)</span> 当前函数的顺序,以及 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr"><span class="std std-ref">指令</span></a> 将执行。
+(给出了更精确的定义) <a class="reference internal" href="runtime.html#zh-syntax-config"><span class="std std-ref">后来</span></a>.)</p>
+<p>为了避免不必要的麻烦, 存储 <span class="math notranslate nohighlight">\(s\)</span> 页:1 栈帧 <span class="math notranslate nohighlight">\(f\)</span> 经常合并为 <em>状态</em> <span class="math notranslate nohighlight">\(z\)</span>,这是一对 <span class="math notranslate nohighlight">\((s ; f)\)</span>。 。 。
+此外, <span class="math notranslate nohighlight">\(z\)</span> 在不触及它们的削减规则中省略。</p>
+<p>没有单独代表 <a class="reference internal" href="runtime.html#zh-stack"><span class="std std-ref">栈</span></a>。 。 。
+相反,它作为组合的一部分是方便的 指令 顺序。
+特别是, <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">值</span></a> 定义与 <span class="math notranslate nohighlight">\(\mathsf{const}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{ref}\)</span> 指令, (中文).
+和此类序列 指令 可解释为一种操作“栈向右发展。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>例如, <a class="reference internal" href="instructions.html#zh-exec-binop"><span class="std std-ref">减少规则</span></a> 联 合 国 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}}\)</span> 指令 具体如下:</p>
+<div class="math notranslate nohighlight">
+\[(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~n_1)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~n_2)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}}) \href{../exec/conventions.html#exec-notation}{\hookrightarrow} (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~(n_1 + n_2) \mathbin{\mathrm{mod}} {2^{32}})\]</div>
+<p>根据这个规则,两个 <span class="math notranslate nohighlight">\(\mathsf{const}\)</span> 指令 页:1 <span class="math notranslate nohighlight">\(\mathsf{add}\)</span> 指令 本身从 指令 溪流并替换为一个新的 <span class="math notranslate nohighlight">\(\mathsf{const}\)</span> 指令。 。 。
+这可以被解释为弹出2 值 关闭 栈 并推进结果。</p>
+<p>如果无结果, 指令 缩小为空序 :</p>
+<div class="math notranslate nohighlight">
+\[\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{nop}} \href{../exec/conventions.html#exec-notation}{\hookrightarrow} \epsilon\]</div>
+</div>
+<p><a class="reference internal" href="runtime.html#zh-label"><span class="std std-ref">标签</span></a> 和 <a class="reference internal" href="runtime.html#zh-frame"><span class="std std-ref">边框</span></a> 类似 <a class="reference internal" href="runtime.html#zh-syntax-instr-admin"><span class="std std-ref">定义</span></a> 加入一个 指令 顺序。</p>
+<p>削减顺序由削减规则的细节决定.
+通常,最左边 指令 这不是一个常数 将是下一个削减的主题 <em>步骤</em>.</p>
+<p>减少 <em>终止</em> 在不再适用削减规则的情况下。
+<a class="reference internal" href="../appendix/properties.html#zh-soundness"><span class="std std-ref">声音</span></a> 会 议 日 程 和 议 程 WebAssembly <a class="reference internal" href="../valid/conventions.html#zh-type-system"><span class="std std-ref">类型系统</span></a> 保证只有原件出现这种情况; 指令 序列已被缩小为 <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">价值</span></a> 指令,可解释为 <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">值</span></a> 函数 栈, (中文).
+或如果出现 <a class="reference internal" href="../syntax/instructions.html#zh-exception"><span class="std std-ref">例外</span></a> 或 <a class="reference internal" href="../intro/overview.html#zh-trap"><span class="std std-ref">陷阱</span></a> 发生了</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>举例来说: 指令 顺序,</p>
+<div class="math notranslate nohighlight">
+\[(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_1)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_2)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{neg}})~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_3)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}})~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{mul}})\]</div>
+<p>在三个步骤后终止:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rcl@{}l@{}}
+&amp; &amp; \hookrightarrow &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_1)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_4)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_3)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}})~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{mul}}) \\
+&amp; &amp; \hookrightarrow &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_1)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_5)~(\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} {.} \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{mul}}) \\
+&amp; &amp; \hookrightarrow &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~q_6) \\
+\end{array}\end{split}\]</div>
+<p>地点 <span class="math notranslate nohighlight">\(q_4 = {-q_2}\)</span> 和 <span class="math notranslate nohighlight">\(q_5 = {-q_2} + q_3\)</span> 和 <span class="math notranslate nohighlight">\(q_6 = q_1 \cdot ({-q_2} + q_3)\)</span>.</p>
+</div>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="zh-cite-pldi2017" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="conventions.html#zh-id1" role="doc-backlink">1</a><span class="fn-bracket">]</span></span>
+<p>语义来源于以下一篇文章:
+安德烈亚斯·哈斯,安德烈亚斯·罗斯伯格,德里克·舒夫,本·蒂策尔,丹·戈曼,卢克·瓦格纳,阿隆·扎凯,JF·巴斯蒂安,迈克尔·霍尔曼. <a class="reference external" href="https://dl.acm.org/citation.cfm?doid=3062341.3062363">将网络推向快速 WebAssembly</a>. 第38届ACM SIGPLAN编程语言设计与实施会议记录(PLDI 2017). ACM 2017 (英语).</p>
+</aside>
+<aside class="footnote brackets" id="zh-cite-tapl" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="conventions.html#zh-id2" role="doc-backlink">2</a><span class="fn-bracket">]</span></span>
+<p>例如:本杰明·皮尔斯. <a class="reference external" href="https://www.cis.upenn.edu/~bcpierce/tapl/">类型 语文和方案编制</a>2002年麻省理工学院出版社</p>
+</aside>
+</aside>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/exec/conventions.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

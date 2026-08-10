@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Modules  / 模块  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../text/index.html" rel="next" title="Text Format"/>
+<link href="instructions.html" rel="prev" title="Instructions"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conventions.html"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="modules.html#"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/binary/modules.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="modules">
+<h1>Modules<a class="headerlink" href="modules.html#modules" title="Link to this heading">¶</a></h1>
+<p>The binary encoding of modules is organized into <em>sections</em>.
+Most sections correspond to one component of a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a> record,
+except that <a class="reference internal" href="../syntax/modules.html#syntax-func"><span class="std std-ref">function definitions</span></a> are split into two sections, separating their type declarations in the <a class="reference internal" href="modules.html#binary-funcsec"><span class="std std-ref">function section</span></a> from their bodies in the <a class="reference internal" href="modules.html#binary-codesec"><span class="std std-ref">code section</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This separation enables <em>parallel</em> and <em>streaming</em> compilation of the functions in a module.</p>
+</div>
+<section id="indices">
+<span id="binary-index"></span><span id="binary-externidx"></span><span id="binary-fieldidx"></span><span id="binary-labelidx"></span><span id="binary-localidx"></span><span id="binary-elemidx"></span><span id="binary-dataidx"></span><span id="binary-funcidx"></span><span id="binary-tableidx"></span><span id="binary-memidx"></span><span id="binary-globalidx"></span><span id="binary-tagidx"></span><span id="binary-typeidx"></span><span id="index-0"></span><h2>Indices<a class="headerlink" href="modules.html#indices" title="Link to this heading">¶</a></h2>
+<p>All basic <a class="reference internal" href="../syntax/modules.html#syntax-index"><span class="std std-ref">indices</span></a> are encoded with their respective value.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-typeidx}{\mathtt{typeidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-tableidx}{\mathtt{tableidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-memidx}{\mathtt{memidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-globalidx}{\mathtt{globalidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-tagidx}{\mathtt{tagidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-elemidx}{\mathtt{elemidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-dataidx}{\mathtt{dataidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-localidx}{\mathtt{localidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-fieldidx}{\mathtt{fieldidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-labelidx}{\mathtt{labelidx}}} &amp; ::= &amp; l{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; l \\
+\end{array}\end{split}\]</div>
+<p><a class="reference internal" href="../syntax/modules.html#syntax-externidx"><span class="std std-ref">External indices</span></a> are encoded by a distiguishing byte followed by an encoding of their respective value.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-externidx}{\mathtt{externidx}}} &amp; ::= &amp; \mathtt{0x00}~~x{:}{\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{func}}~x \\
+&amp; &amp; | &amp; \mathtt{0x01}~~x{:}{\href{../binary/modules.html#binary-tableidx}{\mathtt{tableidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{table}}~x \\
+&amp; &amp; | &amp; \mathtt{0x02}~~x{:}{\href{../binary/modules.html#binary-memidx}{\mathtt{memidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{memory}}~x \\
+&amp; &amp; | &amp; \mathtt{0x03}~~x{:}{\href{../binary/modules.html#binary-globalidx}{\mathtt{globalidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{global}}~x \\
+&amp; &amp; | &amp; \mathtt{0x04}~~x{:}{\href{../binary/modules.html#binary-tagidx}{\mathtt{tagidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{tag}}~x \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="sections">
+<span id="binary-section"></span><span id="index-1"></span><h2>Sections<a class="headerlink" href="modules.html#sections" title="Link to this heading">¶</a></h2>
+<p>Each section consists of</p>
+<ul class="simple">
+<li><p>a one-byte section <em>id</em>,</p></li>
+<li><p>the <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}}\)</span> <em>length</em> of the contents, in bytes,</p></li>
+<li><p>the actual <em>contents</em>, whose structure is dependent on the section id.</p></li>
+</ul>
+<p>Every section is optional; an omitted section is equivalent to the section being present with empty contents.</p>
+<p>The following parameterized grammar rule defines the generic structure of a section with id <span class="math notranslate nohighlight">\(N\)</span> and contents described by the grammar <span class="math notranslate nohighlight">\({\mathtt{X}}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{N}({\mathtt{X}}) &amp; ::= &amp; N{:}{\href{../binary/values.html#binary-byte}{\mathtt{byte}}}~~{\mathit{len}}{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{{\mathit{en}}^\ast}{:}{\mathtt{X}} &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{en}}^\ast} &amp; \quad \mbox{if}~ {\mathit{len}} = ||{\mathtt{X}}|| \\
+&amp; &amp; | &amp; \epsilon &amp; \quad\Rightarrow\quad{} &amp; \epsilon \\
+\end{array}\end{split}\]</div>
+<p>For most sections, the contents <span class="math notranslate nohighlight">\({\mathtt{X}}\)</span> encodes a <a class="reference internal" href="conventions.html#binary-list"><span class="std std-ref">list</span></a>.
+In these cases, the empty result <span class="math notranslate nohighlight">\(\epsilon\)</span> is interpreted as the empty list.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Other than for unknown <a class="reference internal" href="modules.html#binary-customsec"><span class="std std-ref">custom sections</span></a>,
+the <span class="math notranslate nohighlight">\({\mathit{size}}\)</span> is not required for decoding, but can be used to skip sections when navigating through a binary.
+The module is malformed if the size does not match the length of the binary contents <span class="math notranslate nohighlight">\({\mathtt{X}}\)</span>.</p>
+</div>
+<p>The following section ids are used:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Id</p></th>
+<th class="head"><p>Section</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-customsec"><span class="std std-ref">custom section</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-typesec"><span class="std std-ref">type section</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-importsec"><span class="std std-ref">import section</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-funcsec"><span class="std std-ref">function section</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-tablesec"><span class="std std-ref">table section</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-memsec"><span class="std std-ref">memory section</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-globalsec"><span class="std std-ref">global section</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-exportsec"><span class="std std-ref">export section</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-startsec"><span class="std std-ref">start section</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-elemsec"><span class="std std-ref">element section</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-codesec"><span class="std std-ref">code section</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-datasec"><span class="std std-ref">data section</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-datacntsec"><span class="std std-ref">data count section</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>13</p></td>
+<td><p><a class="reference internal" href="modules.html#binary-tagsec"><span class="std std-ref">tag section</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Section ids do not always correspond to the <a class="reference internal" href="modules.html#binary-module"><span class="std std-ref">order of sections</span></a> in the encoding of a module.</p>
+</div>
+</section>
+<section id="custom-section">
+<span id="binary-customsec"></span><span id="index-2"></span><h2>Custom Section<a class="headerlink" href="modules.html#custom-section" title="Link to this heading">¶</a></h2>
+<p><em>Custom sections</em> have the id 0.
+They are intended to be used for debugging information or third-party extensions, and are ignored by the WebAssembly semantics.
+Their contents consist of a <a class="reference internal" href="../syntax/values.html#syntax-name"><span class="std std-ref">name</span></a> further identifying the custom section, followed by an uninterpreted sequence of bytes for custom use.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}} &amp; ::= &amp; {{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{0}({\href{../binary/modules.html#binary-customsec}{\mathtt{custom}}}) \\
+&amp; {\href{../binary/modules.html#binary-customsec}{\mathtt{custom}}} &amp; ::= &amp; {\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{{\href{../binary/values.html#binary-byte}{\mathtt{byte}}}^\ast} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If an implementation interprets the data of a custom section, then errors in that data, or the placement of the section, must not invalidate the module.</p>
+</div>
+</section>
+<section id="type-section">
+<span id="binary-typesec"></span><span id="binary-type"></span><span id="index-3"></span><h2>Type Section<a class="headerlink" href="modules.html#type-section" title="Link to this heading">¶</a></h2>
+<p>The <em>type section</em> has the id 1.
+It decodes into the list of <a class="reference internal" href="../syntax/types.html#syntax-rectype"><span class="std std-ref">recursive types</span></a> of a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-typesec}{\mathtt{typesec}}} &amp; ::= &amp; {{\mathit{ty}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{1}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-type}{\mathtt{type}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{ty}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-type}{\mathtt{type}}} &amp; ::= &amp; {\mathit{qt}}{:}{\href{../binary/types.html#binary-rectype}{\mathtt{rectype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-type}{\mathsf{type}}~{\mathit{qt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="import-section">
+<span id="binary-importsec"></span><span id="binary-importdesc"></span><span id="binary-import"></span><span id="index-4"></span><h2>Import Section<a class="headerlink" href="modules.html#import-section" title="Link to this heading">¶</a></h2>
+<p>The <em>import section</em> has the id 2.
+It decodes into the list of <a class="reference internal" href="../syntax/modules.html#syntax-import"><span class="std std-ref">imports</span></a> of a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-importsec}{\mathtt{importsec}}} &amp; ::= &amp; {{\mathit{im}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{2}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-import}{\mathtt{import}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{im}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-import}{\mathtt{import}}} &amp; ::= &amp; {\mathit{nm}}_1{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{nm}}_2{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{xt}}{:}{\href{../binary/types.html#binary-externtype}{\mathtt{externtype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-import}{\mathsf{import}}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="function-section">
+<span id="binary-funcsec"></span><span id="index-5"></span><h2>Function Section<a class="headerlink" href="modules.html#function-section" title="Link to this heading">¶</a></h2>
+<p>The <em>function section</em> has the id 3.
+It decodes into a list of <a class="reference internal" href="../syntax/modules.html#syntax-typeidx"><span class="std std-ref">type indices</span></a> that classify the <a class="reference internal" href="../syntax/modules.html#syntax-func"><span class="std std-ref">functions</span></a> defined by a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.
+The bodies of the respective functions are encoded separately in the <a class="reference internal" href="modules.html#binary-codesec"><span class="std std-ref">code section</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-funcsec}{\mathtt{funcsec}}} &amp; ::= &amp; {x^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{3}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-typeidx}{\mathtt{typeidx}}})) &amp; \quad\Rightarrow\quad{} &amp; {x^\ast} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="table-section">
+<span id="binary-tablesec"></span><span id="binary-table"></span><span id="index-6"></span><h2>Table Section<a class="headerlink" href="modules.html#table-section" title="Link to this heading">¶</a></h2>
+<p>The <em>table section</em> has the id 4.
+It decodes into the list of <a class="reference internal" href="../syntax/modules.html#syntax-table"><span class="std std-ref">tables</span></a> defined by a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-tablesec}{\mathtt{tablesec}}} &amp; ::= &amp; {{\mathit{tab}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{4}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-table}{\mathtt{table}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{tab}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-table}{\mathtt{table}}} &amp; ::= &amp; {\mathit{tt}}{:}{\href{../binary/types.html#binary-tabletype}{\mathtt{tabletype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-table}{\mathsf{table}}~{\mathit{tt}}~(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}null}}~{\mathit{ht}}) &amp; \quad \mbox{if}~ {\mathit{tt}} = {\mathit{at}}~{\mathit{lim}}~(\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}^?}~{\mathit{ht}}) \\
+&amp; &amp; | &amp; \mathtt{0x40}~~\mathtt{0x00}~~{\mathit{tt}}{:}{\href{../binary/types.html#binary-tabletype}{\mathtt{tabletype}}}~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-table}{\mathsf{table}}~{\mathit{tt}}~e \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The encoding of a table type cannot start with byte <span class="math notranslate nohighlight">\(\mathtt{0x40}\)</span>,
+hence decoding is unambiguous.
+The zero byte following it is reserved for future extensions.</p>
+</div>
+</section>
+<section id="memory-section">
+<span id="binary-memsec"></span><span id="binary-mem"></span><span id="index-7"></span><h2>Memory Section<a class="headerlink" href="modules.html#memory-section" title="Link to this heading">¶</a></h2>
+<p>The <em>memory section</em> has the id 5.
+It decodes into the list of <a class="reference internal" href="../syntax/modules.html#syntax-mem"><span class="std std-ref">memories</span></a> defined by a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-memsec}{\mathtt{memsec}}} &amp; ::= &amp; {{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{5}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-mem}{\mathtt{mem}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-mem}{\mathtt{mem}}} &amp; ::= &amp; {\mathit{mt}}{:}{\href{../binary/types.html#binary-memtype}{\mathtt{memtype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-mem}{\mathsf{memory}}~{\mathit{mt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="global-section">
+<span id="binary-globalsec"></span><span id="binary-global"></span><span id="index-8"></span><h2>Global Section<a class="headerlink" href="modules.html#global-section" title="Link to this heading">¶</a></h2>
+<p>The <em>global section</em> has the id 6.
+It decodes into the list of <a class="reference internal" href="../syntax/modules.html#syntax-global"><span class="std std-ref">globals</span></a> defined by a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-globalsec}{\mathtt{globalsec}}} &amp; ::= &amp; {{\mathit{glob}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{6}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-global}{\mathtt{global}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{glob}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-global}{\mathtt{global}}} &amp; ::= &amp; {\mathit{gt}}{:}{\href{../binary/types.html#binary-globaltype}{\mathtt{globaltype}}}~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-global}{\mathsf{global}}~{\mathit{gt}}~e \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="export-section">
+<span id="binary-exportsec"></span><span id="binary-exportdesc"></span><span id="binary-export"></span><span id="index-9"></span><h2>Export Section<a class="headerlink" href="modules.html#export-section" title="Link to this heading">¶</a></h2>
+<p>The <em>export section</em> has the id 7.
+It decodes into the list of <a class="reference internal" href="../syntax/modules.html#syntax-export"><span class="std std-ref">exports</span></a> of a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-exportsec}{\mathtt{exportsec}}} &amp; ::= &amp; {{\mathit{ex}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{7}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-export}{\mathtt{export}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{ex}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-export}{\mathtt{export}}} &amp; ::= &amp; {\mathit{nm}}{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{xx}}{:}{\href{../binary/modules.html#binary-externidx}{\mathtt{externidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-export}{\mathsf{export}}~{\mathit{nm}}~{\mathit{xx}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="start-section">
+<span id="binary-startsec"></span><span id="binary-start"></span><span id="index-10"></span><h2>Start Section<a class="headerlink" href="modules.html#start-section" title="Link to this heading">¶</a></h2>
+<p>The <em>start section</em> has the id 8.
+It decodes into the optional <a class="reference internal" href="../syntax/modules.html#syntax-start"><span class="std std-ref">start function</span></a> of a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-startsec}{\mathtt{startsec}}} &amp; ::= &amp; {{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{8}({\href{../binary/modules.html#binary-start}{\mathtt{start}}}) &amp; \quad\Rightarrow\quad{} &amp; {{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?} \\
+&amp; {\href{../binary/modules.html#binary-start}{\mathtt{start}}} &amp; ::= &amp; x{:}{\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/modules.html#syntax-start}{\mathsf{start}}~x) \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="element-section">
+<span id="binary-elemkind"></span><span id="binary-elemsec"></span><span id="binary-elem"></span><span id="index-11"></span><h2>Element Section<a class="headerlink" href="modules.html#element-section" title="Link to this heading">¶</a></h2>
+<p>The <em>element section</em> has the id 9.
+It decodes into the list of <a class="reference internal" href="../syntax/modules.html#syntax-elem"><span class="std std-ref">element segments</span></a> defined by a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-elemsec}{\mathtt{elemsec}}} &amp; ::= &amp; {{\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{9}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-elem}{\mathtt{elem}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-elemkind}{\mathtt{elemkind}}} &amp; ::= &amp; \mathtt{0x00} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{func}} \\
+&amp; {\href{../binary/modules.html#binary-elem}{\mathtt{elem}}} &amp; ::= &amp; 0{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~e_o{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{y^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~(\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{func}})~{(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}~y)^\ast}~(\href{../syntax/modules.html#syntax-elemmode}{\mathsf{active}}~0~e_o) \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 1{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{\mathit{rt}}{:}{\href{../binary/modules.html#binary-elemkind}{\mathtt{elemkind}}}~~{y^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}~y)^\ast}~\href{../syntax/modules.html#syntax-elemmode}{\mathsf{passive}} \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 2{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~x{:}{\href{../binary/modules.html#binary-tableidx}{\mathtt{tableidx}}}~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{\mathit{rt}}{:}{\href{../binary/modules.html#binary-elemkind}{\mathtt{elemkind}}}~~{y^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}~y)^\ast}~(\href{../syntax/modules.html#syntax-elemmode}{\mathsf{active}}~x~e) \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 3{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{\mathit{rt}}{:}{\href{../binary/modules.html#binary-elemkind}{\mathtt{elemkind}}}~~{y^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}~y)^\ast}~\href{../syntax/modules.html#syntax-elemmode}{\mathsf{declare}} \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 4{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~e_{\mathsf{o}}{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{e^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~(\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{func}})~{e^\ast}~(\href{../syntax/modules.html#syntax-elemmode}{\mathsf{active}}~0~e_{\mathsf{o}}) \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 5{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{\mathit{rt}}{:}{\href{../binary/types.html#binary-reftype}{\mathtt{reftype}}}~~{e^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{e^\ast}~\href{../syntax/modules.html#syntax-elemmode}{\mathsf{passive}} \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 6{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~x{:}{\href{../binary/modules.html#binary-tableidx}{\mathtt{tableidx}}}~~e_{\mathsf{o}}{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{\mathit{rt}}{:}{\href{../binary/types.html#binary-reftype}{\mathtt{reftype}}}~~{e^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{e^\ast}~(\href{../syntax/modules.html#syntax-elemmode}{\mathsf{active}}~x~e_{\mathsf{o}}) \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 7{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{\mathit{rt}}{:}{\href{../binary/types.html#binary-reftype}{\mathtt{reftype}}}~~{e^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{e^\ast}~\href{../syntax/modules.html#syntax-elemmode}{\mathsf{declare}} \\
+\end{array}
+} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The initial integer can be interpreted as a bitfield.
+Bit 0 distinguishes a passive or declarative segment from an active segment,
+bit 1 indicates the presence of an explicit table index for an active segment and otherwise distinguishes passive from declarative segments,
+bit 2 indicates the use of element type and element <a class="reference internal" href="instructions.html#binary-expr"><span class="std std-ref">expressions</span></a> instead of element kind and element indices.</p>
+<p>Additional element kinds may be added in future versions of WebAssembly.</p>
+</div>
+</section>
+<section id="code-section">
+<span id="binary-codesec"></span><span id="binary-local"></span><span id="binary-func"></span><span id="binary-code"></span><span id="index-12"></span><h2>Code Section<a class="headerlink" href="modules.html#code-section" title="Link to this heading">¶</a></h2>
+<p>The <em>code section</em> has the id 10.
+It decodes into the list of <em>code</em> entries that are pairs of lists of <a class="reference internal" href="../syntax/conventions.html#syntax-list"><span class="std std-ref">locals</span></a> and <a class="reference internal" href="../syntax/instructions.html#syntax-expr"><span class="std std-ref">expressions</span></a>.
+They represent the body of the <a class="reference internal" href="../syntax/modules.html#syntax-func"><span class="std std-ref">functions</span></a> defined by a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.
+The types of the respective functions are encoded separately in the <a class="reference internal" href="modules.html#binary-funcsec"><span class="std std-ref">function section</span></a>.</p>
+<p>The encoding of each code entry consists of</p>
+<ul class="simple">
+<li><p>the <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}}\)</span> <em>length</em> of the function code in bytes,</p></li>
+<li><p>the actual <em>function code</em>, which in turn consists of</p>
+<ul>
+<li><p>the declaration of <em>locals</em>,</p></li>
+<li><p>the function <em>body</em> as an <a class="reference internal" href="instructions.html#binary-expr"><span class="std std-ref">expression</span></a>.</p></li>
+</ul>
+</li>
+</ul>
+<p>Local declarations are compressed into a list whose entries consist of</p>
+<ul class="simple">
+<li><p>a <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}}\)</span> <em>count</em>,</p></li>
+<li><p>a <a class="reference internal" href="types.html#binary-valtype"><span class="std std-ref">value type</span></a>,</p></li>
+</ul>
+<p>denoting <em>count</em> locals of the same value type.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-codesec}{\mathtt{codesec}}} &amp; ::= &amp; {{\mathit{code}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{10}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-code}{\mathtt{code}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{code}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-code}{\mathtt{code}}} &amp; ::= &amp; {\mathit{len}}{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{\mathit{code}}{:}{\href{../binary/modules.html#binary-func}{\mathtt{func}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{code}} &amp; \quad \mbox{if}~ {\mathit{len}} = ||{\href{../binary/modules.html#binary-func}{\mathtt{func}}}|| \\
+&amp; {\href{../binary/modules.html#binary-func}{\mathtt{func}}} &amp; ::= &amp; {{{\mathit{loc}}^\ast}^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-local}{\mathtt{locals}}})~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}} &amp; \quad\Rightarrow\quad{} &amp; ({\href{../syntax/conventions.html#notation-concat}{\bigoplus}}\, {{{\mathit{loc}}^\ast}^\ast}, e) &amp; \quad \mbox{if}~ {|{\href{../syntax/conventions.html#notation-concat}{\bigoplus}}\, {{{\mathit{loc}}^\ast}^\ast}|} &lt; {2^{32}} \\
+&amp; {\href{../binary/modules.html#binary-local}{\mathtt{locals}}} &amp; ::= &amp; n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~t{:}{\href{../binary/types.html#binary-valtype}{\mathtt{valtype}}} &amp; \quad\Rightarrow\quad{} &amp; {(\href{../syntax/modules.html#syntax-local}{\mathsf{local}}~t)^{n}} \\
+\end{array}\end{split}\]</div>
+<p>Here, <span class="math notranslate nohighlight">\({\mathit{code}}\)</span> ranges over pairs <span class="math notranslate nohighlight">\(({{\href{../syntax/modules.html#syntax-local}{\mathit{local}}}^\ast}, {\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}})\)</span>.
+Any code for which the length of the resulting sequence is out of bounds of the maximum size of a <a class="reference internal" href="../syntax/conventions.html#syntax-list"><span class="std std-ref">list</span></a> is malformed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Like with <a class="reference internal" href="modules.html#binary-section"><span class="std std-ref">sections</span></a>, the code <span class="math notranslate nohighlight">\({\mathit{size}}\)</span> is not needed for decoding, but can be used to skip functions when navigating through a binary.
+The module is malformed if a size does not match the length of the respective function code.</p>
+</div>
+</section>
+<section id="data-section">
+<span id="binary-datasec"></span><span id="binary-data"></span><span id="index-13"></span><h2>Data Section<a class="headerlink" href="modules.html#data-section" title="Link to this heading">¶</a></h2>
+<p>The <em>data section</em> has the id 11.
+It decodes into the list of <a class="reference internal" href="../syntax/modules.html#syntax-data"><span class="std std-ref">data segments</span></a> defined by a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-datasec}{\mathtt{datasec}}} &amp; ::= &amp; {{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{11}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-data}{\mathtt{data}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-data}{\mathtt{data}}} &amp; ::= &amp; 0{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{b^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/values.html#binary-byte}{\mathtt{byte}}}) &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-data}{\mathsf{data}}~{b^\ast}~(\href{../syntax/modules.html#syntax-datamode}{\mathsf{active}}~0~e) \\
+&amp; &amp; | &amp; 1{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{b^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/values.html#binary-byte}{\mathtt{byte}}}) &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-data}{\mathsf{data}}~{b^\ast}~\href{../syntax/modules.html#syntax-datamode}{\mathsf{passive}} \\
+&amp; &amp; | &amp; 2{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~x{:}{\href{../binary/modules.html#binary-memidx}{\mathtt{memidx}}}~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{b^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/values.html#binary-byte}{\mathtt{byte}}}) &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-data}{\mathsf{data}}~{b^\ast}~(\href{../syntax/modules.html#syntax-datamode}{\mathsf{active}}~x~e) \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The initial integer can be interpreted as a bitfield.
+Bit 0 indicates a passive segment,
+bit 1 indicates the presence of an explicit memory index for an active segment.</p>
+</div>
+</section>
+<section id="data-count-section">
+<span id="binary-datacnt"></span><span id="binary-datacntsec"></span><span id="index-14"></span><h2>Data Count Section<a class="headerlink" href="modules.html#data-count-section" title="Link to this heading">¶</a></h2>
+<p>The <em>data count section</em> has the id 12.
+It decodes into an optional <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}}\)</span> count that represents the number of <a class="reference internal" href="../syntax/modules.html#syntax-data"><span class="std std-ref">data segments</span></a> in the <a class="reference internal" href="modules.html#binary-datasec"><span class="std std-ref">data section</span></a>.
+If this count does not match the length of the data segment list, the module is malformed.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-datacntsec}{\mathtt{datacntsec}}} &amp; ::= &amp; {n^?}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{12}({\href{../binary/modules.html#binary-datacnt}{\mathtt{datacnt}}}) &amp; \quad\Rightarrow\quad{} &amp; {n^?} \\
+&amp; {\href{../binary/modules.html#binary-datacnt}{\mathtt{datacnt}}} &amp; ::= &amp; n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; n \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The data count section is used to simplify single-pass validation. Since the
+data section occurs after the code section, the <span class="math notranslate nohighlight">\(\mathsf{memory{.}init}\)</span> and
+<span class="math notranslate nohighlight">\(\mathsf{data{.}drop}\)</span> instructions would not be able to check whether the data
+segment index is valid until the data section is read. The data count section
+occurs before the code section, so a single-pass validator can use this count
+instead of deferring validation.</p>
+</div>
+</section>
+<section id="tag-section">
+<span id="binary-tagsec"></span><span id="binary-tag"></span><span id="index-15"></span><h2>Tag Section<a class="headerlink" href="modules.html#tag-section" title="Link to this heading">¶</a></h2>
+<p>The <em>tag section</em> has the id 13.
+It decodes into the list of <a class="reference internal" href="../syntax/modules.html#syntax-tag"><span class="std std-ref">tags</span></a> defined by a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-tagsec}{\mathtt{tagsec}}} &amp; ::= &amp; {{\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{13}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-tag}{\mathtt{tag}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-tag}{\mathtt{tag}}} &amp; ::= &amp; {\mathit{jt}}{:}{\href{../binary/types.html#binary-tagtype}{\mathtt{tagtype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-tag}{\mathsf{tag}}~{\mathit{jt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="binary-module">
+<span id="binary-version"></span><span id="binary-magic"></span><span id="index-16"></span><span id="id1"></span><h2>Modules<a class="headerlink" href="modules.html#binary-module" title="Link to this heading">¶</a></h2>
+<p>The encoding of a <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">module</span></a> starts with a preamble containing a 4-byte magic number (the string <span class="math notranslate nohighlight">\(\def\mathdef1615#1{\mbox{‘}\mathtt{#1}\mbox{’}}\mathdef1615{\backslash0asm}\)</span>) and a version field.
+The current version of the WebAssembly binary format is 1.</p>
+<p>The preamble is followed by a sequence of <a class="reference internal" href="modules.html#binary-section"><span class="std std-ref">sections</span></a>.
+<a class="reference internal" href="modules.html#binary-customsec"><span class="std std-ref">Custom sections</span></a> may be inserted at any place in this sequence,
+while other sections must occur at most once and in the prescribed order.
+All sections can be empty.</p>
+<p>The lengths of lists produced by the (possibly empty) <a class="reference internal" href="modules.html#binary-funcsec"><span class="std std-ref">function</span></a> and <a class="reference internal" href="modules.html#binary-codesec"><span class="std std-ref">code</span></a> section must match up.</p>
+<p>Similarly, the optional data count must match the length of the <a class="reference internal" href="modules.html#binary-datasec"><span class="std std-ref">data segment</span></a> list.
+Furthermore, it must be present if any <a class="reference internal" href="../syntax/modules.html#syntax-dataidx"><span class="std std-ref">data index</span></a> occurs in the code section.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-magic}{\mathtt{magic}}} &amp; ::= &amp; \mathtt{0x00}~~\mathtt{0x61}~~\mathtt{0x73}~~\mathtt{0x6D} \\
+&amp; {\href{../binary/modules.html#binary-version}{\mathtt{version}}} &amp; ::= &amp; \mathtt{0x01}~~\mathtt{0x00}~~\mathtt{0x00}~~\mathtt{0x00} \\
+&amp; {\href{../binary/modules.html#binary-module}{\mathtt{module}}} &amp; ::= &amp; \begin{array}[t]{@{}l@{}} {\href{../binary/modules.html#binary-magic}{\mathtt{magic}}}~~{\href{../binary/modules.html#binary-version}{\mathtt{version}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-type}{\mathit{type}}}^\ast}{:}{\href{../binary/modules.html#binary-typesec}{\mathtt{typesec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-import}{\mathit{import}}}^\ast}{:}{\href{../binary/modules.html#binary-importsec}{\mathtt{importsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}^\ast}{:}{\href{../binary/modules.html#binary-funcsec}{\mathtt{funcsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-table}{\mathit{table}}}^\ast}{:}{\href{../binary/modules.html#binary-tablesec}{\mathtt{tablesec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast}{:}{\href{../binary/modules.html#binary-memsec}{\mathtt{memsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}^\ast}{:}{\href{../binary/modules.html#binary-tagsec}{\mathtt{tagsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-global}{\mathit{global}}}^\ast}{:}{\href{../binary/modules.html#binary-globalsec}{\mathtt{globalsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-export}{\mathit{export}}}^\ast}{:}{\href{../binary/modules.html#binary-exportsec}{\mathtt{exportsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?}{:}{\href{../binary/modules.html#binary-startsec}{\mathtt{startsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}^\ast}{:}{\href{../binary/modules.html#binary-elemsec}{\mathtt{elemsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{n^?}{:}{\href{../binary/modules.html#binary-datacntsec}{\mathtt{datacntsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{({{\href{../syntax/modules.html#syntax-local}{\mathit{local}}}^\ast}, {\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}})^\ast}{:}{\href{../binary/modules.html#binary-codesec}{\mathtt{codesec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast}{:}{\href{../binary/modules.html#binary-datasec}{\mathtt{datasec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast} \end{array} &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}l@{}l@{}}
+\href{../syntax/modules.html#syntax-module}{\mathsf{module}}~{{\href{../syntax/modules.html#syntax-type}{\mathit{type}}}^\ast}~{{\href{../syntax/modules.html#syntax-import}{\mathit{import}}}^\ast}~{{\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}^\ast}~{{\href{../syntax/modules.html#syntax-global}{\mathit{global}}}^\ast}~{{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast}~{{\href{../syntax/modules.html#syntax-table}{\mathit{table}}}^\ast}~{{\href{../syntax/modules.html#syntax-func}{\mathit{func}}}^\ast}~{{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast}~{{\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}^\ast}~{{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?}~{{\href{../syntax/modules.html#syntax-export}{\mathit{export}}}^\ast} &amp; &amp; \\
+ \multicolumn{3}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\quad
+\begin{array}[t]{@{}l@{}}
+\mbox{if}~ (n = {|{{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast}|})^? \\
+{\land}~ ({n^?} \neq \epsilon \lor {\href{../syntax/modules.html#syntax-dataidx}{\mathrm{dataidx}}}({{\href{../syntax/modules.html#syntax-func}{\mathit{func}}}^\ast}) = \epsilon) \\
+{\land}~ ({\href{../syntax/modules.html#syntax-func}{\mathit{func}}} = \href{../syntax/modules.html#syntax-func}{\mathsf{func}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{{\href{../syntax/modules.html#syntax-local}{\mathit{local}}}^\ast}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}})^\ast \\
+\end{array} \\
+\end{array}
+} \\
+\end{array}
+} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The version of the WebAssembly binary format may increase in the future
+if backward-incompatible changes have to be made to the format.
+However, such changes are expected to occur very infrequently, if ever.
+The binary format is intended to be extensible,
+such that future features can be added without incrementing its version.</p>
+</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/binary/modules.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-modules">
+<h1>模块<a class="headerlink" href="modules.html#zh-modules" title="Link to this heading">¶</a></h1>
+<p>二进制 编码 页:1 模块 组织成 <em>段</em>。 。 。
+多数 段 对应于 a 的一个组件 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a> 记录,
+除外 <a class="reference internal" href="../syntax/modules.html#zh-syntax-func"><span class="std std-ref">函数定义</span></a> 分为两个 段,将其类型声明在 <a class="reference internal" href="modules.html#zh-binary-funcsec"><span class="std std-ref">函数 段</span></a> 从他们的身体里 <a class="reference internal" href="modules.html#zh-binary-codesec"><span class="std std-ref">代码 段</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>这种分离可以 <em>平行</em> 和 <em>流线</em> 汇编 a 中的函数 模块.</p>
+</div>
+<section id="zh-indices">
+<span id="zh-binary-index"></span><span id="zh-binary-externidx"></span><span id="zh-binary-fieldidx"></span><span id="zh-binary-labelidx"></span><span id="zh-binary-localidx"></span><span id="zh-binary-elemidx"></span><span id="zh-binary-dataidx"></span><span id="zh-binary-funcidx"></span><span id="zh-binary-tableidx"></span><span id="zh-binary-memidx"></span><span id="zh-binary-globalidx"></span><span id="zh-binary-tagidx"></span><span id="zh-binary-typeidx"></span><span id="zh-index-0"></span><h2>指数<a class="headerlink" href="modules.html#zh-indices" title="Link to this heading">¶</a></h2>
+<p>所有基础 <a class="reference internal" href="../syntax/modules.html#zh-syntax-index"><span class="std std-ref">指数</span></a> 以各自的值编码。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-typeidx}{\mathtt{typeidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-tableidx}{\mathtt{tableidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-memidx}{\mathtt{memidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-globalidx}{\mathtt{globalidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-tagidx}{\mathtt{tagidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-elemidx}{\mathtt{elemidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-dataidx}{\mathtt{dataidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-localidx}{\mathtt{localidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-fieldidx}{\mathtt{fieldidx}}} &amp; ::= &amp; x{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+&amp; {\href{../binary/modules.html#binary-labelidx}{\mathtt{labelidx}}} &amp; ::= &amp; l{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; l \\
+\end{array}\end{split}\]</div>
+<p><a class="reference internal" href="../syntax/modules.html#zh-syntax-externidx"><span class="std std-ref">外部指数</span></a> 编码为一条模糊的字节,然后是 编码 价值。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-externidx}{\mathtt{externidx}}} &amp; ::= &amp; \mathtt{0x00}~~x{:}{\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{func}}~x \\
+&amp; &amp; | &amp; \mathtt{0x01}~~x{:}{\href{../binary/modules.html#binary-tableidx}{\mathtt{tableidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{table}}~x \\
+&amp; &amp; | &amp; \mathtt{0x02}~~x{:}{\href{../binary/modules.html#binary-memidx}{\mathtt{memidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{memory}}~x \\
+&amp; &amp; | &amp; \mathtt{0x03}~~x{:}{\href{../binary/modules.html#binary-globalidx}{\mathtt{globalidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{global}}~x \\
+&amp; &amp; | &amp; \mathtt{0x04}~~x{:}{\href{../binary/modules.html#binary-tagidx}{\mathtt{tagidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{tag}}~x \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-sections">
+<span id="zh-binary-section"></span><span id="zh-index-1"></span><h2>段<a class="headerlink" href="modules.html#zh-sections" title="Link to this heading">¶</a></h2>
+<p>每个 段 包含:</p>
+<ul class="simple">
+<li><p>一个字节 段 <em>编号</em>,</p></li>
+<li><p>联合国 <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}}\)</span> <em>长度</em> 目录 字节,</p></li>
+<li><p>实际数 <em>目录</em>,其结构取决于 段 编号.</p></li>
+</ul>
+<p>每个 段 可选; 省略 段 相当于 段 以空内容存在。</p>
+<p>以下参数化 语法 规则定义了一般结构 段 编号 <span class="math notranslate nohighlight">\(N\)</span> 说明的内容 语法 <span class="math notranslate nohighlight">\({\mathtt{X}}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{N}({\mathtt{X}}) &amp; ::= &amp; N{:}{\href{../binary/values.html#binary-byte}{\mathtt{byte}}}~~{\mathit{len}}{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{{\mathit{en}}^\ast}{:}{\mathtt{X}} &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{en}}^\ast} &amp; \quad \mbox{if}~ {\mathit{len}} = ||{\mathtt{X}}|| \\
+&amp; &amp; | &amp; \epsilon &amp; \quad\Rightarrow\quad{} &amp; \epsilon \\
+\end{array}\end{split}\]</div>
+<p>对大多数 段,内容 <span class="math notranslate nohighlight">\({\mathtt{X}}\)</span> 编码 a <a class="reference internal" href="conventions.html#zh-binary-list"><span class="std std-ref">列表</span></a>。 。 。
+在这种情况下,空洞的结果 <span class="math notranslate nohighlight">\(\epsilon\)</span> 被解释为空列表。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>不详 <a class="reference internal" href="modules.html#zh-binary-customsec"><span class="std std-ref">自定义段</span></a>, (中文).
+联合国 <span class="math notranslate nohighlight">\({\mathit{size}}\)</span> 不需要用于 解码,但可用于跳过 段 当通过二进制时。
+那个 模块 如果大小与二进制内容的长度不匹配,则其结构不正确 <span class="math notranslate nohighlight">\({\mathtt{X}}\)</span>.</p>
+</div>
+<p>以下是: 段 标识是:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>编号</p></th>
+<th class="head"><p>段</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-customsec"><span class="std std-ref">自定义 段</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-typesec"><span class="std std-ref">类型 段</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-importsec"><span class="std std-ref">导入 段</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-funcsec"><span class="std std-ref">函数 段</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-tablesec"><span class="std std-ref">图表 段</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-memsec"><span class="std std-ref">内存 段</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-globalsec"><span class="std std-ref">全球 段</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-exportsec"><span class="std std-ref">导出 段</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-startsec"><span class="std std-ref">开始 段</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>9</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-elemsec"><span class="std std-ref">元素 段</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>10</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-codesec"><span class="std std-ref">代码 段</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>11</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-datasec"><span class="std std-ref">数据 段</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>12</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-datacntsec"><span class="std std-ref">数据数 段</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>13</p></td>
+<td><p><a class="reference internal" href="modules.html#zh-binary-tagsec"><span class="std std-ref">标签 段</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>段 标识并不总是符合 <a class="reference internal" href="modules.html#zh-binary-module"><span class="std std-ref">顺序 段</span></a> 输入 编码 页:1 模块.</p>
+</div>
+</section>
+<section id="zh-custom-section">
+<span id="zh-binary-customsec"></span><span id="zh-index-2"></span><h2>自定义 段<a class="headerlink" href="modules.html#zh-custom-section" title="Link to this heading">¶</a></h2>
+<p><em>自定义段</em> 有编号0。
+它们旨在用于调试信息或第三方扩展,被下列程序忽略: WebAssembly 语义学.
+它们的内容包括: <a class="reference internal" href="../syntax/values.html#zh-syntax-name"><span class="std std-ref">名称</span></a> 进一步识别习惯 段,然后是未经解释的顺序 字节 用于定制。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}} &amp; ::= &amp; {{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{0}({\href{../binary/modules.html#binary-customsec}{\mathtt{custom}}}) \\
+&amp; {\href{../binary/modules.html#binary-customsec}{\mathtt{custom}}} &amp; ::= &amp; {\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{{\href{../binary/values.html#binary-byte}{\mathtt{byte}}}^\ast} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>如果一个执行解释一个自定义的数据 段,然后在该数据中出错,或 段,不得使 模块.</p>
+</div>
+</section>
+<section id="zh-type-section">
+<span id="zh-binary-typesec"></span><span id="zh-binary-type"></span><span id="zh-index-3"></span><h2>类型 段<a class="headerlink" href="modules.html#zh-type-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>类型 段</em> 有编号 1。
+它解码为 <a class="reference internal" href="../syntax/types.html#zh-syntax-rectype"><span class="std std-ref">递归 类型</span></a> 页:1 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-typesec}{\mathtt{typesec}}} &amp; ::= &amp; {{\mathit{ty}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{1}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-type}{\mathtt{type}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{ty}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-type}{\mathtt{type}}} &amp; ::= &amp; {\mathit{qt}}{:}{\href{../binary/types.html#binary-rectype}{\mathtt{rectype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-type}{\mathsf{type}}~{\mathit{qt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-import-section">
+<span id="zh-binary-importsec"></span><span id="zh-binary-importdesc"></span><span id="zh-binary-import"></span><span id="zh-index-4"></span><h2>导入 段<a class="headerlink" href="modules.html#zh-import-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>导入 段</em> 有编号2。
+它解码为 <a class="reference internal" href="../syntax/modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a> 页:1 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-importsec}{\mathtt{importsec}}} &amp; ::= &amp; {{\mathit{im}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{2}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-import}{\mathtt{import}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{im}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-import}{\mathtt{import}}} &amp; ::= &amp; {\mathit{nm}}_1{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{nm}}_2{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{xt}}{:}{\href{../binary/types.html#binary-externtype}{\mathtt{externtype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-import}{\mathsf{import}}~{\mathit{nm}}_1~{\mathit{nm}}_2~{\mathit{xt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-function-section">
+<span id="zh-binary-funcsec"></span><span id="zh-index-5"></span><h2>函数 段<a class="headerlink" href="modules.html#zh-function-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>函数 段</em> 有编号3。
+它把代码解码为列表 <a class="reference internal" href="../syntax/modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a> 分类 <a class="reference internal" href="../syntax/modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a> A 定义 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>。 。 。
+各职能机构分别编码于 <a class="reference internal" href="modules.html#zh-binary-codesec"><span class="std std-ref">代码 段</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-funcsec}{\mathtt{funcsec}}} &amp; ::= &amp; {x^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{3}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-typeidx}{\mathtt{typeidx}}})) &amp; \quad\Rightarrow\quad{} &amp; {x^\ast} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-table-section">
+<span id="zh-binary-tablesec"></span><span id="zh-binary-table"></span><span id="zh-index-6"></span><h2>图表 段<a class="headerlink" href="modules.html#zh-table-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>图表 段</em> 有编号4。
+它解码为 <a class="reference internal" href="../syntax/modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a> A 定义 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-tablesec}{\mathtt{tablesec}}} &amp; ::= &amp; {{\mathit{tab}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{4}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-table}{\mathtt{table}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{tab}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-table}{\mathtt{table}}} &amp; ::= &amp; {\mathit{tt}}{:}{\href{../binary/types.html#binary-tabletype}{\mathtt{tabletype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-table}{\mathsf{table}}~{\mathit{tt}}~(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}null}}~{\mathit{ht}}) &amp; \quad \mbox{if}~ {\mathit{tt}} = {\mathit{at}}~{\mathit{lim}}~(\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}^?}~{\mathit{ht}}) \\
+&amp; &amp; | &amp; \mathtt{0x40}~~\mathtt{0x00}~~{\mathit{tt}}{:}{\href{../binary/types.html#binary-tabletype}{\mathtt{tabletype}}}~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-table}{\mathsf{table}}~{\mathit{tt}}~e \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>那个 编码 页:1 表类型 无法从字节开始 <span class="math notranslate nohighlight">\(\mathtt{0x40}\)</span>, (中文).
+因此, 解码 毫不含糊。
+之后的零字节保留给未来的扩展 。</p>
+</div>
+</section>
+<section id="zh-memory-section">
+<span id="zh-binary-memsec"></span><span id="zh-binary-mem"></span><span id="zh-index-7"></span><h2>内存 段<a class="headerlink" href="modules.html#zh-memory-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>内存 段</em> 有编号5。
+它解码为 <a class="reference internal" href="../syntax/modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a> A 定义 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-memsec}{\mathtt{memsec}}} &amp; ::= &amp; {{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{5}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-mem}{\mathtt{mem}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-mem}{\mathtt{mem}}} &amp; ::= &amp; {\mathit{mt}}{:}{\href{../binary/types.html#binary-memtype}{\mathtt{memtype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-mem}{\mathsf{memory}}~{\mathit{mt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-global-section">
+<span id="zh-binary-globalsec"></span><span id="zh-binary-global"></span><span id="zh-index-8"></span><h2>全球 段<a class="headerlink" href="modules.html#zh-global-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>全球 段</em> 有编号6。
+它解码为 <a class="reference internal" href="../syntax/modules.html#zh-syntax-global"><span class="std std-ref">全球</span></a> A 定义 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-globalsec}{\mathtt{globalsec}}} &amp; ::= &amp; {{\mathit{glob}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{6}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-global}{\mathtt{global}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{glob}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-global}{\mathtt{global}}} &amp; ::= &amp; {\mathit{gt}}{:}{\href{../binary/types.html#binary-globaltype}{\mathtt{globaltype}}}~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-global}{\mathsf{global}}~{\mathit{gt}}~e \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-export-section">
+<span id="zh-binary-exportsec"></span><span id="zh-binary-exportdesc"></span><span id="zh-binary-export"></span><span id="zh-index-9"></span><h2>导出 段<a class="headerlink" href="modules.html#zh-export-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>导出 段</em> 有编号7。
+它解码为 <a class="reference internal" href="../syntax/modules.html#zh-syntax-export"><span class="std std-ref">导出</span></a> 页:1 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-exportsec}{\mathtt{exportsec}}} &amp; ::= &amp; {{\mathit{ex}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{7}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-export}{\mathtt{export}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{ex}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-export}{\mathtt{export}}} &amp; ::= &amp; {\mathit{nm}}{:}{\href{../binary/values.html#binary-name}{\mathtt{name}}}~~{\mathit{xx}}{:}{\href{../binary/modules.html#binary-externidx}{\mathtt{externidx}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-export}{\mathsf{export}}~{\mathit{nm}}~{\mathit{xx}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-start-section">
+<span id="zh-binary-startsec"></span><span id="zh-binary-start"></span><span id="zh-index-10"></span><h2>开始 段<a class="headerlink" href="modules.html#zh-start-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>开始 段</em> 有编号8。
+解码为可选 <a class="reference internal" href="../syntax/modules.html#zh-syntax-start"><span class="std std-ref">启动函数</span></a> 页:1 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-startsec}{\mathtt{startsec}}} &amp; ::= &amp; {{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{8}({\href{../binary/modules.html#binary-start}{\mathtt{start}}}) &amp; \quad\Rightarrow\quad{} &amp; {{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?} \\
+&amp; {\href{../binary/modules.html#binary-start}{\mathtt{start}}} &amp; ::= &amp; x{:}{\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/modules.html#syntax-start}{\mathsf{start}}~x) \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-element-section">
+<span id="zh-binary-elemkind"></span><span id="zh-binary-elemsec"></span><span id="zh-binary-elem"></span><span id="zh-index-11"></span><h2>元素 段<a class="headerlink" href="modules.html#zh-element-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>元素 段</em> 有编号9。
+它解码为 <a class="reference internal" href="../syntax/modules.html#zh-syntax-elem"><span class="std std-ref">元素段</span></a> A 定义 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-elemsec}{\mathtt{elemsec}}} &amp; ::= &amp; {{\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{9}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-elem}{\mathtt{elem}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-elemkind}{\mathtt{elemkind}}} &amp; ::= &amp; \mathtt{0x00} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{func}} \\
+&amp; {\href{../binary/modules.html#binary-elem}{\mathtt{elem}}} &amp; ::= &amp; 0{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~e_o{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{y^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~(\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{func}})~{(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}~y)^\ast}~(\href{../syntax/modules.html#syntax-elemmode}{\mathsf{active}}~0~e_o) \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 1{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{\mathit{rt}}{:}{\href{../binary/modules.html#binary-elemkind}{\mathtt{elemkind}}}~~{y^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}~y)^\ast}~\href{../syntax/modules.html#syntax-elemmode}{\mathsf{passive}} \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 2{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~x{:}{\href{../binary/modules.html#binary-tableidx}{\mathtt{tableidx}}}~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{\mathit{rt}}{:}{\href{../binary/modules.html#binary-elemkind}{\mathtt{elemkind}}}~~{y^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}~y)^\ast}~(\href{../syntax/modules.html#syntax-elemmode}{\mathsf{active}}~x~e) \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 3{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{\mathit{rt}}{:}{\href{../binary/modules.html#binary-elemkind}{\mathtt{elemkind}}}~~{y^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-funcidx}{\mathtt{funcidx}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{(\href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}~y)^\ast}~\href{../syntax/modules.html#syntax-elemmode}{\mathsf{declare}} \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 4{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~e_{\mathsf{o}}{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{e^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~(\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{func}})~{e^\ast}~(\href{../syntax/modules.html#syntax-elemmode}{\mathsf{active}}~0~e_{\mathsf{o}}) \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 5{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{\mathit{rt}}{:}{\href{../binary/types.html#binary-reftype}{\mathtt{reftype}}}~~{e^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{e^\ast}~\href{../syntax/modules.html#syntax-elemmode}{\mathsf{passive}} \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 6{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~x{:}{\href{../binary/modules.html#binary-tableidx}{\mathtt{tableidx}}}~~e_{\mathsf{o}}{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{\mathit{rt}}{:}{\href{../binary/types.html#binary-reftype}{\mathtt{reftype}}}~~{e^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{e^\ast}~(\href{../syntax/modules.html#syntax-elemmode}{\mathsf{active}}~x~e_{\mathsf{o}}) \\
+\end{array}
+} \\
+&amp; &amp; | &amp; 7{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{\mathit{rt}}{:}{\href{../binary/types.html#binary-reftype}{\mathtt{reftype}}}~~{e^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}) &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\mathit{rt}}~{e^\ast}~\href{../syntax/modules.html#syntax-elemmode}{\mathsf{declare}} \\
+\end{array}
+} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>初始数据 整数 可以解释为位域。
+比特 0 将被动或声明部分与主动部分区分开来,
+bit 1 表示活动部分存在明确的表格索引,否则将被动部分与声明部分区分开来,
+位 2 表示元素类型和元素的使用 <a class="reference internal" href="instructions.html#zh-binary-expr"><span class="std std-ref">表达式</span></a> 而不是元素种类和元素指数。</p>
+<p>在将来的版本中可能添加额外的元素类型 WebAssembly.</p>
+</div>
+</section>
+<section id="zh-code-section">
+<span id="zh-binary-codesec"></span><span id="zh-binary-local"></span><span id="zh-binary-func"></span><span id="zh-binary-code"></span><span id="zh-index-12"></span><h2>代码 段<a class="headerlink" href="modules.html#zh-code-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>代码 段</em> 有编号10。
+它解码为 <em>代码</em> 列表中的对 <a class="reference internal" href="../syntax/conventions.html#zh-syntax-list"><span class="std std-ref">当地人</span></a> 和 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-expr"><span class="std std-ref">表达式</span></a>。 。 。
+他们代表着人类的身体 <a class="reference internal" href="../syntax/modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a> A 定义 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>。 。 。
+那个 类型 分别编码于 <a class="reference internal" href="modules.html#zh-binary-funcsec"><span class="std std-ref">函数 段</span></a>.</p>
+<p>那个 编码 每个代码条目由</p>
+<ul class="simple">
+<li><p>联合国 <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}}\)</span> <em>长度</em> 函数代码 字节,</p></li>
+<li><p>实际数 <em>函数代码</em>,反过来又包括</p>
+<ul>
+<li><p>声明 <em>当地人</em>,</p></li>
+<li><p>函数 <em>机构</em> 作为 <a class="reference internal" href="instructions.html#zh-binary-expr"><span class="std std-ref">表达式</span></a>.</p></li>
+</ul>
+</li>
+</ul>
+<p>当地申报被压缩成一个清单,其条目包括:</p>
+<ul class="simple">
+<li><p>a <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}}\)</span> <em>计数</em>,</p></li>
+<li><p>a <a class="reference internal" href="types.html#zh-binary-valtype"><span class="std std-ref">值类型</span></a>,</p></li>
+</ul>
+<p>调音 <em>计数</em> 当地人 值类型.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-codesec}{\mathtt{codesec}}} &amp; ::= &amp; {{\mathit{code}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{10}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-code}{\mathtt{code}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{code}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-code}{\mathtt{code}}} &amp; ::= &amp; {\mathit{len}}{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{\mathit{code}}{:}{\href{../binary/modules.html#binary-func}{\mathtt{func}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{code}} &amp; \quad \mbox{if}~ {\mathit{len}} = ||{\href{../binary/modules.html#binary-func}{\mathtt{func}}}|| \\
+&amp; {\href{../binary/modules.html#binary-func}{\mathtt{func}}} &amp; ::= &amp; {{{\mathit{loc}}^\ast}^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-local}{\mathtt{locals}}})~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}} &amp; \quad\Rightarrow\quad{} &amp; ({\href{../syntax/conventions.html#notation-concat}{\bigoplus}}\, {{{\mathit{loc}}^\ast}^\ast}, e) &amp; \quad \mbox{if}~ {|{\href{../syntax/conventions.html#notation-concat}{\bigoplus}}\, {{{\mathit{loc}}^\ast}^\ast}|} &lt; {2^{32}} \\
+&amp; {\href{../binary/modules.html#binary-local}{\mathtt{locals}}} &amp; ::= &amp; n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~t{:}{\href{../binary/types.html#binary-valtype}{\mathtt{valtype}}} &amp; \quad\Rightarrow\quad{} &amp; {(\href{../syntax/modules.html#syntax-local}{\mathsf{local}}~t)^{n}} \\
+\end{array}\end{split}\]</div>
+<p>在这里, <span class="math notranslate nohighlight">\({\mathit{code}}\)</span> 对对的距离 <span class="math notranslate nohighlight">\(({{\href{../syntax/modules.html#syntax-local}{\mathit{local}}}^\ast}, {\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}})\)</span>。 。 。
+任意一个序列长度超出最大大小的编码 <a class="reference internal" href="../syntax/conventions.html#zh-syntax-list"><span class="std std-ref">列表</span></a> 是错的。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>喜欢 <a class="reference internal" href="modules.html#zh-binary-section"><span class="std std-ref">段</span></a>代码 <span class="math notranslate nohighlight">\({\mathit{size}}\)</span> 不需要用于 解码,但可在通过二进制导航时用于跳过函数。
+那个 模块 如果一个大小与相应的函数代码的长度不匹配,则其结构不正确。</p>
+</div>
+</section>
+<section id="zh-data-section">
+<span id="zh-binary-datasec"></span><span id="zh-binary-data"></span><span id="zh-index-13"></span><h2>数据 段<a class="headerlink" href="modules.html#zh-data-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>数据 段</em> 有编号11。
+它解码为 <a class="reference internal" href="../syntax/modules.html#zh-syntax-data"><span class="std std-ref">数据段</span></a> A 定义 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-datasec}{\mathtt{datasec}}} &amp; ::= &amp; {{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{11}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-data}{\mathtt{data}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-data}{\mathtt{data}}} &amp; ::= &amp; 0{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{b^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/values.html#binary-byte}{\mathtt{byte}}}) &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-data}{\mathsf{data}}~{b^\ast}~(\href{../syntax/modules.html#syntax-datamode}{\mathsf{active}}~0~e) \\
+&amp; &amp; | &amp; 1{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~{b^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/values.html#binary-byte}{\mathtt{byte}}}) &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-data}{\mathsf{data}}~{b^\ast}~\href{../syntax/modules.html#syntax-datamode}{\mathsf{passive}} \\
+&amp; &amp; | &amp; 2{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}}~~x{:}{\href{../binary/modules.html#binary-memidx}{\mathtt{memidx}}}~~e{:}{\href{../binary/instructions.html#binary-expr}{\mathtt{expr}}}~~{b^\ast}{:}{\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/values.html#binary-byte}{\mathtt{byte}}}) &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-data}{\mathsf{data}}~{b^\ast}~(\href{../syntax/modules.html#syntax-datamode}{\mathsf{active}}~x~e) \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>初始数据 整数 可以解释为位域。
+Bit 0 表示被动段,
+bit 1 表示活动段存在明确的内存索引。</p>
+</div>
+</section>
+<section id="zh-data-count-section">
+<span id="zh-binary-datacnt"></span><span id="zh-binary-datacntsec"></span><span id="zh-index-14"></span><h2>数据数 段<a class="headerlink" href="modules.html#zh-data-count-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>数据数 段</em> 拥有 id 12。
+它解码为可选 <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}}\)</span> 表示数字的数 <a class="reference internal" href="../syntax/modules.html#zh-syntax-data"><span class="std std-ref">数据段</span></a> 输入 <a class="reference internal" href="modules.html#zh-binary-datasec"><span class="std std-ref">数据 段</span></a>。 。 。
+如果此计数与长度不符 数据段 列表中, 模块 是错的。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-datacntsec}{\mathtt{datacntsec}}} &amp; ::= &amp; {n^?}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{12}({\href{../binary/modules.html#binary-datacnt}{\mathtt{datacnt}}}) &amp; \quad\Rightarrow\quad{} &amp; {n^?} \\
+&amp; {\href{../binary/modules.html#binary-datacnt}{\mathtt{datacnt}}} &amp; ::= &amp; n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1591#1{{\mathtt{u}#1}}\mathdef1591{\mathtt{32}}}} &amp; \quad\Rightarrow\quad{} &amp; n \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>数据计数 段 用于简化单通道 验证自
+数据 段 代码后发生 段,则 <span class="math notranslate nohighlight">\(\mathsf{memory{.}init}\)</span> 和
+<span class="math notranslate nohighlight">\(\mathsf{data{.}drop}\)</span> 指令 无法检查数据
+段索引在数据之前有效 段 已读。 数据计数 段
+在代码之前发生 段,所以一个单通道验证器可以使用此计数
+而不是推迟 验证.</p>
+</div>
+</section>
+<section id="zh-tag-section">
+<span id="zh-binary-tagsec"></span><span id="zh-binary-tag"></span><span id="zh-index-15"></span><h2>标记 段<a class="headerlink" href="modules.html#zh-tag-section" title="Link to this heading">¶</a></h2>
+<p>那个 <em>标签 段</em> 有编号13。
+它解码为 <a class="reference internal" href="../syntax/modules.html#zh-syntax-tag"><span class="std std-ref">标记</span></a> A 定义 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-tagsec}{\mathtt{tagsec}}} &amp; ::= &amp; {{\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}^\ast}{:}{{\href{../binary/modules.html#binary-section}{\mathtt{section}}}}_{13}({\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\href{../binary/modules.html#binary-tag}{\mathtt{tag}}})) &amp; \quad\Rightarrow\quad{} &amp; {{\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}^\ast} \\
+&amp; {\href{../binary/modules.html#binary-tag}{\mathtt{tag}}} &amp; ::= &amp; {\mathit{jt}}{:}{\href{../binary/types.html#binary-tagtype}{\mathtt{tagtype}}} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/modules.html#syntax-tag}{\mathsf{tag}}~{\mathit{jt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-binary-module">
+<span id="zh-binary-version"></span><span id="zh-binary-magic"></span><span id="zh-index-16"></span><span id="zh-id1"></span><h2>模块<a class="headerlink" href="modules.html#zh-binary-module" title="Link to this heading">¶</a></h2>
+<p>那个 编码 页:1 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a> 以包含4字节魔法数的序言(字符串)开头 <span class="math notranslate nohighlight">\(\def\mathdef1615#1{\mbox{‘}\mathtt{#1}\mbox{’}}\mathdef1615{\backslash0asm}\)</span>)和一个版本字段。
+当前版本 WebAssembly 二进制格式 为 1.</p>
+<p>序言后面是下列顺序: <a class="reference internal" href="modules.html#zh-binary-section"><span class="std std-ref">段</span></a>.
+<a class="reference internal" href="modules.html#zh-binary-customsec"><span class="std std-ref">自定义段</span></a> 可在此序列的任何地方插入,
+其他时 段 必须最多一次按规定顺序进行。
+全体 段 可以是空的。</p>
+<p>列表长度( 可能是空的) <a class="reference internal" href="modules.html#zh-binary-funcsec"><span class="std std-ref">函数</span></a> 和 <a class="reference internal" href="modules.html#zh-binary-codesec"><span class="std std-ref">代码</span></a> 段 必须匹配。</p>
+<p>同样,可选数据计数必须匹配 <a class="reference internal" href="modules.html#zh-binary-datasec"><span class="std std-ref">数据段</span></a> 列表中选项。
+此外,如果有的话,它必须在场。 <a class="reference internal" href="../syntax/modules.html#zh-syntax-dataidx"><span class="std std-ref">数据索引</span></a> 在代码中发生 段.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/modules.html#binary-magic}{\mathtt{magic}}} &amp; ::= &amp; \mathtt{0x00}~~\mathtt{0x61}~~\mathtt{0x73}~~\mathtt{0x6D} \\
+&amp; {\href{../binary/modules.html#binary-version}{\mathtt{version}}} &amp; ::= &amp; \mathtt{0x01}~~\mathtt{0x00}~~\mathtt{0x00}~~\mathtt{0x00} \\
+&amp; {\href{../binary/modules.html#binary-module}{\mathtt{module}}} &amp; ::= &amp; \begin{array}[t]{@{}l@{}} {\href{../binary/modules.html#binary-magic}{\mathtt{magic}}}~~{\href{../binary/modules.html#binary-version}{\mathtt{version}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-type}{\mathit{type}}}^\ast}{:}{\href{../binary/modules.html#binary-typesec}{\mathtt{typesec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-import}{\mathit{import}}}^\ast}{:}{\href{../binary/modules.html#binary-importsec}{\mathtt{importsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}^\ast}{:}{\href{../binary/modules.html#binary-funcsec}{\mathtt{funcsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-table}{\mathit{table}}}^\ast}{:}{\href{../binary/modules.html#binary-tablesec}{\mathtt{tablesec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast}{:}{\href{../binary/modules.html#binary-memsec}{\mathtt{memsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}^\ast}{:}{\href{../binary/modules.html#binary-tagsec}{\mathtt{tagsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-global}{\mathit{global}}}^\ast}{:}{\href{../binary/modules.html#binary-globalsec}{\mathtt{globalsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-export}{\mathit{export}}}^\ast}{:}{\href{../binary/modules.html#binary-exportsec}{\mathtt{exportsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?}{:}{\href{../binary/modules.html#binary-startsec}{\mathtt{startsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}^\ast}{:}{\href{../binary/modules.html#binary-elemsec}{\mathtt{elemsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{n^?}{:}{\href{../binary/modules.html#binary-datacntsec}{\mathtt{datacntsec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{({{\href{../syntax/modules.html#syntax-local}{\mathit{local}}}^\ast}, {\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}})^\ast}{:}{\href{../binary/modules.html#binary-codesec}{\mathtt{codesec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast}~~{{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast}{:}{\href{../binary/modules.html#binary-datasec}{\mathtt{datasec}}} \\
+  {{\href{../binary/modules.html#binary-customsec}{\mathtt{customsec}}}^\ast} \end{array} &amp; \quad\Rightarrow\quad{} &amp; &amp; \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}l@{}l@{}}
+\href{../syntax/modules.html#syntax-module}{\mathsf{module}}~{{\href{../syntax/modules.html#syntax-type}{\mathit{type}}}^\ast}~{{\href{../syntax/modules.html#syntax-import}{\mathit{import}}}^\ast}~{{\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}^\ast}~{{\href{../syntax/modules.html#syntax-global}{\mathit{global}}}^\ast}~{{\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}^\ast}~{{\href{../syntax/modules.html#syntax-table}{\mathit{table}}}^\ast}~{{\href{../syntax/modules.html#syntax-func}{\mathit{func}}}^\ast}~{{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast}~{{\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}^\ast}~{{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?}~{{\href{../syntax/modules.html#syntax-export}{\mathit{export}}}^\ast} &amp; &amp; \\
+ \multicolumn{3}{@{}l@{}}{\quad
+\begin{array}[t]{@{}l@{}}
+\quad
+\begin{array}[t]{@{}l@{}}
+\mbox{if}~ (n = {|{{\href{../syntax/modules.html#syntax-data}{\mathit{data}}}^\ast}|})^? \\
+{\land}~ ({n^?} \neq \epsilon \lor {\href{../syntax/modules.html#syntax-dataidx}{\mathrm{dataidx}}}({{\href{../syntax/modules.html#syntax-func}{\mathit{func}}}^\ast}) = \epsilon) \\
+{\land}~ ({\href{../syntax/modules.html#syntax-func}{\mathit{func}}} = \href{../syntax/modules.html#syntax-func}{\mathsf{func}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{{\href{../syntax/modules.html#syntax-local}{\mathit{local}}}^\ast}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}})^\ast \\
+\end{array} \\
+\end{array}
+} \\
+\end{array}
+} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>该版本 WebAssembly 二进制格式 未来可能增加
+如果必须修改格式,则必须修改格式。
+然而,预计这种变化很少发生,如果有的话。
+那个 二进制格式 意在可扩展,
+因此,可以增加未来的特性,而不增加其版本。</p>
+</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/binary/modules.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

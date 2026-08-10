@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Instructions  / 指令  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="modules.html" rel="next" title="Modules"/>
+<link href="types.html" rel="prev" title="Types"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conventions.html"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="instructions.html#"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/syntax/instructions.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="instructions">
+<span id="syntax-instr"></span><span id="index-0"></span><h1>Instructions<a class="headerlink" href="instructions.html#instructions" title="Link to this heading">¶</a></h1>
+<p>WebAssembly code consists of sequences of <em>instructions</em>.
+Its computational model is based on a <em>stack machine</em> in that instructions manipulate values on an implicit <em>operand stack</em>,
+consuming (popping) argument values and producing or returning (pushing) result values.</p>
+<p>In addition to dynamic operands from the stack, some instructions also have static <em>immediate</em> arguments,
+typically <a class="reference internal" href="modules.html#syntax-index"><span class="std std-ref">indices</span></a> or type annotations,
+which are part of the instruction itself.</p>
+<p>Some instructions are <a class="reference internal" href="instructions.html#syntax-instr-control"><span class="std std-ref">structured</span></a> in that they contain nested sequences of instructions.</p>
+<p>The following sections group instructions into a number of different categories.</p>
+<p>The syntax of instruction is further <a class="reference internal" href="../exec/runtime.html#syntax-instr-admin"><span class="std std-ref">extended</span></a> with additional forms for the purpose of specifying <a class="reference internal" href="../exec/index.html#exec"><span class="std std-ref">execution</span></a>.</p>
+<section id="parametric-instructions">
+<span id="syntax-instr-parametric"></span><span id="index-1"></span><h2>Parametric Instructions<a class="headerlink" href="instructions.html#parametric-instructions" title="Link to this heading">¶</a></h2>
+<p>Instructions in this group can operate on operands of any <a class="reference internal" href="types.html#syntax-valtype"><span class="std std-ref">value type</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{nop}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{unreachable}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-parametric}{\mathsf{drop}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-parametric}{\mathsf{select}}~{({{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}^\ast})^?} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{nop}\)</span> instruction does nothing.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{unreachable}\)</span> instruction causes an unconditional <a class="reference internal" href="../intro/overview.html#trap"><span class="std std-ref">trap</span></a>.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{drop}\)</span> instruction simply throws away a single operand.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{select}\)</span> instruction selects one of its first two operands based on whether its third operand is zero or not.
+It may include a <a class="reference internal" href="types.html#syntax-valtype"><span class="std std-ref">value type</span></a> determining the type of these operands.
+If missing, the operands must be of <a class="reference internal" href="types.html#syntax-numtype"><span class="std std-ref">numeric</span></a> or <a class="reference internal" href="types.html#syntax-vectype"><span class="std std-ref">vector</span></a> type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In future versions of WebAssembly, the type annotation on <span class="math notranslate nohighlight">\(\mathsf{select}\)</span> may allow for more than a single value being selected at the same time.</p>
+</div>
+</section>
+<section id="control-instructions">
+<span id="exception"></span><span id="syntax-instr-control"></span><span id="syntax-instrs"></span><span id="syntax-catch"></span><span id="syntax-try-table"></span><span id="syntax-throw-ref"></span><span id="syntax-throw"></span><span id="syntax-return-call-indirect"></span><span id="syntax-return-call-ref"></span><span id="syntax-return-call"></span><span id="syntax-return"></span><span id="syntax-call-indirect"></span><span id="syntax-call-ref"></span><span id="syntax-call"></span><span id="syntax-br-on-cast-fail"></span><span id="syntax-br-on-cast"></span><span id="syntax-br-on-non-null"></span><span id="syntax-br-on-null"></span><span id="syntax-br-table"></span><span id="syntax-br-if"></span><span id="syntax-br"></span><span id="syntax-if"></span><span id="syntax-loop"></span><span id="syntax-block"></span><span id="syntax-unreachable"></span><span id="syntax-nop"></span><span id="index-2"></span><h2>Control Instructions<a class="headerlink" href="instructions.html#control-instructions" title="Link to this heading">¶</a></h2>
+<p>Instructions in this group affect the flow of control.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{block}}~{\href{../syntax/types.html#syntax-blocktype}{\mathit{blocktype}}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{loop}}~{\href{../syntax/types.html#syntax-blocktype}{\mathit{blocktype}}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{if}}~{\href{../syntax/types.html#syntax-blocktype}{\mathit{blocktype}}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast}~\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{else}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_if}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_table}}~{{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}}^\ast}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_null}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_non\_null}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_cast}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_cast\_fail}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{call}}~{\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{call\_ref}}~{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{call\_indirect}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}}~{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return\_call}}~{\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return\_call\_ref}}~{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return\_call\_indirect}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}}~{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{throw}}~{\href{../syntax/modules.html#syntax-tagidx}{\mathit{tagidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{throw\_ref}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{try\_table}}~{\href{../syntax/types.html#syntax-blocktype}{\mathit{blocktype}}}~{\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/instructions.html#syntax-catch}{\mathit{catch}}})~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; \dots \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-catch}{\mathit{catch}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{catch}}~{\href{../syntax/modules.html#syntax-tagidx}{\mathit{tagidx}}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{catch\_ref}}~{\href{../syntax/modules.html#syntax-tagidx}{\mathit{tagidx}}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{catch\_all}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{catch\_all\_ref}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+\end{array}\end{split}\]</div>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{block}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{loop}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{if}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{try\_table}\)</span> instructions are <em>structured</em> instructions.
+They bracket nested sequences of instructions, called <em>blocks</em>.
+As the grammar prescribes, they must be well-nested.</p>
+<p>A structured instruction can consume <em>input</em> and produce <em>output</em> on the operand stack according to its annotated <a class="reference internal" href="types.html#syntax-blocktype"><span class="std std-ref">block type</span></a>.</p>
+<p>Each structured control instruction introduces an implicit <em>label</em>.
+Labels are targets for branch instructions that reference them with <a class="reference internal" href="modules.html#syntax-labelidx"><span class="std std-ref">label indices</span></a>.
+Unlike with other <a class="reference internal" href="modules.html#syntax-index"><span class="std std-ref">index spaces</span></a>, indexing of labels is relative by nesting depth,
+that is, label <span class="math notranslate nohighlight">\(0\)</span> refers to the innermost structured control instruction enclosing the referring branch instruction,
+while increasing indices refer to those farther out.
+Consequently, labels can only be referenced from <em>within</em> the associated structured control instruction.
+This also implies that branches can only be directed outwards,
+“breaking” from the block of the control construct they target.
+The exact effect depends on that control construct.
+In case of <span class="math notranslate nohighlight">\(\mathsf{block}\)</span> or <span class="math notranslate nohighlight">\(\mathsf{if}\)</span> it is a <em>forward jump</em>,
+resuming execution after the end of the block.
+In case of <span class="math notranslate nohighlight">\(\mathsf{loop}\)</span> it is a <em>backward jump</em> to the beginning of the loop.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This enforces <em>structured control flow</em>.
+Intuitively, a branch targeting a <span class="math notranslate nohighlight">\(\mathsf{block}\)</span> or <span class="math notranslate nohighlight">\(\mathsf{if}\)</span> behaves like a <span class="math notranslate nohighlight">\(\mathsf{break}\)</span> statement in most C-like languages,
+while a branch targeting a <span class="math notranslate nohighlight">\(\mathsf{loop}\)</span> behaves like a <span class="math notranslate nohighlight">\(\mathsf{continue}\)</span> statement.</p>
+</div>
+<p>Branch instructions come in several flavors:
+<span class="math notranslate nohighlight">\(\mathsf{br}\)</span> performs an unconditional branch,
+<span class="math notranslate nohighlight">\(\mathsf{br\_if}\)</span> performs a conditional branch,
+and <span class="math notranslate nohighlight">\(\mathsf{br\_table}\)</span> performs an indirect branch through an operand indexing into the label list that is an immediate to the instruction, or to a default target if the operand is out of bounds.
+The <span class="math notranslate nohighlight">\(\mathsf{br\_on\_null}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{br\_on\_non\_null}\)</span> instructions check whether a reference operand is <a class="reference internal" href="../exec/runtime.html#syntax-nullref"><span class="std std-ref">null</span></a> and branch if that is the case or not the case, respectively.
+Similarly, <span class="math notranslate nohighlight">\(\mathsf{br\_on\_cast}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{br\_on\_cast\_fail}\)</span> attempt a downcast on a reference operand and branch if that succeeds, or fails, respectively.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{return}\)</span> instruction is a shortcut for an unconditional branch to the outermost block, which implicitly is the body of the current function.
+Taking a branch <em>unwinds</em> the operand stack up to the height where the targeted structured control instruction was entered.
+However, branches may additionally consume operands themselves, which they push back on the operand stack after unwinding.
+Forward branches require operands according to the output of the targeted block’s type, i.e., represent the values produced by the terminated block.
+Backward branches require operands according to the input of the targeted block’s type, i.e., represent the values consumed by the restarted block.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{call}\)</span> instruction invokes another <a class="reference internal" href="modules.html#syntax-func"><span class="std std-ref">function</span></a>, consuming the necessary arguments from the stack and returning the result values of the call.
+The <span class="math notranslate nohighlight">\(\mathsf{call\_ref}\)</span> instruction invokes a function indirectly through a <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">function reference</span></a> operand.
+The <span class="math notranslate nohighlight">\(\mathsf{call\_indirect}\)</span> instruction calls a function indirectly through an operand indexing into a <a class="reference internal" href="modules.html#syntax-table"><span class="std std-ref">table</span></a> that is denoted by a <a class="reference internal" href="modules.html#syntax-tableidx"><span class="std std-ref">table index</span></a> and must contain <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">function references</span></a>.
+Since it may contain functions of heterogeneous type,
+the callee is dynamically checked against the <a class="reference internal" href="types.html#syntax-functype"><span class="std std-ref">function type</span></a> indexed by the instruction’s second immediate, and the call is aborted with a <a class="reference internal" href="../intro/overview.html#trap"><span class="std std-ref">trap</span></a> if it does not match.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{return\_call}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{return\_call\_ref}\)</span>, and <span class="math notranslate nohighlight">\(\mathsf{return\_call\_indirect}\)</span> instructions are <em>tail-call</em> variants of the previous ones.
+That is, they first return from the current function before actually performing the respective call.
+It is guaranteed that no sequence of nested calls using only these instructions can cause resource exhaustion due to hitting an <a class="reference internal" href="../appendix/implementation.html#impl-exec"><span class="std std-ref">implementation’s limit</span></a> on the number of active calls.</p>
+<p>The instructions <span class="math notranslate nohighlight">\(\mathsf{throw}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{throw\_ref}\)</span>, and <span class="math notranslate nohighlight">\(\mathsf{try\_table}\)</span> are concerned with <em>exceptions</em>.
+The <span class="math notranslate nohighlight">\(\mathsf{throw}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{throw\_ref}\)</span> instructions raise and reraise an exception, respectively, and transfers control to the innermost enclosing exception handler that has a matching catch clause.
+The <span class="math notranslate nohighlight">\(\mathsf{try\_table}\)</span> instruction installs an exception <em>handler</em> that handles exceptions as specified by its catch clauses.</p>
+</section>
+<section id="variable-instructions">
+<span id="syntax-instr-variable"></span><span id="index-3"></span><h2>Variable Instructions<a class="headerlink" href="instructions.html#variable-instructions" title="Link to this heading">¶</a></h2>
+<p>Variable instructions are concerned with access to <a class="reference internal" href="modules.html#syntax-local"><span class="std std-ref">local</span></a> or <a class="reference internal" href="modules.html#syntax-global"><span class="std std-ref">global</span></a> variables.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{local{.}get}}~{\href{../syntax/modules.html#syntax-localidx}{\mathit{localidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{local{.}set}}~{\href{../syntax/modules.html#syntax-localidx}{\mathit{localidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{local{.}tee}}~{\href{../syntax/modules.html#syntax-localidx}{\mathit{localidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{global{.}get}}~{\href{../syntax/modules.html#syntax-globalidx}{\mathit{globalidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{global{.}set}}~{\href{../syntax/modules.html#syntax-globalidx}{\mathit{globalidx}}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>These instructions get or set the values of respective variables.
+The <span class="math notranslate nohighlight">\(\mathsf{local{.}tee}\)</span> instruction is like <span class="math notranslate nohighlight">\(\mathsf{local{.}set}\)</span> but also returns its argument.</p>
+</section>
+<section id="table-instructions">
+<span id="syntax-table-fill"></span><span id="syntax-table-grow"></span><span id="syntax-table-size"></span><span id="syntax-table-set"></span><span id="syntax-table-get"></span><span id="syntax-instr-table"></span><span id="index-4"></span><h2>Table Instructions<a class="headerlink" href="instructions.html#table-instructions" title="Link to this heading">¶</a></h2>
+<p>Instructions in this group are concerned with tables <a class="reference internal" href="modules.html#syntax-table"><span class="std std-ref">table</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}get}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}set}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}size}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}grow}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}fill}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}copy}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}init}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}}~{\href{../syntax/modules.html#syntax-elemidx}{\mathit{elemidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{elem{.}drop}}~{\href{../syntax/modules.html#syntax-elemidx}{\mathit{elemidx}}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{table{.}get}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{table{.}set}\)</span> instructions load or store an element in a table, respectively.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{table{.}size}\)</span> instruction returns the current size of a table.
+The <span class="math notranslate nohighlight">\(\mathsf{table{.}grow}\)</span> instruction grows table by a given delta and returns the previous size, or <span class="math notranslate nohighlight">\({-1}\)</span> if enough space cannot be allocated.
+It also takes an initialization value for the newly allocated entries.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{table{.}fill}\)</span> instruction sets all entries in a range to a given value.
+The <span class="math notranslate nohighlight">\(\mathsf{table{.}copy}\)</span> instruction copies elements from a source table region to a possibly overlapping destination region; the first index denotes the destination.
+The <span class="math notranslate nohighlight">\(\mathsf{table{.}init}\)</span> instruction copies elements from a <a class="reference internal" href="modules.html#syntax-elem"><span class="std std-ref">passive element segment</span></a> into a table.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{elem{.}drop}\)</span> instruction prevents further use of a passive element segment. This instruction is intended to be used as an optimization hint. After an element segment is dropped its elements can no longer be retrieved, so the memory used by this segment may be freed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An additional instruction that accesses a table is the <a class="reference internal" href="instructions.html#syntax-instr-control"><span class="std std-ref">control instruction</span></a> <span class="math notranslate nohighlight">\(\mathsf{call\_indirect}\)</span>.</p>
+</div>
+</section>
+<section id="memory-instructions">
+<span id="syntax-instr-memory"></span><span id="syntax-lanewidth"></span><span id="syntax-vloadop"></span><span id="syntax-storeop"></span><span id="syntax-loadop"></span><span id="syntax-memarg"></span><span id="syntax-storen"></span><span id="syntax-loadn"></span><span id="index-5"></span><h2>Memory Instructions<a class="headerlink" href="instructions.html#memory-instructions" title="Link to this heading">¶</a></h2>
+<p>Instructions in this group are concerned with linear <a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memory</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{align}}~{\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}} ,  \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{offset}}~{\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em64}}} \} \\
+\end{array} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-loadop}{\mathit{loadop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; {{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} &lt; N \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-storeop}{\mathit{storeop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} &lt; N \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vloadop}{\mathit{vloadop}}}}_{{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}} &amp; ::= &amp; {{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} \cdot M = {|{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}|} / 2 \\
+&amp; &amp; | &amp; {{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{splat}}} \\
+&amp; &amp; | &amp; {{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{zero}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} \geq \mathsf{{\scriptstyle 32}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; {{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}}{{{{\href{../syntax/instructions.html#syntax-loadop}{\mathit{loadop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}}^?}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}} \\
+&amp; &amp; | &amp; {{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{store}}}{{{{\href{../syntax/instructions.html#syntax-storeop}{\mathit{storeop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}}^?}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}} \\
+&amp; &amp; | &amp; {{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}}{{{{\href{../syntax/instructions.html#syntax-vloadop}{\mathit{vloadop}}}}_{{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}}^?}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}} \\
+&amp; &amp; | &amp; {{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}}{{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{lane}}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}}~{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{store}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}} \\
+&amp; &amp; | &amp; {{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{store}}}{{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{lane}}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}}~{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}size}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}fill}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}copy}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}init}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/modules.html#syntax-dataidx}{\mathit{dataidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{data{.}drop}}~{\href{../syntax/modules.html#syntax-dataidx}{\mathit{dataidx}}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>Memory is accessed with <span class="math notranslate nohighlight">\(\mathsf{load}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{store}\)</span> instructions for the different <a class="reference internal" href="types.html#syntax-numtype"><span class="std std-ref">number types</span></a> and <a class="reference internal" href="types.html#syntax-vectype"><span class="std std-ref">vector types</span></a>.
+They all take a <a class="reference internal" href="modules.html#syntax-memidx"><span class="std std-ref">memory index</span></a> and a <em>memory argument</em> <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}}\)</span> that contains an address <em>offset</em> and the expected <em>alignment</em> (expressed as the exponent of a power of 2).</p>
+<p>Integer loads and stores can optionally specify a <em>storage size</em> <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}\)</span> that is smaller than the <a class="reference internal" href="types.html#syntax-numtype"><span class="std std-ref">bit width</span></a> of the respective value type.
+In the case of loads, a sign extension mode <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span> is then required to select appropriate behavior.</p>
+<p>Vector loads can specify a shape that is half the <a class="reference internal" href="types.html#syntax-valtype"><span class="std std-ref">bit width</span></a> of <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span>. Each lane is half its usual size, and the sign extension mode <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span> then specifies how the smaller lane is extended to the larger lane.
+Alternatively, vector loads can perform a <em>splat</em>, such that only a single lane of the specified storage size is loaded, and the result is duplicated to all lanes.</p>
+<p>The static address offset is added to the dynamic address operand, yielding a 33-bit or 65-bit <em>effective address</em> that is the zero-based index at which the memory is accessed.
+All values are read and written in <a class="reference external" href="https://en.wikipedia.org/wiki/Endianness#Little-endian">little endian</a> byte order.
+A <a class="reference internal" href="../intro/overview.html#trap"><span class="std std-ref">trap</span></a> results if any of the accessed memory bytes lies outside the address range implied by the memory’s current size.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{memory{.}size}\)</span> instruction returns the current size of a memory.
+The <span class="math notranslate nohighlight">\(\mathsf{memory{.}grow}\)</span> instruction grows a memory by a given delta and returns the previous size, or <span class="math notranslate nohighlight">\({-1}\)</span> if enough memory cannot be allocated.
+Both instructions operate in units of <a class="reference internal" href="../exec/runtime.html#page-size"><span class="std std-ref">page size</span></a>.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{memory{.}fill}\)</span> instruction sets all values in a region of memory to a given byte.
+The <span class="math notranslate nohighlight">\(\mathsf{memory{.}copy}\)</span> instruction copies data from a source memory region to a possibly overlapping destination region in another or the same memory; the first index denotes the destination.
+The <span class="math notranslate nohighlight">\(\mathsf{memory{.}init}\)</span> instruction copies data from a <a class="reference internal" href="modules.html#syntax-data"><span class="std std-ref">passive data segment</span></a> into a memory.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{data{.}drop}\)</span> instruction prevents further use of a passive data segment. This instruction is intended to be used as an optimization hint. After a data segment is dropped its data can no longer be retrieved, so the memory used by this segment may be freed.</p>
+</section>
+<section id="reference-instructions">
+<span id="syntax-instr-ref"></span><span id="syntax-ref-cast"></span><span id="syntax-ref-test"></span><span id="syntax-ref-eq"></span><span id="syntax-ref-as-non-null"></span><span id="syntax-ref-is-null"></span><span id="syntax-ref-func"></span><span id="syntax-ref-null"></span><span id="index-6"></span><h2>Reference Instructions<a class="headerlink" href="instructions.html#reference-instructions" title="Link to this heading">¶</a></h2>
+<p>Instructions in this group are concerned with accessing <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">references</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}~{\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}null}}~{\href{../syntax/types.html#syntax-heaptype}{\mathit{heaptype}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}is\_null}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}as\_non\_null}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}eq}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}test}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}cast}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{ref{.}null}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{ref{.}func}\)</span> instructions produce a <a class="reference internal" href="../exec/runtime.html#syntax-nullref"><span class="std std-ref">null</span></a> reference or a reference to a given function, respectively.</p>
+<p>The instruction <span class="math notranslate nohighlight">\(\mathsf{ref{.}is\_null}\)</span> checks for null,
+while <span class="math notranslate nohighlight">\(\mathsf{ref{.}as\_non\_null}\)</span> converts a <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">nullable</span></a> to a non-null one, and <a class="reference internal" href="../intro/overview.html#trap"><span class="std std-ref">traps</span></a> if it encounters null.</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{ref{.}eq}\)</span> compares two references.</p>
+<p>The instructions <span class="math notranslate nohighlight">\(\mathsf{ref{.}test}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{ref{.}cast}\)</span> test the <a class="reference internal" href="../exec/types.html#type-inst"><span class="std std-ref">dynamic type</span></a> of a reference operand.
+The former merely returns the result of the test,
+while the latter performs a downcast and <a class="reference internal" href="../intro/overview.html#trap"><span class="std std-ref">traps</span></a> if the operand’s type does not match.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <span class="math notranslate nohighlight">\(\mathsf{br\_on\_null}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{br\_on\_non\_null}\)</span> instructions provide versions of <span class="math notranslate nohighlight">\(\mathsf{ref{.}as\_non\_null}\)</span> that branch depending on the success or failure of a null test instead of trapping.
+Similarly, the <span class="math notranslate nohighlight">\(\mathsf{br\_on\_cast}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{br\_on\_cast\_fail}\)</span> instructions provides versions of <span class="math notranslate nohighlight">\(\mathsf{ref{.}cast}\)</span> that branch depending on the success of the downcast instead of trapping.</p>
+<p>An additional instruction operating on function references is the <a class="reference internal" href="instructions.html#syntax-instr-control"><span class="std std-ref">control instruction</span></a> <span class="math notranslate nohighlight">\(\mathsf{call\_ref}\)</span>.</p>
+</div>
+</section>
+<section id="aggregate-instructions">
+<span id="syntax-instr-extern"></span><span id="syntax-instr-i31"></span><span id="syntax-instr-array"></span><span id="syntax-instr-struct"></span><span id="syntax-instr-aggr"></span><span id="syntax-extern-convert-any"></span><span id="syntax-any-convert-extern"></span><span id="syntax-i31-get-u"></span><span id="syntax-i31-get-s"></span><span id="syntax-ref-i31"></span><span id="syntax-array-init-elem"></span><span id="syntax-array-init-data"></span><span id="syntax-array-copy"></span><span id="syntax-array-fill"></span><span id="syntax-array-len"></span><span id="syntax-array-set"></span><span id="syntax-array-get-u"></span><span id="syntax-array-get-s"></span><span id="syntax-array-get"></span><span id="syntax-array-new-elem"></span><span id="syntax-array-new-data"></span><span id="syntax-array-new-fixed"></span><span id="syntax-array-new-default"></span><span id="syntax-array-new"></span><span id="syntax-struct-set"></span><span id="syntax-struct-get-u"></span><span id="syntax-struct-get-s"></span><span id="syntax-struct-get"></span><span id="syntax-struct-new-default"></span><span id="syntax-struct-new"></span><span id="index-7"></span><h2>Aggregate Instructions<a class="headerlink" href="instructions.html#aggregate-instructions" title="Link to this heading">¶</a></h2>
+<p>Instructions in this group are concerned with creating and accessing <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">references</span></a> to <a class="reference internal" href="types.html#syntax-aggrtype"><span class="std std-ref">aggregate</span></a> types.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new\_default}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}get}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}^?}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-fieldidx}{\mathit{fieldidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}set}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-fieldidx}{\mathit{fieldidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_default}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_fixed}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_data}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-dataidx}{\mathit{dataidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_elem}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-elemidx}{\mathit{elemidx}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}get}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}^?}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}set}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}len}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}fill}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}copy}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}init\_data}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-dataidx}{\mathit{dataidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}init\_elem}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-elemidx}{\mathit{elemidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-i31}{\mathsf{ref{.}i\scriptstyle31}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-i31}{\mathsf{i{\scriptstyle31}{.}get}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{extern{.}convert\_any}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{any{.}convert\_extern}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>The instructions <span class="math notranslate nohighlight">\(\mathsf{struct{.}new}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{struct{.}new\_default}\)</span> allocate a new <a class="reference internal" href="types.html#syntax-structtype"><span class="std std-ref">structure</span></a>, initializing them either with operands or with default values.
+The remaining instructions on structs access individual fields,
+allowing for different sign extension modes in the case of <a class="reference internal" href="types.html#syntax-packtype"><span class="std std-ref">packed</span></a> storage types.</p>
+<p>Similarly, <a class="reference internal" href="types.html#syntax-arraytype"><span class="std std-ref">arrays</span></a> can be allocated either with an explicit initialization operand or a default value.
+Furthermore, <span class="math notranslate nohighlight">\(\mathsf{array{.}new\_fixed}\)</span> allocates an array with statically fixed size,
+and <span class="math notranslate nohighlight">\(\mathsf{array{.}new\_data}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{array{.}new\_elem}\)</span> allocate an array and initialize it from a <a class="reference internal" href="modules.html#syntax-data"><span class="std std-ref">data</span></a> or <a class="reference internal" href="modules.html#syntax-elem"><span class="std std-ref">element</span></a> segment, respectively.
+The instructions <span class="math notranslate nohighlight">\(\mathsf{array{.}get}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{array{.}get}~{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span>, and <span class="math notranslate nohighlight">\(\mathsf{array{.}set}\)</span> access individual slots,
+again allowing for different sign extension modes in the case of a <a class="reference internal" href="types.html#syntax-packtype"><span class="std std-ref">packed</span></a> storage type;
+<span class="math notranslate nohighlight">\(\mathsf{array{.}len}\)</span> produces the length of an array;
+<span class="math notranslate nohighlight">\(\mathsf{array{.}fill}\)</span> fills a specified slice of an array with a given value and <span class="math notranslate nohighlight">\(\mathsf{array{.}copy}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{array{.}init\_data}\)</span>, and <span class="math notranslate nohighlight">\(\mathsf{array{.}init\_elem}\)</span> copy elements to a specified slice of an array from a given array, data segment, or element segment, respectively.</p>
+<p>The instructions <span class="math notranslate nohighlight">\(\mathsf{ref{.}i{\scriptstyle 31}}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 31}{.}get}~{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span> convert between type <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 32}}\)</span> and an unboxed <a class="reference internal" href="types.html#syntax-i31"><span class="std std-ref">scalar</span></a>.</p>
+<p>The instructions <span class="math notranslate nohighlight">\(\mathsf{any{.}convert\_extern}\)</span> and <span class="math notranslate nohighlight">\(\mathsf{extern{.}convert\_any}\)</span> allow lossless conversion between references represented as type <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}})\)</span> and as <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}})\)</span>.</p>
+</section>
+<section id="numeric-instructions">
+<span id="syntax-instr-numeric"></span><span id="syntax-cvtop"></span><span id="syntax-relop"></span><span id="syntax-testop"></span><span id="syntax-binop"></span><span id="syntax-unop"></span><span id="syntax-const"></span><span id="syntax-num"></span><span id="syntax-sz"></span><span id="syntax-sx"></span><span id="index-8"></span><h2>Numeric Instructions<a class="headerlink" href="instructions.html#numeric-instructions" title="Link to this heading">¶</a></h2>
+<p>Numeric instructions provide basic operations over numeric <a class="reference internal" href="values.html#syntax-value"><span class="std std-ref">values</span></a> of specific <a class="reference internal" href="types.html#syntax-numtype"><span class="std std-ref">type</span></a>.
+These operations closely match respective operations available in hardware.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} &amp; ::= &amp; \mathsf{{\scriptstyle 8}} ~~|~~ \mathsf{{\scriptstyle 16}} ~~|~~ \mathsf{{\scriptstyle 32}} ~~|~~ \mathsf{{\scriptstyle 64}} \\
+&amp; {\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-sx}{\mathsf{u}} ~~|~~ \href{../syntax/instructions.html#syntax-sx}{\mathsf{s}} \\[0.8ex]
+&amp; {{\href{../exec/runtime.html#syntax-num}{\mathit{num}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; {{\href{../syntax/values.html#syntax-int}{\mathit{i}\kern-0.1em}}}{N} \\
+&amp; {{\href{../exec/runtime.html#syntax-num}{\mathit{num}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; {{\href{../syntax/values.html#syntax-float}{\mathit{f}\kern-0.15em}}}{N} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~{{\href{../exec/runtime.html#syntax-num}{\mathit{num}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} {.} {{\href{../syntax/instructions.html#syntax-unop}{\mathit{unop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} {.} {{\href{../syntax/instructions.html#syntax-binop}{\mathit{binop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} {.} {{\href{../syntax/instructions.html#syntax-testop}{\mathit{testop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} {.} {{\href{../syntax/instructions.html#syntax-relop}{\mathit{relop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}_1 {.} {{{\href{../syntax/instructions.html#syntax-cvtop}{\mathit{cvtop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}_2, {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}_1}}{\mathsf{\_}}{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}_2} \\
+&amp; &amp; | &amp; \dots \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-unop}{\mathit{unop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{clz}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ctz}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{popcnt}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{extend}}}{{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} &lt; N \\
+&amp; {{\href{../syntax/instructions.html#syntax-unop}{\mathit{unop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{abs}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{neg}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{sqrt}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ceil}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{floor}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{trunc}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{nearest}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-binop}{\mathit{binop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{sub}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{mul}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{div}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{rem}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{and}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{or}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{xor}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{shl}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{shr}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{rotl}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{rotr}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-binop}{\mathit{binop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{sub}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{mul}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{div}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{min}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{max}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{copysign}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-testop}{\mathit{testop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{eqz}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-relop}{\mathit{relop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{eq}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ne}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{lt}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{gt}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{le}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ge}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-relop}{\mathit{relop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{eq}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ne}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{lt}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{gt}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{le}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ge}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-cvtop}{\mathit{cvtop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1, {{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{extend}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N_1 &lt; N_2 \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{wrap}} &amp; \quad \mbox{if}~ N_1 &gt; N_2 \\
+&amp; {{\href{../syntax/instructions.html#syntax-cvtop}{\mathit{cvtop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1, {{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{convert}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{reinterpret}} &amp; \quad \mbox{if}~ N_1 = N_2 \\
+&amp; {{\href{../syntax/instructions.html#syntax-cvtop}{\mathit{cvtop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1, {{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{trunc}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{trunc\_sat}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{reinterpret}} &amp; \quad \mbox{if}~ N_1 = N_2 \\
+&amp; {{\href{../syntax/instructions.html#syntax-cvtop}{\mathit{cvtop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1, {{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{promote}} &amp; \quad \mbox{if}~ N_1 &lt; N_2 \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{demote}} &amp; \quad \mbox{if}~ N_1 &gt; N_2 \\
+\end{array}\end{split}\]</div>
+<p>Numeric instructions are divided by <a class="reference internal" href="types.html#syntax-numtype"><span class="std std-ref">number type</span></a>.
+For each type, several subcategories can be distinguished:</p>
+<ul class="simple">
+<li><p><em>Constants</em>: return a static constant.</p></li>
+<li><p><em>Unary operations</em>: consume one operand and produce one result of the respective type.</p></li>
+<li><p><em>Binary operations</em>: consume two operands and produce one result of the respective type.</p></li>
+<li><p><em>Tests</em>: consume one operand of the respective type and produce a Boolean integer result.</p></li>
+<li><p><em>Comparisons</em>: consume two operands of the respective type and produce a Boolean integer result.</p></li>
+<li><p><em>Conversions</em>: consume a value of one type and produce a result of another
+(the source type of the conversion is the one after the “<span class="math notranslate nohighlight">\(\mathsf{\_}\)</span>”).</p></li>
+</ul>
+<p>Some integer instructions come in two flavors,
+where a signedness annotation <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span> distinguishes whether the operands are to be <a class="reference internal" href="../exec/numerics.html#aux-signed"><span class="std std-ref">interpreted</span></a> as <a class="reference internal" href="values.html#syntax-uint"><span class="std std-ref">unsigned</span></a> or <a class="reference internal" href="values.html#syntax-sint"><span class="std std-ref">signed</span></a> integers.
+For the other integer instructions, the use of two’s complement for the signed interpretation means that they behave the same regardless of signedness.</p>
+</section>
+<section id="vector-instructions">
+<span id="syntax-instr-vec-relaxed"></span><span id="syntax-instr-vec"></span><span id="syntax-vcvtop"></span><span id="syntax-vextternop"></span><span id="syntax-vextbinop"></span><span id="syntax-vextunop"></span><span id="syntax-vternop"></span><span id="syntax-vbinop"></span><span id="syntax-vunop"></span><span id="syntax-vshiftop"></span><span id="syntax-vswizzlop"></span><span id="syntax-vrelop"></span><span id="syntax-vtestop"></span><span id="syntax-vvtestop"></span><span id="syntax-vvternop"></span><span id="syntax-vvbinop"></span><span id="syntax-vvunop"></span><span id="syntax-zero"></span><span id="syntax-half"></span><span id="syntax-shape"></span><span id="syntax-dim"></span><span id="syntax-lanetype"></span><span id="syntax-laneidx"></span><span id="index-9"></span><h2>Vector Instructions<a class="headerlink" href="instructions.html#vector-instructions" title="Link to this heading">¶</a></h2>
+<p>Vector instructions (also known as <em>SIMD</em> instructions, <em>single instruction multiple data</em>) provide basic operations over <a class="reference internal" href="values.html#syntax-value"><span class="std std-ref">values</span></a> of <a class="reference internal" href="types.html#syntax-vectype"><span class="std std-ref">vector type</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-lanetype}{\mathit{lanetype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} ~~|~~ {\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}} \\
+&amp; {\href{../syntax/instructions.html#syntax-dim}{\mathit{dim}}} &amp; ::= &amp; \mathsf{{\scriptstyle 1}} ~~|~~ \mathsf{{\scriptstyle 2}} ~~|~~ \mathsf{{\scriptstyle 4}} ~~|~~ \mathsf{{\scriptstyle 8}} ~~|~~ \mathsf{{\scriptstyle 16}} \\
+&amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} &amp; ::= &amp; {{\href{../syntax/instructions.html#syntax-lanetype}{\mathit{lanetype}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{{\href{../syntax/instructions.html#syntax-dim}{\mathit{dim}}}} &amp; \quad \mbox{if}~ {|{\href{../syntax/instructions.html#syntax-lanetype}{\mathit{lanetype}}}|} \cdot {\href{../syntax/instructions.html#syntax-dim}{\mathit{dim}}} = 128 \\
+&amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}) = {\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}} \\
+&amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{bshape}}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}) = \href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle8}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-half}{\mathit{half}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{low}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{high}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{zero}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}} &amp; ::= &amp; {\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em8}}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~{{\href{../exec/runtime.html#syntax-vec}{\mathit{vec}}}}_{{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} {.} {\href{../syntax/instructions.html#syntax-vvunop}{\mathit{vvunop}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} {.} {\href{../syntax/instructions.html#syntax-vvbinop}{\mathit{vvbinop}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} {.} {\href{../syntax/instructions.html#syntax-vvternop}{\mathit{vvternop}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} {.} {\href{../syntax/instructions.html#syntax-vvtestop}{\mathit{vvtestop}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} {.} {{\href{../syntax/instructions.html#syntax-vunop}{\mathit{vunop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} {.} {{\href{../syntax/instructions.html#syntax-vbinop}{\mathit{vbinop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} {.} {{\href{../syntax/instructions.html#syntax-vternop}{\mathit{vternop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} {.} {{\href{../syntax/instructions.html#syntax-vrelop}{\mathit{vtestop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} {.} {{\href{../syntax/instructions.html#syntax-vrelop}{\mathit{vrelop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}} {.} {{\href{../syntax/instructions.html#syntax-vshiftop}{\mathit{vshiftop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{bitmask}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{bshape}}} {.} {{\href{../syntax/instructions.html#syntax-vswizzlop}{\mathit{vswizzlop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{bshape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{bshape}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{shuffle}}~{{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}}^\ast} &amp; \quad \mbox{if}~ {|{{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}}^\ast}|} = {\href{../syntax/instructions.html#aux-dim}{\mathrm{dim}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{bshape}}}) \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1 {.} {{{\href{../syntax/instructions.html#syntax-vextunop}{\mathit{vextunop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2, {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1 {.} {{{\href{../syntax/instructions.html#syntax-vextbinop}{\mathit{vextbinop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2, {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1 {.} {{{\href{../syntax/instructions.html#syntax-vextternop}{\mathit{vextternop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2, {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2} \\
+&amp; &amp; | &amp; {{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{narrow}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ {|{\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2)|} = 2 \cdot {|{\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1)|} \leq \mathsf{{\scriptstyle 32}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}_1 {.} {{{\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}_2, {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}_1}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}_2} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{splat}} \\
+&amp; &amp; | &amp; {{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{extract\_lane}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}^?}}~{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}} &amp; \quad \mbox{if}~ {{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}^?} = \epsilon \Leftrightarrow {\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}) \in \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}~\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}}~\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle32}}~\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{replace\_lane}}~{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>Vector instructions have a naming convention involving a <em>shape</em> prefix that
+determines how their operands will be interpreted,
+written <span class="math notranslate nohighlight">\({t}{\mathsf{x}}{N}\)</span>, and consisting of a <em>lane type</em> <span class="math notranslate nohighlight">\(t\)</span>, a possibly <em>packed</em> <a class="reference internal" href="types.html#syntax-numtype"><span class="std std-ref">numeric type</span></a>, and its <em>dimension</em> <span class="math notranslate nohighlight">\(N\)</span>, which denotes the number of lanes of that type.
+Operations are performed point-wise on the values of each lane.</p>
+<p>Instructions prefixed with <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> do not involve a specific interpretation, and treat the <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> as either an <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{i\scriptstyle\kern-0.1em128}}}\)</span> value or a vector of <span class="math notranslate nohighlight">\(128\)</span> individual bits.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, the shape <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{\mathsf{{\scriptstyle 4}}}\)</span> interprets the operand
+as four <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{i\scriptstyle\kern-0.1em32}}}\)</span> values, packed into an <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{i\scriptstyle\kern-0.1em128}}}\)</span>.
+The bit width of the lane type <span class="math notranslate nohighlight">\(t\)</span> times <span class="math notranslate nohighlight">\(N\)</span> always is <span class="math notranslate nohighlight">\(128\)</span>.</p>
+</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-vvunop}{\mathit{vvunop}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{not}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-vvbinop}{\mathit{vvbinop}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{and}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{andnot}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{or}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{xor}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-vvternop}{\mathit{vvternop}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{bitselect}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-vvtestop}{\mathit{vvtestop}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{any\_true}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vunop}{\mathit{vunop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{abs}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{neg}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{popcnt}} &amp; \quad \mbox{if}~ N = \mathsf{{\scriptstyle 8}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vunop}{\mathit{vunop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{abs}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{neg}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{sqrt}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{ceil}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{floor}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{trunc}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{nearest}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vbinop}{\mathit{vbinop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{add}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{sub}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{add\_sat}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \leq \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{sub\_sat}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \leq \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{mul}} &amp; \quad \mbox{if}~ N \geq \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{avgr}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{u}}} &amp; \quad \mbox{if}~ N \leq \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{q{\scriptstyle15}mulr\_sat}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ N = \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_q15mulr}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ N = \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{min}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \leq \mathsf{{\scriptstyle 32}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{max}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \leq \mathsf{{\scriptstyle 32}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vbinop}{\mathit{vbinop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{add}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{sub}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{mul}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{div}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{min}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{max}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{pmin}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{pmax}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_min}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_max}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vternop}{\mathit{vternop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_laneselect}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vternop}{\mathit{vternop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_madd}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_nmadd}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vrelop}{\mathit{vtestop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{all\_true}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vrelop}{\mathit{vrelop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{eq}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{ne}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{lt}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \neq \mathsf{{\scriptstyle 64}} \lor {\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}} = \href{../syntax/instructions.html#syntax-sx}{\mathsf{s}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{gt}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \neq \mathsf{{\scriptstyle 64}} \lor {\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}} = \href{../syntax/instructions.html#syntax-sx}{\mathsf{s}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{le}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \neq \mathsf{{\scriptstyle 64}} \lor {\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}} = \href{../syntax/instructions.html#syntax-sx}{\mathsf{s}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{ge}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \neq \mathsf{{\scriptstyle 64}} \lor {\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}} = \href{../syntax/instructions.html#syntax-sx}{\mathsf{s}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vrelop}{\mathit{vrelop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{eq}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{ne}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{lt}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{gt}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{le}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{ge}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vswizzlop}{\mathit{vswizzlop}}}}_{{\href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle8}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{swizzle}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_swizzle}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vshiftop}{\mathit{vshiftop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{shl}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{shr}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vextunop}{\mathit{vextunop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{extadd\_pairwise}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ 16 \leq 2 \cdot N_1 = N_2 \leq \mathsf{{\scriptstyle 32}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vextbinop}{\mathit{vextbinop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{extmul}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ 2 \cdot N_1 = N_2 \geq \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{dot}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ 2 \cdot N_1 = N_2 = \mathsf{{\scriptstyle 32}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_dot}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ 2 \cdot N_1 = N_2 = \mathsf{{\scriptstyle 16}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vextternop}{\mathit{vextternop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_dot\_add}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ 4 \cdot N_1 = N_2 = \mathsf{{\scriptstyle 32}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{extend}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N_2 = 2 \cdot N_1 \\
+&amp; {{\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{convert}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}^?}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N_2 = N_1 = \mathsf{{\scriptstyle 32}} \land {{\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}^?} = \epsilon \lor N_2 = 2 \cdot N_1 \land {{\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}^?} = \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{low}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{trunc\_sat}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?}} &amp; \quad \mbox{if}~ N_1 = N_2 = \mathsf{{\scriptstyle 32}} \land {{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?} = \epsilon \lor N_1 = 2 \cdot N_2 \land {{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?} = \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{zero}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_trunc}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?}} &amp; \quad \mbox{if}~ N_1 = N_2 = \mathsf{{\scriptstyle 32}} \land {{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?} = \epsilon \lor N_1 = 2 \cdot N_2 \land {{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?} = \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{zero}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{demote}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{zero}}} &amp; \quad \mbox{if}~ N_1 = 2 \cdot N_2 \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{promote}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{low}}} &amp; \quad \mbox{if}~ 2 \cdot N_1 = N_2 \\
+\end{array}\end{split}\]</div>
+<p>Vector instructions can be grouped into several subcategories:</p>
+<ul class="simple">
+<li><p><em>Constants</em>: return a static constant.</p></li>
+<li><p><em>Unary Operations</em>: consume one <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> operand and produce one <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> result.</p></li>
+<li><p><em>Binary Operations</em>: consume two <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> operands and produce one <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> result.</p></li>
+<li><p><em>Ternary Operations</em>: consume three <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> operands and produce one <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> result.</p></li>
+<li><p><em>Tests</em>: consume one <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> operand and produce a Boolean integer result.</p></li>
+<li><p><em>Shifts</em>: consume a <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> operand and an <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 32}}\)</span> operand, producing one <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> result.</p></li>
+<li><p><em>Splats</em>: consume a value of numeric type and produce a <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> result of a specified shape.</p></li>
+<li><p><em>Extract lanes</em>: consume a <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> operand and return the numeric value in a given lane.</p></li>
+<li><p><em>Replace lanes</em>: consume a <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> operand and a numeric value for a given lane, and produce a <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> result.</p></li>
+</ul>
+<p>Some vector instructions have a signedness annotation <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span> which distinguishes whether the elements in the operands are to be <a class="reference internal" href="../exec/numerics.html#aux-signed"><span class="std std-ref">interpreted</span></a> as <a class="reference internal" href="values.html#syntax-uint"><span class="std std-ref">unsigned</span></a> or <a class="reference internal" href="values.html#syntax-sint"><span class="std std-ref">signed</span></a> integers.
+For the other vector instructions, the use of two’s complement for the signed interpretation means that they behave the same regardless of signedness.</p>
+<section id="conventions">
+<span id="aux-halfop"></span><span id="aux-zeroop"></span><span id="aux-dim"></span><span id="aux-lanetype"></span><h3>Conventions<a class="headerlink" href="instructions.html#conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The function <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}})\)</span> extracts the lane type of a shape.</p></li>
+<li><p>The function <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#aux-dim}{\mathrm{dim}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}})\)</span> extracts the dimension of a shape.</p></li>
+<li><p>The function <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#aux-zeroop}{\mathrm{zeroop}}}({\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}})\)</span> extracts the <span class="math notranslate nohighlight">\(\mathsf{zero}\)</span> flag from a vector conversion operator, or returns <span class="math notranslate nohighlight">\(\epsilon\)</span> if it does not contain any.</p></li>
+<li><p>The function <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#aux-halfop}{\mathrm{halfop}}}({\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}})\)</span> extracts the <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}\)</span> flag from a vector conversion operator, or returns <span class="math notranslate nohighlight">\(\epsilon\)</span> if it does not contain any.</p></li>
+</ul>
+</section>
+</section>
+<section id="expressions">
+<span id="syntax-expr"></span><span id="index-10"></span><h2>Expressions<a class="headerlink" href="instructions.html#expressions" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="modules.html#syntax-func"><span class="std std-ref">Function</span></a> bodies, initialization values for <a class="reference internal" href="modules.html#syntax-global"><span class="std std-ref">globals</span></a>, elements and offsets of <a class="reference internal" href="modules.html#syntax-elem"><span class="std std-ref">element</span></a> segments, and offsets of <a class="reference internal" href="modules.html#syntax-data"><span class="std std-ref">data</span></a> segments are given as expressions, which are sequences of <a class="reference internal" href="instructions.html#syntax-instr"><span class="std std-ref">instructions</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} &amp; ::= &amp; {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+\end{array}\end{split}\]</div>
+<p>In some places, validation <a class="reference internal" href="../valid/instructions.html#valid-constant"><span class="std std-ref">restricts</span></a> expressions to be <em>constant</em>, which limits the set of allowable instructions.</p>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/syntax/instructions.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-instructions">
+<span id="zh-syntax-instr"></span><span id="zh-index-0"></span><h1>指令<a class="headerlink" href="instructions.html#zh-instructions" title="Link to this heading">¶</a></h1>
+<p>WebAssembly 代码由下列序列组成: <em>指令</em>。 。 。
+其计算模型基于 <em>栈 机器</em> 在那个 指令 操纵 值 暗含着 <em>操作 栈</em>, (中文).
+消耗( 弹出) 参数 值 产生或返回(推)结果 值.</p>
+<p>除了来自 栈,一些 指令 还有静态 <em>立即数</em> 论据,
+常规 <a class="reference internal" href="modules.html#zh-syntax-index"><span class="std std-ref">指数</span></a> 或类型说明,
+部分内容 指令 它本身。</p>
+<p>有点 指令 已经 <a class="reference internal" href="instructions.html#zh-syntax-instr-control"><span class="std std-ref">结构化</span></a> 里面有巢状的序列, 指令.</p>
+<p>以下是: 段 组 指令 分为若干不同的类别。</p>
+<p>那个 语法 页:1 指令 更进一步 <a class="reference internal" href="../exec/runtime.html#zh-syntax-instr-admin"><span class="std std-ref">延长</span></a> 附加表格,以具体说明 <a class="reference internal" href="../exec/index.html#zh-exec"><span class="std std-ref">执行</span></a>.</p>
+<section id="zh-parametric-instructions">
+<span id="zh-syntax-instr-parametric"></span><span id="zh-index-1"></span><h2>参数指令<a class="headerlink" href="instructions.html#zh-parametric-instructions" title="Link to this heading">¶</a></h2>
+<p>指令 此组可以运行于任意 <a class="reference internal" href="types.html#zh-syntax-valtype"><span class="std std-ref">值类型</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{nop}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{unreachable}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-parametric}{\mathsf{drop}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-parametric}{\mathsf{select}}~{({{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}}^\ast})^?} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{nop}\)</span> 指令 什么也没做。</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{unreachable}\)</span> 指令 导致无条件 <a class="reference internal" href="../intro/overview.html#zh-trap"><span class="std std-ref">陷阱</span></a>.</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{drop}\)</span> 指令 只是丢掉一个操作。</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{select}\)</span> 指令 选择它的第一个两个操作符之一,基于它的第三个操作符是否为零。
+其中可包括: <a class="reference internal" href="types.html#zh-syntax-valtype"><span class="std std-ref">值类型</span></a> 确定这些操作的类型。
+如果缺少, 操作必须是 <a class="reference internal" href="types.html#zh-syntax-numtype"><span class="std std-ref">数字</span></a> 或 <a class="reference internal" href="types.html#zh-syntax-vectype"><span class="std std-ref">矢量</span></a> 类型。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>未来版本 WebAssembly,在 <span class="math notranslate nohighlight">\(\mathsf{select}\)</span> 可能允许同时选择一个以上的数值。</p>
+</div>
+</section>
+<section id="zh-control-instructions">
+<span id="zh-exception"></span><span id="zh-syntax-instr-control"></span><span id="zh-syntax-instrs"></span><span id="zh-syntax-catch"></span><span id="zh-syntax-try-table"></span><span id="zh-syntax-throw-ref"></span><span id="zh-syntax-throw"></span><span id="zh-syntax-return-call-indirect"></span><span id="zh-syntax-return-call-ref"></span><span id="zh-syntax-return-call"></span><span id="zh-syntax-return"></span><span id="zh-syntax-call-indirect"></span><span id="zh-syntax-call-ref"></span><span id="zh-syntax-call"></span><span id="zh-syntax-br-on-cast-fail"></span><span id="zh-syntax-br-on-cast"></span><span id="zh-syntax-br-on-non-null"></span><span id="zh-syntax-br-on-null"></span><span id="zh-syntax-br-table"></span><span id="zh-syntax-br-if"></span><span id="zh-syntax-br"></span><span id="zh-syntax-if"></span><span id="zh-syntax-loop"></span><span id="zh-syntax-block"></span><span id="zh-syntax-unreachable"></span><span id="zh-syntax-nop"></span><span id="zh-index-2"></span><h2>控制指令<a class="headerlink" href="instructions.html#zh-control-instructions" title="Link to this heading">¶</a></h2>
+<p>指令 在此组中影响控制流动。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{block}}~{\href{../syntax/types.html#syntax-blocktype}{\mathit{blocktype}}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{loop}}~{\href{../syntax/types.html#syntax-blocktype}{\mathit{blocktype}}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{if}}~{\href{../syntax/types.html#syntax-blocktype}{\mathit{blocktype}}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast}~\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{else}}~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_if}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_table}}~{{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}}^\ast}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_null}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_non\_null}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_cast}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{br\_on\_cast\_fail}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{call}}~{\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{call\_ref}}~{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{call\_indirect}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}}~{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return\_call}}~{\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return\_call\_ref}}~{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{return\_call\_indirect}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}}~{\href{../syntax/types.html#syntax-typeuse}{\mathit{typeuse}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{throw}}~{\href{../syntax/modules.html#syntax-tagidx}{\mathit{tagidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{throw\_ref}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{try\_table}}~{\href{../syntax/types.html#syntax-blocktype}{\mathit{blocktype}}}~{\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/instructions.html#syntax-catch}{\mathit{catch}}})~{{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+&amp; &amp; | &amp; \dots \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-catch}{\mathit{catch}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{catch}}~{\href{../syntax/modules.html#syntax-tagidx}{\mathit{tagidx}}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{catch\_ref}}~{\href{../syntax/modules.html#syntax-tagidx}{\mathit{tagidx}}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{catch\_all}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{catch\_all\_ref}}~{\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} \\
+\end{array}\end{split}\]</div>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{block}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{loop}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{if}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{try\_table}\)</span> 指令 已经 <em>结构化</em> 指令。 。 。
+他们的巢状序列 指令,调用 <em>块</em>。 。 。
+作为 语法 规定,必须善待他们。</p>
+<p>结构化 指令 可以消费 <em>投入</em> 生产 <em>产出</em> 运行中 栈 根据注解 <a class="reference internal" href="types.html#zh-syntax-blocktype"><span class="std std-ref">块类型</span></a>.</p>
+<p>每个结构 控制指令 引入隐含 <em>标签</em>。 。 。
+标签是分支的目标 指令 提到他们 <a class="reference internal" href="modules.html#zh-syntax-labelidx"><span class="std std-ref">标签 指数</span></a>。 。 。
+不同于其他 <a class="reference internal" href="modules.html#zh-syntax-index"><span class="std std-ref">索引空间</span></a>标签的索引是通过筑巢深度相对的,
+也就是说, 标签 <span class="math notranslate nohighlight">\(0\)</span> 指最内层结构 控制指令 附上推荐分支机构 指令, (中文).
+不断增长的指数是指更远的指数。
+因此,标签只能从 <em>在内部</em> 相关的结构 控制指令。 。 。
+这也意味着分支只能向外流动,
+“打破”它们所瞄准的控制构筑区块。
+确切的影响取决于控制结构。
+如果出现 <span class="math notranslate nohighlight">\(\mathsf{block}\)</span> 或 <span class="math notranslate nohighlight">\(\mathsf{if}\)</span> 这是一个 <em>向前跳转</em>, (中文).
+恢复 执行 隔断后.
+如果出现 <span class="math notranslate nohighlight">\(\mathsf{loop}\)</span> 这是一个 <em>向后跳转</em> 到循环的开头。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>这个是强制的 <em>结构化控制流程</em>。 。 。
+直觉上,一个分支的目标 <span class="math notranslate nohighlight">\(\mathsf{block}\)</span> 或 <span class="math notranslate nohighlight">\(\mathsf{if}\)</span> 表现得像一个 <span class="math notranslate nohighlight">\(\mathsf{break}\)</span> 以大多数C类语言表达,
+当树枝瞄准 <span class="math notranslate nohighlight">\(\mathsf{loop}\)</span> 表现得像一个 <span class="math notranslate nohighlight">\(\mathsf{continue}\)</span> 语句。</p>
+</div>
+<p>处 指令 有几种口味:
+<span class="math notranslate nohighlight">\(\mathsf{br}\)</span> 做一个无条件的分支,
+<span class="math notranslate nohighlight">\(\mathsf{br\_if}\)</span> 执行有条件的分支,
+和 <span class="math notranslate nohighlight">\(\mathsf{br\_table}\)</span> 通过操作索引到 标签 列表为 立即数 页:1 指令,或默认目标,如果操作超出范围。
+那个 <span class="math notranslate nohighlight">\(\mathsf{br\_on\_null}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{br\_on\_non\_null}\)</span> 指令 检查参考操作是否为 <a class="reference internal" href="../exec/runtime.html#zh-syntax-nullref"><span class="std std-ref">无效</span></a> 如果情况是否如此,则分别设立分支机构。
+同样, <span class="math notranslate nohighlight">\(\mathsf{br\_on\_cast}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{br\_on\_cast\_fail}\)</span> 尝试在引用操作和分支上下播,如果成功或失败。</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{return}\)</span> 指令 是无条件分支到最外侧块的快捷键,它隐含着当前函数的正文.
+夺取分支 <em>解风</em> 操作 栈 达到目标结构的高度 控制指令 输入。
+然而,树枝可能还会消耗它们自己,它们会把它们推回它们自己 栈 解开后。
+前进分支需要根据目标块类型的输出进行操作,即代表 值 由终止区块生产。
+后向分支需要根据目标块类型输入的操作符,即代表 值 由重新启动的块消耗。</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{call}\)</span> 指令 引用另一个 <a class="reference internal" href="modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a>,从而消耗了来自 栈 并返回结果 值 电话。
+那个 <span class="math notranslate nohighlight">\(\mathsf{call\_ref}\)</span> 指令 通过 a 间接引用函数 <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">函数引用</span></a> 行动
+那个 <span class="math notranslate nohighlight">\(\mathsf{call\_indirect}\)</span> 指令 通过运行索引间接调用函数 <a class="reference internal" href="modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a> 表示为 <a class="reference internal" href="modules.html#zh-syntax-tableidx"><span class="std std-ref">表格索引</span></a> 并且必须包含 <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">函数引用</span></a>。 。 。
+由于它可能包含各种类型的功能,
+对被调用者进行动态检查 <a class="reference internal" href="types.html#zh-syntax-functype"><span class="std std-ref">函数类型</span></a> 以 指令第二届 立即数中,该呼叫以 <a class="reference internal" href="../intro/overview.html#zh-trap"><span class="std std-ref">陷阱</span></a> 如果它不匹配的话。</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{return\_call}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{return\_call\_ref}\)</span>,以及 <span class="math notranslate nohighlight">\(\mathsf{return\_call\_indirect}\)</span> 指令 已经 <em>尾调</em> 前面的变体。
+也就是说,他们首先从当前函数返回,然后才实际执行相应的呼叫。
+保证不发生仅使用这些的巢状呼叫 指令 能够因撞击而导致资源耗竭 <a class="reference internal" href="../appendix/implementation.html#zh-impl-exec"><span class="std std-ref">执行限制</span></a> 正在通话的次数。</p>
+<p>那个 指令 <span class="math notranslate nohighlight">\(\mathsf{throw}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{throw\_ref}\)</span>,以及 <span class="math notranslate nohighlight">\(\mathsf{try\_table}\)</span> 涉及 <em>例外情况</em>。 。 。
+那个 <span class="math notranslate nohighlight">\(\mathsf{throw}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{throw\_ref}\)</span> 指令 分别提出和重新提出例外,并将控制权转移给包含有例外处理器的最内层 匹配 捕获条款。
+那个 <span class="math notranslate nohighlight">\(\mathsf{try\_table}\)</span> 指令 安装例外 <em>处理器</em> 处理渔获量条款中规定的例外情况。</p>
+</section>
+<section id="zh-variable-instructions">
+<span id="zh-syntax-instr-variable"></span><span id="zh-index-3"></span><h2>变量指令<a class="headerlink" href="instructions.html#zh-variable-instructions" title="Link to this heading">¶</a></h2>
+<p>变量指令 涉及获得 <a class="reference internal" href="modules.html#zh-syntax-local"><span class="std std-ref">当地</span></a> 或 <a class="reference internal" href="modules.html#zh-syntax-global"><span class="std std-ref">全球</span></a> 变量。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{local{.}get}}~{\href{../syntax/modules.html#syntax-localidx}{\mathit{localidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{local{.}set}}~{\href{../syntax/modules.html#syntax-localidx}{\mathit{localidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{local{.}tee}}~{\href{../syntax/modules.html#syntax-localidx}{\mathit{localidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{global{.}get}}~{\href{../syntax/modules.html#syntax-globalidx}{\mathit{globalidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-variable}{\mathsf{global{.}set}}~{\href{../syntax/modules.html#syntax-globalidx}{\mathit{globalidx}}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>这些 指令 获取或设置 值 变量。
+那个 <span class="math notranslate nohighlight">\(\mathsf{local{.}tee}\)</span> 指令 碞钩 <span class="math notranslate nohighlight">\(\mathsf{local{.}set}\)</span> 但也还原其论点。</p>
+</section>
+<section id="zh-table-instructions">
+<span id="zh-syntax-table-fill"></span><span id="zh-syntax-table-grow"></span><span id="zh-syntax-table-size"></span><span id="zh-syntax-table-set"></span><span id="zh-syntax-table-get"></span><span id="zh-syntax-instr-table"></span><span id="zh-index-4"></span><h2>表指令<a class="headerlink" href="instructions.html#zh-table-instructions" title="Link to this heading">¶</a></h2>
+<p>指令 该组中涉及表格 <a class="reference internal" href="modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}get}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}set}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}size}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}grow}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}fill}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}copy}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}init}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}}~{\href{../syntax/modules.html#syntax-elemidx}{\mathit{elemidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-table}{\mathsf{elem{.}drop}}~{\href{../syntax/modules.html#syntax-elemidx}{\mathit{elemidx}}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{table{.}get}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{table{.}set}\)</span> 指令 装入或 存储 表格中的元素。</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{table{.}size}\)</span> 指令 返回表格的当前大小。
+那个 <span class="math notranslate nohighlight">\(\mathsf{table{.}grow}\)</span> 指令 以指定三角洲生长表格并返回先前大小,或 <span class="math notranslate nohighlight">\({-1}\)</span> 如果无法分配足够的空间。
+新分配的条目还需要初始化值。</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{table{.}fill}\)</span> 指令 将某个区域中的所有条目设定为给定值。
+那个 <span class="math notranslate nohighlight">\(\mathsf{table{.}copy}\)</span> 指令 从源表区域复制元素到可能重叠的目的地区域;第一个指数表示目的地。
+那个 <span class="math notranslate nohighlight">\(\mathsf{table{.}init}\)</span> 指令 从 a 复制元素 <a class="reference internal" href="modules.html#zh-syntax-elem"><span class="std std-ref">被动 元素段</span></a> 进入一个桌子。</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{elem{.}drop}\)</span> 指令 防止进一步使用被动 元素段这个 指令 用于优化提示。 之后 元素段 被丢弃,其元素无法再被检索,因此此段所用的内存可能被释放。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>额外 指令 访问表是 <a class="reference internal" href="instructions.html#zh-syntax-instr-control"><span class="std std-ref">控制指令</span></a> <span class="math notranslate nohighlight">\(\mathsf{call\_indirect}\)</span>.</p>
+</div>
+</section>
+<section id="zh-memory-instructions">
+<span id="zh-syntax-instr-memory"></span><span id="zh-syntax-lanewidth"></span><span id="zh-syntax-vloadop"></span><span id="zh-syntax-storeop"></span><span id="zh-syntax-loadop"></span><span id="zh-syntax-memarg"></span><span id="zh-syntax-storen"></span><span id="zh-syntax-loadn"></span><span id="zh-index-5"></span><h2>内存指令<a class="headerlink" href="instructions.html#zh-memory-instructions" title="Link to this heading">¶</a></h2>
+<p>指令 该组中涉及线性 <a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">内存</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}} &amp; ::= &amp; \{ \begin{array}[t]{@{}l@{}l@{}}
+\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{align}}~{\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}} ,  \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{offset}}~{\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em64}}} \} \\
+\end{array} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-loadop}{\mathit{loadop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; {{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} &lt; N \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-storeop}{\mathit{storeop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} &lt; N \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vloadop}{\mathit{vloadop}}}}_{{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}} &amp; ::= &amp; {{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} \cdot M = {|{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}|} / 2 \\
+&amp; &amp; | &amp; {{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{splat}}} \\
+&amp; &amp; | &amp; {{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{zero}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} \geq \mathsf{{\scriptstyle 32}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; {{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}}{{{{\href{../syntax/instructions.html#syntax-loadop}{\mathit{loadop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}}^?}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}} \\
+&amp; &amp; | &amp; {{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{store}}}{{{{\href{../syntax/instructions.html#syntax-storeop}{\mathit{storeop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}}^?}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}} \\
+&amp; &amp; | &amp; {{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}}{{{{\href{../syntax/instructions.html#syntax-vloadop}{\mathit{vloadop}}}}_{{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}}^?}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}} \\
+&amp; &amp; | &amp; {{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{load}}}{{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{lane}}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}}~{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{store}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}} \\
+&amp; &amp; | &amp; {{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{store}}}{{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{lane}}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}}~{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}size}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}fill}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}copy}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}init}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/modules.html#syntax-dataidx}{\mathit{dataidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{data{.}drop}}~{\href{../syntax/modules.html#syntax-dataidx}{\mathit{dataidx}}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>内存访问于 <span class="math notranslate nohighlight">\(\mathsf{load}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{store}\)</span> 指令 用于不同 <a class="reference internal" href="types.html#zh-syntax-numtype"><span class="std std-ref">编号 类型</span></a> 和 <a class="reference internal" href="types.html#zh-syntax-vectype"><span class="std std-ref">矢量 类型</span></a>。 。 。
+他们都拿一个 <a class="reference internal" href="modules.html#zh-syntax-memidx"><span class="std std-ref">内存索引</span></a> (单位:千美元) <em>内存参数</em> <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-memarg}{\mathit{memarg}}}\)</span> 包含一个 地址 <em>页:1</em> 和预期 <em>对齐</em> (表示为二权的代言人).</p>
+<p>整数 负载和存储可选择指定一个 <em>存储大小</em> <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}\)</span> 这比 <a class="reference internal" href="types.html#zh-syntax-numtype"><span class="std std-ref">位宽</span></a> 报告 值类型。 。 。
+对于负载, 标记扩展模式 <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span> 然后要求选择适当的行为。</p>
+<p>矢量负载可以指定一个形状,即: <a class="reference internal" href="types.html#zh-syntax-valtype"><span class="std std-ref">位宽</span></a> 页:1 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span>。每个车道的大小为通常的一半,标志延长模式 <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span> 然后指定小车道如何延伸至大车道。
+或者,矢量载荷可以执行 <em>板块</em>,使只装载指定存储大小的单车道,结果重复到所有车道。</p>
+<p>静态 地址 页:1 地址 操作, 生成一个 33 位或 65 位 <em>有效 地址</em> 这是访问内存时基于零的索引。
+全体 值 读和写 <a class="reference external" href="https://en.wikipedia.org/wiki/Endianness#Little-endian">小异端语</a> 字节顺序 。
+页:1 <a class="reference internal" href="../intro/overview.html#zh-trap"><span class="std std-ref">陷阱</span></a> 如果访问的内存中有任何结果 字节 位于 地址 内存当前大小所暗示的范围。</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{memory{.}size}\)</span> 指令 返回内存的当前大小。
+那个 <span class="math notranslate nohighlight">\(\mathsf{memory{.}grow}\)</span> 指令 由给定三角洲生成内存并返回先前大小, 或 <span class="math notranslate nohighlight">\({-1}\)</span> 如果无法分配足够的内存。
+两者 指令 单位 <a class="reference internal" href="../exec/runtime.html#zh-page-size"><span class="std std-ref">页面大小</span></a>.</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{memory{.}fill}\)</span> 指令 全部设置 值 在给定字节的记忆区域。
+那个 <span class="math notranslate nohighlight">\(\mathsf{memory{.}copy}\)</span> 指令 从源存储区域复制数据到另一个或同一内存中可能重叠的目的地区域;第一个索引表示目的地。
+那个 <span class="math notranslate nohighlight">\(\mathsf{memory{.}init}\)</span> 指令 从a复制数据 <a class="reference internal" href="modules.html#zh-syntax-data"><span class="std std-ref">被动 数据段</span></a> 成为记忆</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{data{.}drop}\)</span> 指令 防止进一步使用被动 数据段这个 指令 用于优化提示。 之后a 数据段 被丢弃,其数据无法再被检索,所以此段所用的内存可能会被释放。</p>
+</section>
+<section id="zh-reference-instructions">
+<span id="zh-syntax-instr-ref"></span><span id="zh-syntax-ref-cast"></span><span id="zh-syntax-ref-test"></span><span id="zh-syntax-ref-eq"></span><span id="zh-syntax-ref-as-non-null"></span><span id="zh-syntax-ref-is-null"></span><span id="zh-syntax-ref-func"></span><span id="zh-syntax-ref-null"></span><span id="zh-index-6"></span><h2>引用指令<a class="headerlink" href="instructions.html#zh-reference-instructions" title="Link to this heading">¶</a></h2>
+<p>指令 该群体关心的是获取 <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">参考文献</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}func}}~{\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}null}}~{\href{../syntax/types.html#syntax-heaptype}{\mathit{heaptype}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}is\_null}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}as\_non\_null}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}eq}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}test}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-ref}{\mathsf{ref{.}cast}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{ref{.}null}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{ref{.}func}\)</span> 指令 生成一个 <a class="reference internal" href="../exec/runtime.html#zh-syntax-nullref"><span class="std std-ref">无效</span></a> 分别提及或提及某一函数。</p>
+<p>那个 指令 <span class="math notranslate nohighlight">\(\mathsf{ref{.}is\_null}\)</span> 检查无效,
+时 <span class="math notranslate nohighlight">\(\mathsf{ref{.}as\_non\_null}\)</span> 转换 a <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">无效</span></a> 给一个非虚无的,和 <a class="reference internal" href="../intro/overview.html#zh-trap"><span class="std std-ref">陷阱</span></a> 如果它遇到无效。</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{ref{.}eq}\)</span> 比较两个参考文献。</p>
+<p>那个 指令 <span class="math notranslate nohighlight">\(\mathsf{ref{.}test}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{ref{.}cast}\)</span> 测试 <a class="reference internal" href="../exec/types.html#zh-type-inst"><span class="std std-ref">动态类型</span></a> 参考操作。
+前者只是返回测试的结果,
+而后人却低调地说: <a class="reference internal" href="../intro/overview.html#zh-trap"><span class="std std-ref">陷阱</span></a> 如果操作类型不匹配。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>那个 <span class="math notranslate nohighlight">\(\mathsf{br\_on\_null}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{br\_on\_non\_null}\)</span> 指令 提供版本 <span class="math notranslate nohighlight">\(\mathsf{ref{.}as\_non\_null}\)</span> 取决于无效测试的成败 而不是陷阱
+同样, <span class="math notranslate nohighlight">\(\mathsf{br\_on\_cast}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{br\_on\_cast\_fail}\)</span> 指令 提供版本 <span class="math notranslate nohighlight">\(\mathsf{ref{.}cast}\)</span> 这支树枝取决于下播的成功 而不是陷阱。</p>
+<p>额外 指令 在函数引用上运行的是 <a class="reference internal" href="instructions.html#zh-syntax-instr-control"><span class="std std-ref">控制指令</span></a> <span class="math notranslate nohighlight">\(\mathsf{call\_ref}\)</span>.</p>
+</div>
+</section>
+<section id="zh-aggregate-instructions">
+<span id="zh-syntax-instr-extern"></span><span id="zh-syntax-instr-i31"></span><span id="zh-syntax-instr-array"></span><span id="zh-syntax-instr-struct"></span><span id="zh-syntax-instr-aggr"></span><span id="zh-syntax-extern-convert-any"></span><span id="zh-syntax-any-convert-extern"></span><span id="zh-syntax-i31-get-u"></span><span id="zh-syntax-i31-get-s"></span><span id="zh-syntax-ref-i31"></span><span id="zh-syntax-array-init-elem"></span><span id="zh-syntax-array-init-data"></span><span id="zh-syntax-array-copy"></span><span id="zh-syntax-array-fill"></span><span id="zh-syntax-array-len"></span><span id="zh-syntax-array-set"></span><span id="zh-syntax-array-get-u"></span><span id="zh-syntax-array-get-s"></span><span id="zh-syntax-array-get"></span><span id="zh-syntax-array-new-elem"></span><span id="zh-syntax-array-new-data"></span><span id="zh-syntax-array-new-fixed"></span><span id="zh-syntax-array-new-default"></span><span id="zh-syntax-array-new"></span><span id="zh-syntax-struct-set"></span><span id="zh-syntax-struct-get-u"></span><span id="zh-syntax-struct-get-s"></span><span id="zh-syntax-struct-get"></span><span id="zh-syntax-struct-new-default"></span><span id="zh-syntax-struct-new"></span><span id="zh-index-7"></span><h2>合计 指令<a class="headerlink" href="instructions.html#zh-aggregate-instructions" title="Link to this heading">¶</a></h2>
+<p>指令 该组负责创建和获取 <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">参考文献</span></a> 改为: <a class="reference internal" href="types.html#zh-syntax-aggrtype"><span class="std std-ref">合计</span></a> 类型.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}new\_default}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}get}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}^?}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-fieldidx}{\mathit{fieldidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-struct}{\mathsf{struct{.}set}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-fieldidx}{\mathit{fieldidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_default}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_fixed}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_data}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-dataidx}{\mathit{dataidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}new\_elem}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-elemidx}{\mathit{elemidx}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}get}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}^?}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}set}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}len}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}fill}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}copy}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}init\_data}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-dataidx}{\mathit{dataidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-array}{\mathsf{array{.}init\_elem}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{\href{../syntax/modules.html#syntax-elemidx}{\mathit{elemidx}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-i31}{\mathsf{ref{.}i\scriptstyle31}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-i31}{\mathsf{i{\scriptstyle31}{.}get}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{extern{.}convert\_any}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-extern}{\mathsf{any{.}convert\_extern}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>那个 指令 <span class="math notranslate nohighlight">\(\mathsf{struct{.}new}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{struct{.}new\_default}\)</span> 分配一个新的 <a class="reference internal" href="types.html#zh-syntax-structtype"><span class="std std-ref">结构</span></a>,以操作或默认方式初始化 值。 。 。
+其余 指令 访问单个字段的结构,
+允许在 <a class="reference internal" href="types.html#zh-syntax-packtype"><span class="std std-ref">包装</span></a> 存储 类型.</p>
+<p>同样, <a class="reference internal" href="types.html#zh-syntax-arraytype"><span class="std std-ref">数组</span></a> 可以使用明确的初始化操作或默认值来分配。
+还有, <span class="math notranslate nohighlight">\(\mathsf{array{.}new\_fixed}\)</span> 分配静态固定大小的数组,
+和 <span class="math notranslate nohighlight">\(\mathsf{array{.}new\_data}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{array{.}new\_elem}\)</span> 分配一个阵列并从 a 初始化 <a class="reference internal" href="modules.html#zh-syntax-data"><span class="std std-ref">数据</span></a> 或 <a class="reference internal" href="modules.html#zh-syntax-elem"><span class="std std-ref">元素</span></a> 分别为部分。
+那个 指令 <span class="math notranslate nohighlight">\(\mathsf{array{.}get}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{array{.}get}~{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span>,以及 <span class="math notranslate nohighlight">\(\mathsf{array{.}set}\)</span> 进入单个插槽,
+允许使用不同的符号扩展模式。 <a class="reference internal" href="types.html#zh-syntax-packtype"><span class="std std-ref">包装</span></a> 存储类型;
+<span class="math notranslate nohighlight">\(\mathsf{array{.}len}\)</span> 生成数组的长度;
+<span class="math notranslate nohighlight">\(\mathsf{array{.}fill}\)</span> 以给定值填充数组的指定片段,并 <span class="math notranslate nohighlight">\(\mathsf{array{.}copy}\)</span>, <span class="math notranslate nohighlight">\(\mathsf{array{.}init\_data}\)</span>,以及 <span class="math notranslate nohighlight">\(\mathsf{array{.}init\_elem}\)</span> 将元素复制到指定数组的指定片段, 数据段,或 元素段分别为:</p>
+<p>那个 指令 <span class="math notranslate nohighlight">\(\mathsf{ref{.}i{\scriptstyle 31}}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 31}{.}get}~{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span> 在类型之间转换 <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 32}}\)</span> 和一个未装箱 <a class="reference internal" href="types.html#zh-syntax-i31"><span class="std std-ref">斜线</span></a>.</p>
+<p>那个 指令 <span class="math notranslate nohighlight">\(\mathsf{any{.}convert\_extern}\)</span> 和 <span class="math notranslate nohighlight">\(\mathsf{extern{.}convert\_any}\)</span> 允许以类型表示的参考文献之间的无损转换 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}})\)</span> 并截至 <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}})\)</span>.</p>
+</section>
+<section id="zh-numeric-instructions">
+<span id="zh-syntax-instr-numeric"></span><span id="zh-syntax-cvtop"></span><span id="zh-syntax-relop"></span><span id="zh-syntax-testop"></span><span id="zh-syntax-binop"></span><span id="zh-syntax-unop"></span><span id="zh-syntax-const"></span><span id="zh-syntax-num"></span><span id="zh-syntax-sz"></span><span id="zh-syntax-sx"></span><span id="zh-index-8"></span><h2>数值指令<a class="headerlink" href="instructions.html#zh-numeric-instructions" title="Link to this heading">¶</a></h2>
+<p>数值指令 提供数字上的基本操作 <a class="reference internal" href="values.html#zh-syntax-value"><span class="std std-ref">值</span></a> 具体 <a class="reference internal" href="types.html#zh-syntax-numtype"><span class="std std-ref">类型</span></a>。 。 。
+这些操作与硬件中各自可用的操作紧密匹配.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} &amp; ::= &amp; \mathsf{{\scriptstyle 8}} ~~|~~ \mathsf{{\scriptstyle 16}} ~~|~~ \mathsf{{\scriptstyle 32}} ~~|~~ \mathsf{{\scriptstyle 64}} \\
+&amp; {\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-sx}{\mathsf{u}} ~~|~~ \href{../syntax/instructions.html#syntax-sx}{\mathsf{s}} \\[0.8ex]
+&amp; {{\href{../exec/runtime.html#syntax-num}{\mathit{num}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; {{\href{../syntax/values.html#syntax-int}{\mathit{i}\kern-0.1em}}}{N} \\
+&amp; {{\href{../exec/runtime.html#syntax-num}{\mathit{num}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; {{\href{../syntax/values.html#syntax-float}{\mathit{f}\kern-0.15em}}}{N} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~{{\href{../exec/runtime.html#syntax-num}{\mathit{num}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} {.} {{\href{../syntax/instructions.html#syntax-unop}{\mathit{unop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} {.} {{\href{../syntax/instructions.html#syntax-binop}{\mathit{binop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} {.} {{\href{../syntax/instructions.html#syntax-testop}{\mathit{testop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} {.} {{\href{../syntax/instructions.html#syntax-relop}{\mathit{relop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}_1 {.} {{{\href{../syntax/instructions.html#syntax-cvtop}{\mathit{cvtop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}_2, {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}_1}}{\mathsf{\_}}{{\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}}_2} \\
+&amp; &amp; | &amp; \dots \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-unop}{\mathit{unop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{clz}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ctz}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{popcnt}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{extend}}}{{\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#syntax-sz}{\mathit{sz}}} &lt; N \\
+&amp; {{\href{../syntax/instructions.html#syntax-unop}{\mathit{unop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{abs}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{neg}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{sqrt}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ceil}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{floor}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{trunc}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{nearest}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-binop}{\mathit{binop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{sub}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{mul}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{div}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{rem}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{and}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{or}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{xor}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{shl}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{shr}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{rotl}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{rotr}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-binop}{\mathit{binop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{add}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{sub}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{mul}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{div}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{min}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{max}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{copysign}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-testop}{\mathit{testop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{eqz}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-relop}{\mathit{relop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{eq}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ne}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{lt}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{gt}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{le}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ge}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-relop}{\mathit{relop}}}}_{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{eq}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ne}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{lt}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{gt}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{le}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{ge}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-cvtop}{\mathit{cvtop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1, {{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{extend}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N_1 &lt; N_2 \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{wrap}} &amp; \quad \mbox{if}~ N_1 &gt; N_2 \\
+&amp; {{\href{../syntax/instructions.html#syntax-cvtop}{\mathit{cvtop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1, {{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{convert}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{reinterpret}} &amp; \quad \mbox{if}~ N_1 = N_2 \\
+&amp; {{\href{../syntax/instructions.html#syntax-cvtop}{\mathit{cvtop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1, {{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{trunc}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{trunc\_sat}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{reinterpret}} &amp; \quad \mbox{if}~ N_1 = N_2 \\
+&amp; {{\href{../syntax/instructions.html#syntax-cvtop}{\mathit{cvtop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1, {{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{promote}} &amp; \quad \mbox{if}~ N_1 &lt; N_2 \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{demote}} &amp; \quad \mbox{if}~ N_1 &gt; N_2 \\
+\end{array}\end{split}\]</div>
+<p>数值指令 除以 <a class="reference internal" href="types.html#zh-syntax-numtype"><span class="std std-ref">数字类型</span></a>。 。 。
+对于每一种类型,可以区分几个子类别:</p>
+<ul class="simple">
+<li><p><em>常数</em>:返回静态常数.</p></li>
+<li><p><em>联合业务</em>: 消耗一个操作并产生相应类型的一个结果.</p></li>
+<li><p><em>二进制操作</em>: 消耗两个操作符,并产生相应类型的一个结果.</p></li>
+<li><p><em>测试</em>: 使用相应类型的一个操作符并生成布尔 整数 结果。</p></li>
+<li><p><em>比较</em>: 消耗相应类型的两个操作符并生产布尔 整数 结果。</p></li>
+<li><p><em>改划</em>: 消耗一种类型的值并产生另一种类型的结果
+(转换的源类型是“......”之后的源类型。)<span class="math notranslate nohighlight">\(\mathsf{\_}\)</span>”).</p></li>
+</ul>
+<p>有点 整数 指令 来,来,来,来,来,来,来
+其中,签名注解 <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span> 区分操作是否 <a class="reference internal" href="../exec/numerics.html#zh-aux-signed"><span class="std std-ref">口译</span></a> 作为 <a class="reference internal" href="values.html#zh-syntax-uint"><span class="std std-ref">未签名</span></a> 或 <a class="reference internal" href="values.html#zh-syntax-sint"><span class="std std-ref">签名</span></a> 整数。 。 。
+对于另一个 整数 指令使用两个补充的签名解释意味着,无论签署与否,它们的行为都是一样的。</p>
+</section>
+<section id="zh-vector-instructions">
+<span id="zh-syntax-instr-vec-relaxed"></span><span id="zh-syntax-instr-vec"></span><span id="zh-syntax-vcvtop"></span><span id="zh-syntax-vextternop"></span><span id="zh-syntax-vextbinop"></span><span id="zh-syntax-vextunop"></span><span id="zh-syntax-vternop"></span><span id="zh-syntax-vbinop"></span><span id="zh-syntax-vunop"></span><span id="zh-syntax-vshiftop"></span><span id="zh-syntax-vswizzlop"></span><span id="zh-syntax-vrelop"></span><span id="zh-syntax-vtestop"></span><span id="zh-syntax-vvtestop"></span><span id="zh-syntax-vvternop"></span><span id="zh-syntax-vvbinop"></span><span id="zh-syntax-vvunop"></span><span id="zh-syntax-zero"></span><span id="zh-syntax-half"></span><span id="zh-syntax-shape"></span><span id="zh-syntax-dim"></span><span id="zh-syntax-lanetype"></span><span id="zh-syntax-laneidx"></span><span id="zh-index-9"></span><h2>向量指令<a class="headerlink" href="instructions.html#zh-vector-instructions" title="Link to this heading">¶</a></h2>
+<p>向量指令 (又称: <em>锡默德</em> 指令, <em>单人 指令 多个数据</em>(b) 提供基本业务 <a class="reference internal" href="values.html#zh-syntax-value"><span class="std std-ref">值</span></a> 页:1 <a class="reference internal" href="types.html#zh-syntax-vectype"><span class="std std-ref">向量类型</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-lanetype}{\mathit{lanetype}}} &amp; ::= &amp; {\href{../syntax/types.html#syntax-numtype}{\mathit{numtype}}} ~~|~~ {\href{../syntax/types.html#syntax-packtype}{\mathit{packtype}}} \\
+&amp; {\href{../syntax/instructions.html#syntax-dim}{\mathit{dim}}} &amp; ::= &amp; \mathsf{{\scriptstyle 1}} ~~|~~ \mathsf{{\scriptstyle 2}} ~~|~~ \mathsf{{\scriptstyle 4}} ~~|~~ \mathsf{{\scriptstyle 8}} ~~|~~ \mathsf{{\scriptstyle 16}} \\
+&amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} &amp; ::= &amp; {{\href{../syntax/instructions.html#syntax-lanetype}{\mathit{lanetype}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{{\href{../syntax/instructions.html#syntax-dim}{\mathit{dim}}}} &amp; \quad \mbox{if}~ {|{\href{../syntax/instructions.html#syntax-lanetype}{\mathit{lanetype}}}|} \cdot {\href{../syntax/instructions.html#syntax-dim}{\mathit{dim}}} = 128 \\
+&amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}) = {\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}} \\
+&amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{bshape}}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} &amp; \quad \mbox{if}~ {\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}) = \href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle8}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-half}{\mathit{half}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{low}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{high}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{zero}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}} &amp; ::= &amp; {\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em8}}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~{{\href{../exec/runtime.html#syntax-vec}{\mathit{vec}}}}_{{\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} {.} {\href{../syntax/instructions.html#syntax-vvunop}{\mathit{vvunop}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} {.} {\href{../syntax/instructions.html#syntax-vvbinop}{\mathit{vvbinop}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} {.} {\href{../syntax/instructions.html#syntax-vvternop}{\mathit{vvternop}}} \\
+&amp; &amp; | &amp; {\href{../syntax/types.html#syntax-vectype}{\mathit{vectype}}} {.} {\href{../syntax/instructions.html#syntax-vvtestop}{\mathit{vvtestop}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} {.} {{\href{../syntax/instructions.html#syntax-vunop}{\mathit{vunop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} {.} {{\href{../syntax/instructions.html#syntax-vbinop}{\mathit{vbinop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} {.} {{\href{../syntax/instructions.html#syntax-vternop}{\mathit{vternop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} {.} {{\href{../syntax/instructions.html#syntax-vrelop}{\mathit{vtestop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}} {.} {{\href{../syntax/instructions.html#syntax-vrelop}{\mathit{vrelop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}} {.} {{\href{../syntax/instructions.html#syntax-vshiftop}{\mathit{vshiftop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{bitmask}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{bshape}}} {.} {{\href{../syntax/instructions.html#syntax-vswizzlop}{\mathit{vswizzlop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{bshape}}}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{bshape}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{shuffle}}~{{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}}^\ast} &amp; \quad \mbox{if}~ {|{{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}}^\ast}|} = {\href{../syntax/instructions.html#aux-dim}{\mathrm{dim}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{bshape}}}) \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1 {.} {{{\href{../syntax/instructions.html#syntax-vextunop}{\mathit{vextunop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2, {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1 {.} {{{\href{../syntax/instructions.html#syntax-vextbinop}{\mathit{vextbinop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2, {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1 {.} {{{\href{../syntax/instructions.html#syntax-vextternop}{\mathit{vextternop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2, {\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2} \\
+&amp; &amp; | &amp; {{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{narrow}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ {|{\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_2)|} = 2 \cdot {|{\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{ishape}}}_1)|} \leq \mathsf{{\scriptstyle 32}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}_1 {.} {{{\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}}}_{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}_2, {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}_1}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}_2} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{splat}} \\
+&amp; &amp; | &amp; {{\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{extract\_lane}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}^?}}~{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}} &amp; \quad \mbox{if}~ {{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}^?} = \epsilon \Leftrightarrow {\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}) \in \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}~\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}}~\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle32}}~\href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{replace\_lane}}~{\href{../syntax/instructions.html#syntax-laneidx}{\mathit{laneidx}}} \\
+&amp; &amp; | &amp; \dots \\
+\end{array}\end{split}\]</div>
+<p>向量指令 拥有一项涉及 <em>形状</em> 前缀
+判定他们的行为是怎样解释的,
+写入 <span class="math notranslate nohighlight">\({t}{\mathsf{x}}{N}\)</span>,并包含一个 <em>车道类型</em> <span class="math notranslate nohighlight">\(t\)</span>,一个可能 <em>包装</em> <a class="reference internal" href="types.html#zh-syntax-numtype"><span class="std std-ref">数字类型</span></a>,及其组合 <em>维度</em> <span class="math notranslate nohighlight">\(N\)</span>,表示该类型车道的数量。
+业务是在 值 每个车道。</p>
+<p>指令 前缀为 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 不涉及具体解释,并处理 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 作为 <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{i\scriptstyle\kern-0.1em128}}}\)</span> 数值或矢量 <span class="math notranslate nohighlight">\(128\)</span> 单个位数。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>例如,形状 <span class="math notranslate nohighlight">\({\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{\mathsf{{\scriptstyle 4}}}\)</span> 解释操作
+作为四 <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{i\scriptstyle\kern-0.1em32}}}\)</span> 值,装入 <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{i\scriptstyle\kern-0.1em128}}}\)</span>。 。 。
+车道类型的位宽度 <span class="math notranslate nohighlight">\(t\)</span> 时间 <span class="math notranslate nohighlight">\(N\)</span> 总是 <span class="math notranslate nohighlight">\(128\)</span>.</p>
+</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-vvunop}{\mathit{vvunop}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{not}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-vvbinop}{\mathit{vvbinop}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{and}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{andnot}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{or}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{xor}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-vvternop}{\mathit{vvternop}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{bitselect}} \\[0.8ex]
+&amp; {\href{../syntax/instructions.html#syntax-vvtestop}{\mathit{vvtestop}}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{any\_true}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vunop}{\mathit{vunop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{abs}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{neg}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{popcnt}} &amp; \quad \mbox{if}~ N = \mathsf{{\scriptstyle 8}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vunop}{\mathit{vunop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{abs}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{neg}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{sqrt}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{ceil}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{floor}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{trunc}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{nearest}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vbinop}{\mathit{vbinop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{add}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{sub}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{add\_sat}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \leq \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{sub\_sat}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \leq \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{mul}} &amp; \quad \mbox{if}~ N \geq \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{avgr}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{u}}} &amp; \quad \mbox{if}~ N \leq \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{q{\scriptstyle15}mulr\_sat}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ N = \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_q15mulr}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ N = \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{min}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \leq \mathsf{{\scriptstyle 32}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{max}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \leq \mathsf{{\scriptstyle 32}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vbinop}{\mathit{vbinop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{add}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{sub}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{mul}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{div}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{min}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{max}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{pmin}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{pmax}} \\
+&amp; &amp; | &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_min}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_max}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vternop}{\mathit{vternop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_laneselect}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vternop}{\mathit{vternop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_madd}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_nmadd}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vrelop}{\mathit{vtestop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{all\_true}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vrelop}{\mathit{vrelop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{eq}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{ne}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{lt}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \neq \mathsf{{\scriptstyle 64}} \lor {\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}} = \href{../syntax/instructions.html#syntax-sx}{\mathsf{s}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{gt}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \neq \mathsf{{\scriptstyle 64}} \lor {\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}} = \href{../syntax/instructions.html#syntax-sx}{\mathsf{s}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{le}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \neq \mathsf{{\scriptstyle 64}} \lor {\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}} = \href{../syntax/instructions.html#syntax-sx}{\mathsf{s}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{ge}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N \neq \mathsf{{\scriptstyle 64}} \lor {\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}} = \href{../syntax/instructions.html#syntax-sx}{\mathsf{s}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vrelop}{\mathit{vrelop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{eq}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{ne}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{lt}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{gt}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{le}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{ge}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vswizzlop}{\mathit{vswizzlop}}}}_{{\href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle8}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{swizzle}} ~~|~~ \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_swizzle}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vshiftop}{\mathit{vshiftop}}}}_{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M}} &amp; ::= &amp; \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{shl}} ~~|~~ {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{shr}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vextunop}{\mathit{vextunop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{extadd\_pairwise}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ 16 \leq 2 \cdot N_1 = N_2 \leq \mathsf{{\scriptstyle 32}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vextbinop}{\mathit{vextbinop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{extmul}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ 2 \cdot N_1 = N_2 \geq \mathsf{{\scriptstyle 16}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{dot}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ 2 \cdot N_1 = N_2 = \mathsf{{\scriptstyle 32}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_dot}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ 2 \cdot N_1 = N_2 = \mathsf{{\scriptstyle 16}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vextternop}{\mathit{vextternop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_dot\_add}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-sx}{\mathsf{s}}} &amp; \quad \mbox{if}~ 4 \cdot N_1 = N_2 = \mathsf{{\scriptstyle 32}} \\[0.8ex]
+&amp; {{\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{extend}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N_2 = 2 \cdot N_1 \\
+&amp; {{\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{convert}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}^?}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}} &amp; \quad \mbox{if}~ N_2 = N_1 = \mathsf{{\scriptstyle 32}} \land {{\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}^?} = \epsilon \lor N_2 = 2 \cdot N_1 \land {{\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}^?} = \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{low}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{i}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{trunc\_sat}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?}} &amp; \quad \mbox{if}~ N_1 = N_2 = \mathsf{{\scriptstyle 32}} \land {{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?} = \epsilon \lor N_1 = 2 \cdot N_2 \land {{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?} = \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{zero}} \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{relaxed\_trunc}}}{\mathsf{\_}}{{\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}}{\mathsf{\_}}{{{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?}} &amp; \quad \mbox{if}~ N_1 = N_2 = \mathsf{{\scriptstyle 32}} \land {{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?} = \epsilon \lor N_1 = 2 \cdot N_2 \land {{\href{../syntax/instructions.html#syntax-zero}{\mathit{zero}}}^?} = \href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{zero}} \\
+&amp; {{\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}}}_{{{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_1}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_1}, {{{\href{../syntax/types.html#syntax-numtype}{\mathsf{f}}}{{\href{../syntax/types.html#syntax-numtype}{\scriptstyle\kern-0.1emN}}}}_2}{\href{../syntax/instructions.html#syntax-shape}{\mathsf{x}}}{M_2}} &amp; ::= &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{demote}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{zero}}} &amp; \quad \mbox{if}~ N_1 = 2 \cdot N_2 \\
+&amp; &amp; | &amp; {\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{promote}}}{\mathsf{\_}}{\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{low}}} &amp; \quad \mbox{if}~ 2 \cdot N_1 = N_2 \\
+\end{array}\end{split}\]</div>
+<p>向量指令 可分为几个子类别:</p>
+<ul class="simple">
+<li><p><em>常数</em>:返回静态常数.</p></li>
+<li><p><em>一元操作</em>: 消耗一个 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 操作并生成一个 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 结果。</p></li>
+<li><p><em>二进制操作</em>: 消耗两个 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 操作并生成一个 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 结果。</p></li>
+<li><p><em>三级操作</em>: 消费 3 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 操作并生成一个 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 结果。</p></li>
+<li><p><em>测试</em>: 消耗一个 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 操作并生成布尔 整数 结果。</p></li>
+<li><p><em>移动</em>: 消耗 a <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 操作和一个 <span class="math notranslate nohighlight">\(\mathsf{i{\scriptstyle 32}}\)</span> 操作, 生成一个 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 结果。</p></li>
+<li><p><em>板块</em>: 消耗数字类型值并生成 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 指定形状的结果。</p></li>
+<li><p><em>提取通道</em>: 消耗 a <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 操作并返回给定道中的数值。</p></li>
+<li><p><em>替换车道</em>: 消耗 a <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 操作和给定航道的数值,并生成 <span class="math notranslate nohighlight">\(\mathsf{v{\scriptstyle 128}}\)</span> 结果。</p></li>
+</ul>
+<p>有点 向量指令 有签名说明 <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-sx}{\mathit{sx}}}\)</span> 区分操作中的元素是否 <a class="reference internal" href="../exec/numerics.html#zh-aux-signed"><span class="std std-ref">口译</span></a> 作为 <a class="reference internal" href="values.html#zh-syntax-uint"><span class="std std-ref">未签名</span></a> 或 <a class="reference internal" href="values.html#zh-syntax-sint"><span class="std std-ref">签名</span></a> 整数。 。 。
+对于另一个 向量指令使用两个补充的签名解释意味着,无论签署与否,它们的行为都是一样的。</p>
+<section id="zh-conventions">
+<span id="zh-aux-halfop"></span><span id="zh-aux-zeroop"></span><span id="zh-aux-dim"></span><span id="zh-aux-lanetype"></span><h3>约定<a class="headerlink" href="instructions.html#zh-conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>职能 <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#aux-lanetype}{\mathrm{lanetype}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}})\)</span> 提取形状的车道类型。</p></li>
+<li><p>职能 <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#aux-dim}{\mathrm{dim}}}({\href{../syntax/instructions.html#syntax-shape}{\mathit{shape}}})\)</span> 提取形状的尺寸。</p></li>
+<li><p>职能 <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#aux-zeroop}{\mathrm{zeroop}}}({\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}})\)</span> 提取 <span class="math notranslate nohighlight">\(\mathsf{zero}\)</span> 向量转换运算符的旗帜,或返回 <span class="math notranslate nohighlight">\(\epsilon\)</span> 如果它没有包含任何。</p></li>
+<li><p>职能 <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#aux-halfop}{\mathrm{halfop}}}({\href{../syntax/instructions.html#syntax-vcvtop}{\mathit{vcvtop}}})\)</span> 提取 <span class="math notranslate nohighlight">\({\href{../syntax/instructions.html#syntax-half}{\mathit{half}}}\)</span> 向量转换运算符的旗帜,或返回 <span class="math notranslate nohighlight">\(\epsilon\)</span> 如果它没有包含任何。</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-expressions">
+<span id="zh-syntax-expr"></span><span id="zh-index-10"></span><h2>表达式<a class="headerlink" href="instructions.html#zh-expressions" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a> 机构,初始化 值 (单位:千美元) <a class="reference internal" href="modules.html#zh-syntax-global"><span class="std std-ref">全球</span></a>页:1 <a class="reference internal" href="modules.html#zh-syntax-elem"><span class="std std-ref">元素</span></a> 部分,以及 <a class="reference internal" href="modules.html#zh-syntax-data"><span class="std std-ref">数据</span></a> 部分作为表达式表示,这些表示式是: <a class="reference internal" href="instructions.html#zh-syntax-instr"><span class="std std-ref">指令</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} &amp; ::= &amp; {{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast} \\
+\end{array}\end{split}\]</div>
+<p>在一些地方, 验证 <a class="reference internal" href="../valid/instructions.html#zh-valid-constant"><span class="std std-ref">限制</span></a> 表达式 <em>常数</em>,限制一组允许的 指令.</p>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/syntax/instructions.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

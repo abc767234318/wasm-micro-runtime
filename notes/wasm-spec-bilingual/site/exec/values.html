@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Values  / 值  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="instructions.html" rel="next" title="Instructions"/>
+<link href="types.html" rel="prev" title="Types"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conventions.html"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime.html"><span class="wasm-bi-nav-en">Runtime Structure</span><span class="wasm-bi-nav-zh">运行时结构</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="numerics.html"><span class="wasm-bi-nav-en">Numerics</span><span class="wasm-bi-nav-zh">数字</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="values.html#"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/exec/values.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<span class="target" id="index-0"></span><section id="values">
+<h1>Values<a class="headerlink" href="values.html#values" title="Link to this heading">¶</a></h1>
+<section id="value-typing">
+<span id="valid-val"></span><span id="index-1"></span><h2>Value Typing<a class="headerlink" href="values.html#value-typing" title="Link to this heading">¶</a></h2>
+<p>For the purpose of checking argument <a class="reference internal" href="runtime.html#syntax-val"><span class="std std-ref">values</span></a> against the parameter types of exported <a class="reference internal" href="../syntax/modules.html#syntax-func"><span class="std std-ref">functions</span></a>,
+values are classified by <a class="reference internal" href="../syntax/types.html#syntax-valtype"><span class="std std-ref">value types</span></a>.
+The following auxiliary typing rules specify this typing relation relative to a <a class="reference internal" href="runtime.html#syntax-store"><span class="std std-ref">store</span></a> <span class="math notranslate nohighlight">\(S\)</span> in which possibly referenced <a class="reference internal" href="runtime.html#syntax-addr"><span class="std std-ref">addresses</span></a> live.</p>
+<section id="numeric-values">
+<span id="valid-num"></span><h3>Numeric Values<a class="headerlink" href="values.html#numeric-values" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-num"><span class="std std-ref">number value</span></a> <span class="math notranslate nohighlight">\(({\mathit{nt}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~c)\)</span> is <a class="reference internal" href="values.html#valid-num"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-numtype"><span class="std std-ref">number type</span></a> <span class="math notranslate nohighlight">\({\mathit{nt}}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+}{
+s \href{../exec/values.html#valid-num}{\vdash} {\mathit{nt}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~c : {\mathit{nt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="vector-values">
+<span id="valid-vec"></span><h3>Vector Values<a class="headerlink" href="values.html#vector-values" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-vec"><span class="std std-ref">vector value</span></a> <span class="math notranslate nohighlight">\(({\mathit{vt}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{const}}~c)\)</span> is <a class="reference internal" href="values.html#valid-vec"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-vectype"><span class="std std-ref">vector type</span></a> <span class="math notranslate nohighlight">\({\mathit{vt}}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+}{
+s \href{../exec/values.html#valid-vec}{\vdash} {\mathit{vt}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{const}}~c : {\mathit{vt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="null-references">
+<span id="valid-ref"></span><h3>Null References<a class="headerlink" href="values.html#null-references" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\(\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}}\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../valid/conventions.html#syntax-valtype-ext}{\mathsf{bot}})\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}} : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../valid/conventions.html#syntax-valtype-ext}{\mathsf{bot}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="scalar-references">
+<span id="valid-ref-i31num"></span><h3>Scalar References<a class="headerlink" href="values.html#scalar-references" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}i\scriptstyle31}}~i)\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}})\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}i\scriptstyle31}}~i : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="structure-references">
+<span id="valid-ref-struct"></span><h3>Structure References<a class="headerlink" href="values.html#structure-references" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}struct}}~a)\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}})\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-structinst"><span class="std std-ref">structure instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{structs}}{}[a]\)</span> exists.</p></li>
+<li><p>The <a class="reference internal" href="../valid/conventions.html#syntax-deftype"><span class="std std-ref">defined type</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{structs}}{}[a]{.}\href{../exec/runtime.html#syntax-structinst}{\mathsf{type}}\)</span> is of the form <span class="math notranslate nohighlight">\({\mathit{dt}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{structs}}{}[a]{.}\href{../exec/runtime.html#syntax-structinst}{\mathsf{type}} = {\mathit{dt}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}struct}}~a : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="array-references">
+<span id="valid-ref-array"></span><h3>Array References<a class="headerlink" href="values.html#array-references" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}array}}~a)\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}})\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-arrayinst"><span class="std std-ref">array instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{arrays}}{}[a]\)</span> exists.</p></li>
+<li><p>The <a class="reference internal" href="../valid/conventions.html#syntax-deftype"><span class="std std-ref">defined type</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{arrays}}{}[a]{.}\href{../exec/runtime.html#syntax-arrayinst}{\mathsf{type}}\)</span> is of the form <span class="math notranslate nohighlight">\({\mathit{dt}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{arrays}}{}[a]{.}\href{../exec/runtime.html#syntax-arrayinst}{\mathsf{type}} = {\mathit{dt}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}array}}~a : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="exception-references">
+<span id="valid-ref-exn"></span><h3>Exception References<a class="headerlink" href="values.html#exception-references" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}exn}}~a)\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}})\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-exninst"><span class="std std-ref">exception instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{exns}}{}[a]\)</span> exists.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{exns}}{}[a] = {\mathit{exn}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}exn}}~a : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="function-references">
+<h3>Function References<a class="headerlink" href="values.html#function-references" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}func}}~a)\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}})\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-funcinst"><span class="std std-ref">function instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a]\)</span> exists.</p></li>
+<li><p>The <a class="reference internal" href="../valid/conventions.html#syntax-deftype"><span class="std std-ref">defined type</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a]{.}\href{../exec/runtime.html#syntax-funcinst}{\mathsf{type}}\)</span> is of the form <span class="math notranslate nohighlight">\({\mathit{dt}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a]{.}\href{../exec/runtime.html#syntax-funcinst}{\mathsf{type}} = {\mathit{dt}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}func}}~a : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="host-references">
+<h3>Host References<a class="headerlink" href="values.html#host-references" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}host}}~a)\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}})\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}host}}~a : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}}
+}
+\qquad
+\end{array}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A bare host reference is considered internalized.</p>
+</div>
+</section>
+<section id="external-references">
+<h3>External References<a class="headerlink" href="values.html#external-references" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}extern}}~{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}})\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}})\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}})\)</span>.</p></li>
+<li><p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}\)</span> is not of the form <span class="math notranslate nohighlight">\(\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s \href{../exec/values.html#valid-ref}{\vdash} {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}}
+ \qquad
+{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} \neq \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}extern}}~{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="subsumption">
+<h3>Subsumption<a class="headerlink" href="values.html#subsumption" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\({\mathit{rt}}\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-ref"><span class="std std-ref">reference value</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}\)</span> is <a class="reference internal" href="values.html#valid-ref"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\({\mathit{rt}'}\)</span>.</p></li>
+<li><p>Under the context <span class="math notranslate nohighlight">\(\{ \href{../valid/conventions.html#context}{\mathsf{return}}~\epsilon \}\)</span>, the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\({\mathit{rt}}\)</span> is <a class="reference internal" href="../valid/types.html#valid-reftype"><span class="std std-ref">valid</span></a>.</p></li>
+<li><p>The <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\({\mathit{rt}'}\)</span> <a class="reference internal" href="../valid/matching.html#match-reftype"><span class="std std-ref">matches</span></a> the <a class="reference internal" href="../syntax/types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> <span class="math notranslate nohighlight">\({\mathit{rt}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s \href{../exec/values.html#valid-ref}{\vdash} {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} : {\mathit{rt}'}
+ \qquad
+\{  \} \href{../valid/types.html#valid-reftype}{\vdash} {\mathit{rt}} : \href{../valid/types.html#valid-reftype}{\mathsf{ok}}
+ \qquad
+\{  \} \href{../valid/matching.html#match-reftype}{\vdash} {\mathit{rt}'} \href{../valid/matching.html#match-reftype}{\leq} {\mathit{rt}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} : {\mathit{rt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+</section>
+<section id="external-typing">
+<span id="valid-externaddr"></span><span id="index-2"></span><h2>External Typing<a class="headerlink" href="values.html#external-typing" title="Link to this heading">¶</a></h2>
+<p>For the purpose of checking <a class="reference internal" href="runtime.html#syntax-externaddr"><span class="std std-ref">external address</span></a> against <a class="reference internal" href="../syntax/modules.html#syntax-import"><span class="std std-ref">imports</span></a>,
+such values are classified by <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external types</span></a>.
+The following auxiliary typing rules specify this typing relation relative to a <a class="reference internal" href="runtime.html#syntax-store"><span class="std std-ref">store</span></a> <span class="math notranslate nohighlight">\(S\)</span> in which the referenced instances live.</p>
+<section id="functions">
+<span id="valid-externaddr-func"></span><span id="index-3"></span><h3>Functions<a class="headerlink" href="values.html#functions" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-externaddr"><span class="std std-ref">external address</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-externaddr}{\mathsf{func}}~a)\)</span> is <a class="reference internal" href="values.html#valid-externaddr"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-externtype}{\mathsf{func}}~{\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}}{.}\href{../exec/runtime.html#syntax-funcinst}{\mathsf{type}})\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-funcinst"><span class="std std-ref">function instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a]\)</span> exists.</p></li>
+<li><p>The <a class="reference internal" href="runtime.html#syntax-funcinst"><span class="std std-ref">function instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a]\)</span> is of the form <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a] = {\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} \href{../exec/runtime.html#syntax-externaddr}{\mathsf{func}}~a : \href{../syntax/types.html#syntax-externtype}{\mathsf{func}}~{\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}}{.}\href{../exec/runtime.html#syntax-funcinst}{\mathsf{type}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="tables">
+<span id="valid-externaddr-table"></span><span id="index-4"></span><h3>Tables<a class="headerlink" href="values.html#tables" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-externaddr"><span class="std std-ref">external address</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-externaddr}{\mathsf{table}}~a)\)</span> is <a class="reference internal" href="values.html#valid-externaddr"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-externtype}{\mathsf{table}}~{\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}}{.}\href{../exec/runtime.html#syntax-tableinst}{\mathsf{type}})\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-tableinst"><span class="std std-ref">table instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}{}[a]\)</span> exists.</p></li>
+<li><p>The <a class="reference internal" href="runtime.html#syntax-tableinst"><span class="std std-ref">table instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}{}[a]\)</span> is of the form <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}{}[a] = {\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} \href{../exec/runtime.html#syntax-externaddr}{\mathsf{table}}~a : \href{../syntax/types.html#syntax-externtype}{\mathsf{table}}~{\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}}{.}\href{../exec/runtime.html#syntax-tableinst}{\mathsf{type}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="memories">
+<span id="valid-externaddr-mem"></span><span id="index-5"></span><h3>Memories<a class="headerlink" href="values.html#memories" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-externaddr"><span class="std std-ref">external address</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-externaddr}{\mathsf{mem}}~a)\)</span> is <a class="reference internal" href="values.html#valid-externaddr"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-externtype}{\mathsf{mem}}~{\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}}{.}\href{../exec/runtime.html#syntax-meminst}{\mathsf{type}})\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-meminst"><span class="std std-ref">memory instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}{}[a]\)</span> exists.</p></li>
+<li><p>The <a class="reference internal" href="runtime.html#syntax-meminst"><span class="std std-ref">memory instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}{}[a]\)</span> is of the form <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}{}[a] = {\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} \href{../exec/runtime.html#syntax-externaddr}{\mathsf{mem}}~a : \href{../syntax/types.html#syntax-externtype}{\mathsf{mem}}~{\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}}{.}\href{../exec/runtime.html#syntax-meminst}{\mathsf{type}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="globals">
+<span id="valid-externaddr-global"></span><span id="index-6"></span><h3>Globals<a class="headerlink" href="values.html#globals" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-externaddr"><span class="std std-ref">external address</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-externaddr}{\mathsf{global}}~a)\)</span> is <a class="reference internal" href="values.html#valid-externaddr"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-externtype}{\mathsf{global}}~{\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}}{.}\href{../exec/runtime.html#syntax-globalinst}{\mathsf{type}})\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-globalinst"><span class="std std-ref">global instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}{}[a]\)</span> exists.</p></li>
+<li><p>The <a class="reference internal" href="runtime.html#syntax-globalinst"><span class="std std-ref">global instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}{}[a]\)</span> is of the form <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}{}[a] = {\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} \href{../exec/runtime.html#syntax-externaddr}{\mathsf{global}}~a : \href{../syntax/types.html#syntax-externtype}{\mathsf{global}}~{\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}}{.}\href{../exec/runtime.html#syntax-globalinst}{\mathsf{type}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="tags">
+<span id="valid-externaddr-tag"></span><span id="index-7"></span><h3>Tags<a class="headerlink" href="values.html#tags" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-externaddr"><span class="std std-ref">external address</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-externaddr}{\mathsf{tag}}~a)\)</span> is <a class="reference internal" href="values.html#valid-externaddr"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external type</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-externtype}{\mathsf{tag}}~{\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}}{.}\href{../exec/runtime.html#syntax-taginst}{\mathsf{type}})\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-taginst"><span class="std std-ref">tag instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tags}}{}[a]\)</span> exists.</p></li>
+<li><p>The <a class="reference internal" href="runtime.html#syntax-taginst"><span class="std std-ref">tag instance</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tags}}{}[a]\)</span> is of the form <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tags}}{}[a] = {\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} \href{../exec/runtime.html#syntax-externaddr}{\mathsf{tag}}~a : \href{../syntax/types.html#syntax-externtype}{\mathsf{tag}}~{\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}}{.}\href{../exec/runtime.html#syntax-taginst}{\mathsf{type}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="id1">
+<h3>Subsumption<a class="headerlink" href="values.html#id1" title="Link to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="runtime.html#syntax-externaddr"><span class="std std-ref">external address</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}}\)</span> is <a class="reference internal" href="values.html#valid-externaddr"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external type</span></a> <span class="math notranslate nohighlight">\({\mathit{xt}}\)</span> if:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The <a class="reference internal" href="runtime.html#syntax-externaddr"><span class="std std-ref">external address</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}}\)</span> is <a class="reference internal" href="values.html#valid-externaddr"><span class="std std-ref">valid</span></a> with the <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external type</span></a> <span class="math notranslate nohighlight">\({\mathit{xt}'}\)</span>.</p></li>
+<li><p>Under the context <span class="math notranslate nohighlight">\(\{ \href{../valid/conventions.html#context}{\mathsf{return}}~\epsilon \}\)</span>, the <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external type</span></a> <span class="math notranslate nohighlight">\({\mathit{xt}}\)</span> is <a class="reference internal" href="../valid/types.html#valid-externtype"><span class="std std-ref">valid</span></a>.</p></li>
+<li><p>The <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external type</span></a> <span class="math notranslate nohighlight">\({\mathit{xt}'}\)</span> <a class="reference internal" href="../valid/matching.html#match-externtype"><span class="std std-ref">matches</span></a> the <a class="reference internal" href="../syntax/types.html#syntax-externtype"><span class="std std-ref">external type</span></a> <span class="math notranslate nohighlight">\({\mathit{xt}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s \href{../exec/values.html#valid-externaddr}{\vdash} {\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}} : {\mathit{xt}'}
+ \qquad
+\{  \} \href{../valid/types.html#valid-externtype}{\vdash} {\mathit{xt}} : \href{../valid/types.html#valid-externtype}{\mathsf{ok}}
+ \qquad
+\{  \} \href{../valid/matching.html#match-externtype}{\vdash} {\mathit{xt}'} \href{../valid/matching.html#match-externtype}{\leq} {\mathit{xt}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} {\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}} : {\mathit{xt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/exec/values.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<span class="target" id="zh-index-0"></span><section id="zh-values">
+<h1>值<a class="headerlink" href="values.html#zh-values" title="Link to this heading">¶</a></h1>
+<section id="zh-value-typing">
+<span id="zh-valid-val"></span><span id="zh-index-1"></span><h2>值打字<a class="headerlink" href="values.html#zh-value-typing" title="Link to this heading">¶</a></h2>
+<p>用于检查参数 <a class="reference internal" href="runtime.html#zh-syntax-val"><span class="std std-ref">值</span></a> 针对参数 类型 出口数量 <a class="reference internal" href="../syntax/modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a>,
+值 按分类 <a class="reference internal" href="../syntax/types.html#zh-syntax-valtype"><span class="std std-ref">价值 类型</span></a>。 。 。
+以下辅助打字规则指定此打字关系相对于 a <a class="reference internal" href="runtime.html#zh-syntax-store"><span class="std std-ref">存储</span></a> <span class="math notranslate nohighlight">\(S\)</span> 其中可能引用 <a class="reference internal" href="runtime.html#zh-syntax-addr"><span class="std std-ref">地址</span></a> 活着</p>
+<section id="zh-numeric-values">
+<span id="zh-valid-num"></span><h3>数字 值<a class="headerlink" href="values.html#zh-numeric-values" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-num"><span class="std std-ref">数字值</span></a> <span class="math notranslate nohighlight">\(({\mathit{nt}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~c)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-num"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-numtype"><span class="std std-ref">数字类型</span></a> <span class="math notranslate nohighlight">\({\mathit{nt}}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+}{
+s \href{../exec/values.html#valid-num}{\vdash} {\mathit{nt}}{.}\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~c : {\mathit{nt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-vector-values">
+<span id="zh-valid-vec"></span><h3>矢量 值<a class="headerlink" href="values.html#zh-vector-values" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-vec"><span class="std std-ref">矢量值</span></a> <span class="math notranslate nohighlight">\(({\mathit{vt}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{const}}~c)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-vec"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-vectype"><span class="std std-ref">向量类型</span></a> <span class="math notranslate nohighlight">\({\mathit{vt}}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+}{
+s \href{../exec/values.html#valid-vec}{\vdash} {\mathit{vt}}{.}\href{../syntax/instructions.html#syntax-instr-vec}{\mathsf{const}}~c : {\mathit{vt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-null-references">
+<span id="zh-valid-ref"></span><h3>编号<a class="headerlink" href="values.html#zh-null-references" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\(\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}}\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../valid/conventions.html#syntax-valtype-ext}{\mathsf{bot}})\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}} : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}~\href{../valid/conventions.html#syntax-valtype-ext}{\mathsf{bot}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-scalar-references">
+<span id="zh-valid-ref-i31num"></span><h3>参考文献<a class="headerlink" href="values.html#zh-scalar-references" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}i\scriptstyle31}}~i)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}})\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}i\scriptstyle31}}~i : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-structure-references">
+<span id="zh-valid-ref-struct"></span><h3>结构参考文献<a class="headerlink" href="values.html#zh-structure-references" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}struct}}~a)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}})\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-structinst"><span class="std std-ref">结构实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{structs}}{}[a]\)</span> 已存在。</p></li>
+<li><p>那个 <a class="reference internal" href="../valid/conventions.html#zh-syntax-deftype"><span class="std std-ref">定义类型</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{structs}}{}[a]{.}\href{../exec/runtime.html#syntax-structinst}{\mathsf{type}}\)</span> 形式为 <span class="math notranslate nohighlight">\({\mathit{dt}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{structs}}{}[a]{.}\href{../exec/runtime.html#syntax-structinst}{\mathsf{type}} = {\mathit{dt}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}struct}}~a : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-array-references">
+<span id="zh-valid-ref-array"></span><h3>矩阵引用<a class="headerlink" href="values.html#zh-array-references" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}array}}~a)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}})\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-arrayinst"><span class="std std-ref">数组实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{arrays}}{}[a]\)</span> 已存在。</p></li>
+<li><p>那个 <a class="reference internal" href="../valid/conventions.html#zh-syntax-deftype"><span class="std std-ref">定义类型</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{arrays}}{}[a]{.}\href{../exec/runtime.html#syntax-arrayinst}{\mathsf{type}}\)</span> 形式为 <span class="math notranslate nohighlight">\({\mathit{dt}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{arrays}}{}[a]{.}\href{../exec/runtime.html#syntax-arrayinst}{\mathsf{type}} = {\mathit{dt}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}array}}~a : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-exception-references">
+<span id="zh-valid-ref-exn"></span><h3>参考文献<a class="headerlink" href="values.html#zh-exception-references" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}exn}}~a)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}})\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-exninst"><span class="std std-ref">例外实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{exns}}{}[a]\)</span> 已存在。</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{exns}}{}[a] = {\mathit{exn}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}exn}}~a : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-function-references">
+<h3>函数参考文献<a class="headerlink" href="values.html#zh-function-references" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}func}}~a)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}})\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-funcinst"><span class="std std-ref">函数实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a]\)</span> 已存在。</p></li>
+<li><p>那个 <a class="reference internal" href="../valid/conventions.html#zh-syntax-deftype"><span class="std std-ref">定义类型</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a]{.}\href{../exec/runtime.html#syntax-funcinst}{\mathsf{type}}\)</span> 形式为 <span class="math notranslate nohighlight">\({\mathit{dt}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a]{.}\href{../exec/runtime.html#syntax-funcinst}{\mathsf{type}} = {\mathit{dt}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}func}}~a : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\mathit{dt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-host-references">
+<h3>主机参考<a class="headerlink" href="values.html#zh-host-references" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}host}}~a)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}})\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}host}}~a : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}}
+}
+\qquad
+\end{array}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>裸宿主参考物被认为是内化的.</p>
+</div>
+</section>
+<section id="zh-external-references">
+<h3>外部参考文献<a class="headerlink" href="values.html#zh-external-references" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}extern}}~{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}})\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}})\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}})\)</span>.</p></li>
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}\)</span> 不为形式 <span class="math notranslate nohighlight">\(\href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s \href{../exec/values.html#valid-ref}{\vdash} {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{any}}
+ \qquad
+{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} \neq \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}null}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} \href{../exec/runtime.html#syntax-ref}{\mathsf{ref{.}extern}}~{\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} : \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~\href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-subsumption">
+<h3>潜移<a class="headerlink" href="values.html#zh-subsumption" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\({\mathit{rt}}\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-ref"><span class="std std-ref">参考值</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}}\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-ref"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\({\mathit{rt}'}\)</span>.</p></li>
+<li><p>在背景之下 <span class="math notranslate nohighlight">\(\{ \href{../valid/conventions.html#context}{\mathsf{return}}~\epsilon \}\)</span>,则 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\({\mathit{rt}}\)</span> 这是 <a class="reference internal" href="../valid/types.html#zh-valid-reftype"><span class="std std-ref">无效</span></a>.</p></li>
+<li><p>那个 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\({\mathit{rt}'}\)</span> <a class="reference internal" href="../valid/matching.html#zh-match-reftype"><span class="std std-ref">匹配</span></a> 联合国 <a class="reference internal" href="../syntax/types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> <span class="math notranslate nohighlight">\({\mathit{rt}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s \href{../exec/values.html#valid-ref}{\vdash} {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} : {\mathit{rt}'}
+ \qquad
+\{  \} \href{../valid/types.html#valid-reftype}{\vdash} {\mathit{rt}} : \href{../valid/types.html#valid-reftype}{\mathsf{ok}}
+ \qquad
+\{  \} \href{../valid/matching.html#match-reftype}{\vdash} {\mathit{rt}'} \href{../valid/matching.html#match-reftype}{\leq} {\mathit{rt}}
+}{
+s \href{../exec/values.html#valid-ref}{\vdash} {\href{../exec/runtime.html#syntax-ref}{\mathit{ref}}} : {\mathit{rt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+</section>
+<section id="zh-external-typing">
+<span id="zh-valid-externaddr"></span><span id="zh-index-2"></span><h2>外部打字<a class="headerlink" href="values.html#zh-external-typing" title="Link to this heading">¶</a></h2>
+<p>为检查目的 <a class="reference internal" href="runtime.html#zh-syntax-externaddr"><span class="std std-ref">外部 地址</span></a> 反对 <a class="reference internal" href="../syntax/modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a>, (中文).
+此类 值 按分类 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部 类型</span></a>。 。 。
+以下辅助打字规则指定此打字关系相对于 a <a class="reference internal" href="runtime.html#zh-syntax-store"><span class="std std-ref">存储</span></a> <span class="math notranslate nohighlight">\(S\)</span> 引用实例所在。</p>
+<section id="zh-functions">
+<span id="zh-valid-externaddr-func"></span><span id="zh-index-3"></span><h3>职能<a class="headerlink" href="values.html#zh-functions" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-externaddr"><span class="std std-ref">外部 地址</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-externaddr}{\mathsf{func}}~a)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-externaddr"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-externtype}{\mathsf{func}}~{\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}}{.}\href{../exec/runtime.html#syntax-funcinst}{\mathsf{type}})\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-funcinst"><span class="std std-ref">函数实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a]\)</span> 已存在。</p></li>
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-funcinst"><span class="std std-ref">函数实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a]\)</span> 形式为 <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{funcs}}{}[a] = {\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} \href{../exec/runtime.html#syntax-externaddr}{\mathsf{func}}~a : \href{../syntax/types.html#syntax-externtype}{\mathsf{func}}~{\href{../exec/runtime.html#syntax-funcinst}{\mathit{funcinst}}}{.}\href{../exec/runtime.html#syntax-funcinst}{\mathsf{type}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-tables">
+<span id="zh-valid-externaddr-table"></span><span id="zh-index-4"></span><h3>表格<a class="headerlink" href="values.html#zh-tables" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-externaddr"><span class="std std-ref">外部 地址</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-externaddr}{\mathsf{table}}~a)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-externaddr"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-externtype}{\mathsf{table}}~{\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}}{.}\href{../exec/runtime.html#syntax-tableinst}{\mathsf{type}})\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-tableinst"><span class="std std-ref">表实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}{}[a]\)</span> 已存在。</p></li>
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-tableinst"><span class="std std-ref">表实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}{}[a]\)</span> 形式为 <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tables}}{}[a] = {\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} \href{../exec/runtime.html#syntax-externaddr}{\mathsf{table}}~a : \href{../syntax/types.html#syntax-externtype}{\mathsf{table}}~{\href{../exec/runtime.html#syntax-tableinst}{\mathit{tableinst}}}{.}\href{../exec/runtime.html#syntax-tableinst}{\mathsf{type}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-memories">
+<span id="zh-valid-externaddr-mem"></span><span id="zh-index-5"></span><h3>回忆<a class="headerlink" href="values.html#zh-memories" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-externaddr"><span class="std std-ref">外部 地址</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-externaddr}{\mathsf{mem}}~a)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-externaddr"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-externtype}{\mathsf{mem}}~{\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}}{.}\href{../exec/runtime.html#syntax-meminst}{\mathsf{type}})\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-meminst"><span class="std std-ref">内存实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}{}[a]\)</span> 已存在。</p></li>
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-meminst"><span class="std std-ref">内存实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}{}[a]\)</span> 形式为 <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}{}[a] = {\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} \href{../exec/runtime.html#syntax-externaddr}{\mathsf{mem}}~a : \href{../syntax/types.html#syntax-externtype}{\mathsf{mem}}~{\href{../exec/runtime.html#syntax-meminst}{\mathit{meminst}}}{.}\href{../exec/runtime.html#syntax-meminst}{\mathsf{type}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-globals">
+<span id="zh-valid-externaddr-global"></span><span id="zh-index-6"></span><h3>全球<a class="headerlink" href="values.html#zh-globals" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-externaddr"><span class="std std-ref">外部 地址</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-externaddr}{\mathsf{global}}~a)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-externaddr"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-externtype}{\mathsf{global}}~{\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}}{.}\href{../exec/runtime.html#syntax-globalinst}{\mathsf{type}})\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-globalinst"><span class="std std-ref">全球实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}{}[a]\)</span> 已存在。</p></li>
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-globalinst"><span class="std std-ref">全球实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}{}[a]\)</span> 形式为 <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{globals}}{}[a] = {\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} \href{../exec/runtime.html#syntax-externaddr}{\mathsf{global}}~a : \href{../syntax/types.html#syntax-externtype}{\mathsf{global}}~{\href{../exec/runtime.html#syntax-globalinst}{\mathit{globalinst}}}{.}\href{../exec/runtime.html#syntax-globalinst}{\mathsf{type}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-tags">
+<span id="zh-valid-externaddr-tag"></span><span id="zh-index-7"></span><h3>标记<a class="headerlink" href="values.html#zh-tags" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-externaddr"><span class="std std-ref">外部 地址</span></a> <span class="math notranslate nohighlight">\((\href{../exec/runtime.html#syntax-externaddr}{\mathsf{tag}}~a)\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-externaddr"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> <span class="math notranslate nohighlight">\((\href{../syntax/types.html#syntax-externtype}{\mathsf{tag}}~{\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}}{.}\href{../exec/runtime.html#syntax-taginst}{\mathsf{type}})\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-taginst"><span class="std std-ref">标签实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tags}}{}[a]\)</span> 已存在。</p></li>
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-taginst"><span class="std std-ref">标签实例</span></a> <span class="math notranslate nohighlight">\(s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tags}}{}[a]\)</span> 形式为 <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s{.}\href{../exec/runtime.html#syntax-store}{\mathsf{tags}}{}[a] = {\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} \href{../exec/runtime.html#syntax-externaddr}{\mathsf{tag}}~a : \href{../syntax/types.html#syntax-externtype}{\mathsf{tag}}~{\href{../exec/runtime.html#syntax-taginst}{\mathit{taginst}}}{.}\href{../exec/runtime.html#syntax-taginst}{\mathsf{type}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+<section id="zh-id1">
+<h3>潜移<a class="headerlink" href="values.html#zh-id1" title="Link to this heading">¶</a></h3>
+<p>那个 <a class="reference internal" href="runtime.html#zh-syntax-externaddr"><span class="std std-ref">外部 地址</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}}\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-externaddr"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> <span class="math notranslate nohighlight">\({\mathit{xt}}\)</span> 如果:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>那个 <a class="reference internal" href="runtime.html#zh-syntax-externaddr"><span class="std std-ref">外部 地址</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}}\)</span> 这是 <a class="reference internal" href="values.html#zh-valid-externaddr"><span class="std std-ref">无效</span></a> 与 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> <span class="math notranslate nohighlight">\({\mathit{xt}'}\)</span>.</p></li>
+<li><p>在背景之下 <span class="math notranslate nohighlight">\(\{ \href{../valid/conventions.html#context}{\mathsf{return}}~\epsilon \}\)</span>,则 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> <span class="math notranslate nohighlight">\({\mathit{xt}}\)</span> 这是 <a class="reference internal" href="../valid/types.html#zh-valid-externtype"><span class="std std-ref">无效</span></a>.</p></li>
+<li><p>那个 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> <span class="math notranslate nohighlight">\({\mathit{xt}'}\)</span> <a class="reference internal" href="../valid/matching.html#zh-match-externtype"><span class="std std-ref">匹配</span></a> 联合国 <a class="reference internal" href="../syntax/types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> <span class="math notranslate nohighlight">\({\mathit{xt}}\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{array}{@{}c@{}}\displaystyle
+\frac{
+s \href{../exec/values.html#valid-externaddr}{\vdash} {\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}} : {\mathit{xt}'}
+ \qquad
+\{  \} \href{../valid/types.html#valid-externtype}{\vdash} {\mathit{xt}} : \href{../valid/types.html#valid-externtype}{\mathsf{ok}}
+ \qquad
+\{  \} \href{../valid/matching.html#match-externtype}{\vdash} {\mathit{xt}'} \href{../valid/matching.html#match-externtype}{\leq} {\mathit{xt}}
+}{
+s \href{../exec/values.html#valid-externaddr}{\vdash} {\href{../exec/runtime.html#syntax-externaddr}{\mathit{externaddr}}} : {\mathit{xt}}
+}
+\qquad
+\end{array}\]</div>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/exec/values.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

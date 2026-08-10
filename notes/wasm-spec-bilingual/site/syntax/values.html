@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Values  / 值  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="types.html" rel="next" title="Types"/>
+<link href="conventions.html" rel="prev" title="Conventions"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conventions.html"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="values.html#"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/syntax/values.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="values">
+<span id="syntax-value"></span><span id="index-0"></span><h1>Values<a class="headerlink" href="values.html#values" title="Link to this heading">¶</a></h1>
+<p>WebAssembly programs operate on primitive numeric <em>values</em>.
+Moreover, in the definition of programs, immutable sequences of values occur to represent more complex data, such as text strings or other vectors.</p>
+<section id="bytes">
+<span id="syntax-byte"></span><span id="index-1"></span><h2>Bytes<a class="headerlink" href="values.html#bytes" title="Link to this heading">¶</a></h2>
+<p>The simplest form of value are raw uninterpreted <em>bytes</em>.
+In the abstract syntax they are represented as hexadecimal literals.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/values.html#syntax-byte}{\mathit{byte}}} &amp; ::= &amp; \mathtt{0x00} ~~|~~ \ldots ~~|~~ \mathtt{0xFF} \\
+\end{array}\end{split}\]</div>
+<section id="conventions">
+<h3>Conventions<a class="headerlink" href="values.html#conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The meta variable <span class="math notranslate nohighlight">\(b\)</span> ranges over bytes.</p></li>
+<li><p>Bytes are sometimes interpreted as natural numbers <span class="math notranslate nohighlight">\(n &lt; 256\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="integers">
+<span id="syntax-int"></span><span id="syntax-uint"></span><span id="syntax-sint"></span><span id="index-2"></span><h2>Integers<a class="headerlink" href="values.html#integers" title="Link to this heading">¶</a></h2>
+<p>Different classes of <em>integers</em> with different value ranges are distinguished by their <em>bit width</em> <span class="math notranslate nohighlight">\(N\)</span> and by whether they are <em>unsigned</em> or <em>signed</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {{\href{../syntax/values.html#syntax-int}{\mathit{u}\kern-0.1em}}}{N} &amp; ::= &amp; 0 ~~|~~ \ldots ~~|~~ {2^{N}} - 1 \\
+&amp; {{\href{../syntax/values.html#syntax-int}{\mathit{s}\kern-0.1em}}}{N} &amp; ::= &amp; {-{2^{N - 1}}} ~~|~~ \ldots ~~|~~ {-1} ~~|~~ 0 ~~|~~ {+1} ~~|~~ \ldots ~~|~~ {+{2^{N - 1}}} - 1 \\
+&amp; {{\href{../syntax/values.html#syntax-int}{\mathit{i}\kern-0.1em}}}{N} &amp; ::= &amp; {{\href{../syntax/values.html#syntax-int}{\mathit{u}\kern-0.1em}}}{N} \\
+\end{array}\end{split}\]</div>
+<p>The class <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{i}\kern-0.1em}}\)</span> defines <em>uninterpreted</em> integers, whose signedness interpretation can vary depending on context.
+In the abstract syntax, they are represented as unsigned values.
+However, some operations <a class="reference internal" href="../exec/numerics.html#aux-signed"><span class="std std-ref">convert</span></a> them to signed based on a two’s complement interpretation.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The main integer types occurring in this specification are <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em8}}}\)</span>, <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}}\)</span>, <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em64}}}\)</span>, and <span class="math notranslate nohighlight">\({\mathit{u{\kern-0.1em\scriptstyle 128}}}\)</span>.
+However, other sizes occur as auxiliary constructions, e.g., in the definition of <a class="reference internal" href="values.html#syntax-float"><span class="std std-ref">floating-point</span></a> numbers.</p>
+</div>
+<section id="id1">
+<h3>Conventions<a class="headerlink" href="values.html#id1" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The meta variables <span class="math notranslate nohighlight">\(m\)</span>, <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(j\)</span> range over integers.</p></li>
+<li><p>Numbers may be denoted by simple arithmetics, as in the grammar above.
+In order to distinguish arithmetics like <span class="math notranslate nohighlight">\({2^{N}}\)</span> from sequences like <span class="math notranslate nohighlight">\({(1)^{N}}\)</span>, the latter is distinguished with parentheses.</p></li>
+</ul>
+</section>
+</section>
+<section id="floating-point">
+<span id="syntax-float"></span><span id="syntax-payload"></span><span id="syntax-nan"></span><span id="index-3"></span><h2>Floating-Point<a class="headerlink" href="values.html#floating-point" title="Link to this heading">¶</a></h2>
+<p><em>Floating-point</em> data represents 32 or 64 bit values that correspond to the respective binary formats of the <a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754</a> standard (Section 3.3).</p>
+<p>Every value has a <em>sign</em> and a <em>magnitude</em>.
+Magnitudes can either be expressed as <em>normal</em> numbers of the form <span class="math notranslate nohighlight">\(m_0~{.}~m_1~m_2~\ldots~m_{\mathsf{m}} \cdot {2^{e}}\)</span>, where <span class="math notranslate nohighlight">\(e\)</span> is the exponent and <span class="math notranslate nohighlight">\(m\)</span> is the <em>significand</em> whose most significant bit <span class="math notranslate nohighlight">\(m_0\)</span> is <span class="math notranslate nohighlight">\(1\)</span>,
+or as a <em>subnormal</em> number where the exponent is fixed to the smallest possible value and <span class="math notranslate nohighlight">\(m_0\)</span> is <span class="math notranslate nohighlight">\(0\)</span>; among the subnormals are positive and negative zero values.
+Since the significands are binary values, normals are represented in the form <span class="math notranslate nohighlight">\((1 + m \cdot {2^{{-M}}}) \cdot {2^{e}}\)</span> in the abstract syntax, where <span class="math notranslate nohighlight">\(M\)</span> is the bit width of <span class="math notranslate nohighlight">\(m\)</span>; similarly for subnormals.</p>
+<p>Possible magnitudes also include the special values <span class="math notranslate nohighlight">\(\infty\)</span> (infinity) and <span class="math notranslate nohighlight">\(\mathsf{nan}\)</span> (<em>NaN</em>, not a number).
+NaN values have a <em>payload</em> that describes the mantissa bits in the underlying <a class="reference internal" href="../exec/numerics.html#aux-fbits"><span class="std std-ref">binary representation</span></a>.
+No distinction is made between signalling and quiet NaNs.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {{\href{../syntax/values.html#syntax-float}{\mathit{f}\kern-0.15em}}}{N} &amp; ::= &amp; {+{{\href{../syntax/values.html#syntax-float}{\mathit{fmag}\scriptstyle\kern-0.1emN}}}} ~~|~~ {-{{\href{../syntax/values.html#syntax-float}{\mathit{fmag}\scriptstyle\kern-0.1emN}}}} \\
+&amp; {{\href{../syntax/values.html#syntax-float}{\mathit{fmag}\scriptstyle\kern-0.1emN}}} &amp; ::= &amp; (1 + m \cdot {2^{{-M}}}) \cdot {2^{e}} &amp; \quad \mbox{if}~ m &lt; {2^{M}} \land 2 - {2^{E - 1}} \leq e \leq {2^{E - 1}} - 1 \\
+&amp; &amp; | &amp; (0 + m \cdot {2^{{-M}}}) \cdot {2^{e}} &amp; \quad \mbox{if}~ m &lt; {2^{M}} \land 2 - {2^{E - 1}} = e \\
+&amp; &amp; | &amp; \infty \\
+&amp; &amp; | &amp; {\href{../syntax/values.html#syntax-float}{\mathsf{nan}}}{(m)} &amp; \quad \mbox{if}~ 1 \leq m &lt; {2^{M}} \\
+\end{array}\end{split}\]</div>
+<p id="aux-expon"><span id="aux-signif"></span>where <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} M &amp; = &amp; {\href{../syntax/values.html#aux-signif}{\mathrm{signif}}}(N) \\ \end{array}\)</span> and <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} E &amp; = &amp; {\href{../syntax/values.html#aux-expon}{\mathrm{expon}}}(N) \\ \end{array}\)</span> with</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{\href{../syntax/values.html#aux-signif}{\mathrm{signif}}}(32) &amp; = &amp; 23 \\
+{\href{../syntax/values.html#aux-signif}{\mathrm{signif}}}(64) &amp; = &amp; 52 \\[0.8ex]
+{\href{../syntax/values.html#aux-expon}{\mathrm{expon}}}(32) &amp; = &amp; 8 \\
+{\href{../syntax/values.html#aux-expon}{\mathrm{expon}}}(64) &amp; = &amp; 11 \\
+\end{array}\end{split}\]</div>
+<p id="aux-canon"><span id="arithmetic-nan"></span><span id="canonical-nan"></span>A <em>canonical NaN</em> is a floating-point value <span class="math notranslate nohighlight">\({\pm{\mathsf{nan}}{({{\href{../syntax/values.html#aux-canon}{\mathrm{canon}}}}_{N})}}\)</span> where <span class="math notranslate nohighlight">\({{\href{../syntax/values.html#aux-canon}{\mathrm{canon}}}}_{N}\)</span> is a payload whose most significant bit is <span class="math notranslate nohighlight">\(1\)</span> while all others are <span class="math notranslate nohighlight">\(0\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{\href{../syntax/values.html#aux-canon}{\mathrm{canon}}}}_{N} &amp; = &amp; {2^{{\href{../syntax/values.html#aux-signif}{\mathrm{signif}}}(N) - 1}} \\
+\end{array}\end{split}\]</div>
+<p>An <em>arithmetic NaN</em> is a floating-point value <span class="math notranslate nohighlight">\({\pm{\mathsf{nan}}{(m)}}\)</span> with <span class="math notranslate nohighlight">\(m \geq {{\href{../syntax/values.html#aux-canon}{\mathrm{canon}}}}_{N}\)</span>, such that the most significant bit is <span class="math notranslate nohighlight">\(1\)</span> while all others are arbitrary.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the abstract syntax, subnormals are distinguished by the leading <span class="math notranslate nohighlight">\(0\)</span> of the significand. The exponent of subnormals has the same value as the smallest possible exponent of a normal number. Only in the <a class="reference internal" href="../binary/values.html#binary-float"><span class="std std-ref">binary representation</span></a> the exponent of a subnormal is encoded differently than the exponent of any normal number.</p>
+<p>The notion of canonical NaN defined here is unrelated to the notion of canonical NaN that the <a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754</a> standard (Section 3.5.2) defines for decimal interchange formats.</p>
+</div>
+<section id="id2">
+<h3>Conventions<a class="headerlink" href="values.html#id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The meta variable <span class="math notranslate nohighlight">\(z\)</span> ranges over floating-point values where clear from context.</p></li>
+<li><p>Where clear from context, shorthands like <span class="math notranslate nohighlight">\({+1}\)</span> denote floating point values like <span class="math notranslate nohighlight">\({+(1 + 0 \cdot {2^{{-M}}}) \cdot {2^{0}}}\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="vectors">
+<span id="syntax-vecnum"></span><span id="index-4"></span><h2>Vectors<a class="headerlink" href="values.html#vectors" title="Link to this heading">¶</a></h2>
+<p><em>Numeric vectors</em> are 128-bit values that are processed by vector instructions (also known as <em>SIMD</em> instructions, single instruction multiple data).
+They are represented in the abstract syntax using <span class="math notranslate nohighlight">\({\mathit{u{\kern-0.1em\scriptstyle 128}}}\)</span>. The interpretation of lane types (<a class="reference internal" href="values.html#syntax-int"><span class="std std-ref">integer</span></a> or <a class="reference internal" href="values.html#syntax-float"><span class="std std-ref">floating-point</span></a> numbers) and lane sizes are determined by the specific instruction operating on them.</p>
+</section>
+<section id="names">
+<span id="syntax-name"></span><span id="syntax-char"></span><span id="index-5"></span><h2>Names<a class="headerlink" href="values.html#names" title="Link to this heading">¶</a></h2>
+<p><em>Names</em> are sequences of <em>characters</em>, which are <em>scalar values</em> as defined by <a class="reference external" href="https://www.unicode.org/versions/latest/">Unicode</a> (Section 2.4).</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/values.html#syntax-name}{\mathit{name}}} &amp; ::= &amp; {{\href{../syntax/values.html#syntax-name}{\mathit{char}}}^\ast} &amp; \quad \mbox{if}~ {|{\href{../binary/values.html#binary-utf8}{\mathrm{utf\scriptstyle8}}}({{\href{../syntax/values.html#syntax-name}{\mathit{char}}}^\ast})|} &lt; {2^{32}} \\
+&amp; {\href{../syntax/values.html#syntax-name}{\mathit{char}}} &amp; ::= &amp; \mathrm{U{+}00} ~~|~~ \ldots ~~|~~ \mathrm{U{+}D7FF} ~~|~~ \mathrm{U{+}E000} ~~|~~ \ldots ~~|~~ \mathrm{U{+}10FFFF} \\
+\end{array}\end{split}\]</div>
+<p>Due to the limitations of the <a class="reference internal" href="../binary/values.html#binary-name"><span class="std std-ref">binary format</span></a>,
+the length of a name is bounded by the length of its <a class="reference internal" href="../binary/values.html#binary-utf8"><span class="std std-ref">UTF-8</span></a> encoding.</p>
+<section id="convention">
+<h3>Convention<a class="headerlink" href="values.html#convention" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>Characters (Unicode scalar values) are sometimes used interchangeably with natural numbers <span class="math notranslate nohighlight">\(n &lt; 1114112\)</span>.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/syntax/values.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-values">
+<span id="zh-syntax-value"></span><span id="zh-index-0"></span><h1>值<a class="headerlink" href="values.html#zh-values" title="Link to this heading">¶</a></h1>
+<p>WebAssembly 程序在原始数字上运行 <em>值</em>。 。 。
+此外,在程序的定义中,不可改变的序列: 值 以表示更为复杂的数据,例如文本字符串或其他向量。</p>
+<section id="zh-bytes">
+<span id="zh-syntax-byte"></span><span id="zh-index-1"></span><h2>字节<a class="headerlink" href="values.html#zh-bytes" title="Link to this heading">¶</a></h2>
+<p>最简单的价值形式是未经解释的原始形式 <em>字节</em>。 。 。
+在那个 抽象语法 以十六进制字数表示。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/values.html#syntax-byte}{\mathit{byte}}} &amp; ::= &amp; \mathtt{0x00} ~~|~~ \ldots ~~|~~ \mathtt{0xFF} \\
+\end{array}\end{split}\]</div>
+<section id="zh-conventions">
+<h3>约定<a class="headerlink" href="values.html#zh-conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>元变量 <span class="math notranslate nohighlight">\(b\)</span> 宽度 字节.</p></li>
+<li><p>字节 有时被解释为自然数 <span class="math notranslate nohighlight">\(n &lt; 256\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-integers">
+<span id="zh-syntax-int"></span><span id="zh-syntax-uint"></span><span id="zh-syntax-sint"></span><span id="zh-index-2"></span><h2>整数<a class="headerlink" href="values.html#zh-integers" title="Link to this heading">¶</a></h2>
+<p>不同类别 <em>整数</em> 具有不同数值范围的 <em>位宽</em> <span class="math notranslate nohighlight">\(N\)</span> 以及他们是否 <em>未签名</em> 或 <em>签名</em>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {{\href{../syntax/values.html#syntax-int}{\mathit{u}\kern-0.1em}}}{N} &amp; ::= &amp; 0 ~~|~~ \ldots ~~|~~ {2^{N}} - 1 \\
+&amp; {{\href{../syntax/values.html#syntax-int}{\mathit{s}\kern-0.1em}}}{N} &amp; ::= &amp; {-{2^{N - 1}}} ~~|~~ \ldots ~~|~~ {-1} ~~|~~ 0 ~~|~~ {+1} ~~|~~ \ldots ~~|~~ {+{2^{N - 1}}} - 1 \\
+&amp; {{\href{../syntax/values.html#syntax-int}{\mathit{i}\kern-0.1em}}}{N} &amp; ::= &amp; {{\href{../syntax/values.html#syntax-int}{\mathit{u}\kern-0.1em}}}{N} \\
+\end{array}\end{split}\]</div>
+<p>班级 <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{i}\kern-0.1em}}\)</span> 定义 <em>未解释</em> 整数,其签名解释会因上下文而异.
+在那个 抽象语法,他们作为未署名代表 值。 。 。
+然而,一些业务 <a class="reference internal" href="../exec/numerics.html#zh-aux-signed"><span class="std std-ref">转换</span></a> 根据两个补充解释签署。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>主语 整数 类型 发生于此 规范 已经 <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em8}}}\)</span>, <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}}\)</span>, <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em64}}}\)</span>,以及 <span class="math notranslate nohighlight">\({\mathit{u{\kern-0.1em\scriptstyle 128}}}\)</span>。 。 。
+然而,其他尺寸作为辅助构筑物出现,例如在定义中. <a class="reference internal" href="values.html#zh-syntax-float"><span class="std std-ref">浮点数</span></a> 数字。</p>
+</div>
+<section id="zh-id1">
+<h3>约定<a class="headerlink" href="values.html#zh-id1" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>元变量 <span class="math notranslate nohighlight">\(m\)</span>, <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(i\)</span>, <span class="math notranslate nohighlight">\(j\)</span> 范围 整数.</p></li>
+<li><p>数字可以用简单的算术表示,如: 语法 页:1
+为了区分算术 <span class="math notranslate nohighlight">\({2^{N}}\)</span> 从序列像 <span class="math notranslate nohighlight">\({(1)^{N}}\)</span>,后者用括号区分。</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-floating-point">
+<span id="zh-syntax-float"></span><span id="zh-syntax-payload"></span><span id="zh-syntax-nan"></span><span id="zh-index-3"></span><h2>浮点数<a class="headerlink" href="values.html#zh-floating-point" title="Link to this heading">¶</a></h2>
+<p><em>浮点数</em> 数据为32或64位 值 相应的二进制格式 <a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754 (英语).</a> 标准段 3.3).</p>
+<p>每个值都有 <em>签名</em> (单位:千美元) <em>数量</em>。 。 。
+宽度可以是 <em>常规</em> 表单编号 <span class="math notranslate nohighlight">\(m_0~{.}~m_1~m_2~\ldots~m_{\mathsf{m}} \cdot {2^{e}}\)</span>时, <span class="math notranslate nohighlight">\(e\)</span> 负责者和 <span class="math notranslate nohighlight">\(m\)</span> 这是 <em>美国</em> 他们最重要的一点 <span class="math notranslate nohighlight">\(m_0\)</span> 这是 <span class="math notranslate nohighlight">\(1\)</span>, (中文).
+或作为 <em>亚正常</em> 以最小值为单位并 <span class="math notranslate nohighlight">\(m_0\)</span> 这是 <span class="math notranslate nohighlight">\(0\)</span>;在亚正常中为正负零 值。 。 。
+由于标志是二进制 值,普通人以表格形式表示 <span class="math notranslate nohighlight">\((1 + m \cdot {2^{{-M}}}) \cdot {2^{e}}\)</span> 输入 抽象语法时, <span class="math notranslate nohighlight">\(M\)</span> 是比特宽度 <span class="math notranslate nohighlight">\(m\)</span>;类似对次正常.</p>
+<p>可能的幅度还包括: 值 <span class="math notranslate nohighlight">\(\infty\)</span> (无穷)及. <span class="math notranslate nohighlight">\(\mathsf{nan}\)</span> (<em>纳恩</em>,而不是一个数字。
+纳恩 值 有个 <em>有效载荷</em> 说明背后的曼提萨 <a class="reference internal" href="../exec/numerics.html#zh-aux-fbits"><span class="std std-ref">二进制表示符</span></a>。 。 。
+信号与安静的NaNs没有区别.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {{\href{../syntax/values.html#syntax-float}{\mathit{f}\kern-0.15em}}}{N} &amp; ::= &amp; {+{{\href{../syntax/values.html#syntax-float}{\mathit{fmag}\scriptstyle\kern-0.1emN}}}} ~~|~~ {-{{\href{../syntax/values.html#syntax-float}{\mathit{fmag}\scriptstyle\kern-0.1emN}}}} \\
+&amp; {{\href{../syntax/values.html#syntax-float}{\mathit{fmag}\scriptstyle\kern-0.1emN}}} &amp; ::= &amp; (1 + m \cdot {2^{{-M}}}) \cdot {2^{e}} &amp; \quad \mbox{if}~ m &lt; {2^{M}} \land 2 - {2^{E - 1}} \leq e \leq {2^{E - 1}} - 1 \\
+&amp; &amp; | &amp; (0 + m \cdot {2^{{-M}}}) \cdot {2^{e}} &amp; \quad \mbox{if}~ m &lt; {2^{M}} \land 2 - {2^{E - 1}} = e \\
+&amp; &amp; | &amp; \infty \\
+&amp; &amp; | &amp; {\href{../syntax/values.html#syntax-float}{\mathsf{nan}}}{(m)} &amp; \quad \mbox{if}~ 1 \leq m &lt; {2^{M}} \\
+\end{array}\end{split}\]</div>
+<p id="zh-aux-expon"><span id="zh-aux-signif"></span>地点 <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} M &amp; = &amp; {\href{../syntax/values.html#aux-signif}{\mathrm{signif}}}(N) \\ \end{array}\)</span> 和 <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{~}c@{~}l@{}l@{}} E &amp; = &amp; {\href{../syntax/values.html#aux-expon}{\mathrm{expon}}}(N) \\ \end{array}\)</span> 与</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{\href{../syntax/values.html#aux-signif}{\mathrm{signif}}}(32) &amp; = &amp; 23 \\
+{\href{../syntax/values.html#aux-signif}{\mathrm{signif}}}(64) &amp; = &amp; 52 \\[0.8ex]
+{\href{../syntax/values.html#aux-expon}{\mathrm{expon}}}(32) &amp; = &amp; 8 \\
+{\href{../syntax/values.html#aux-expon}{\mathrm{expon}}}(64) &amp; = &amp; 11 \\
+\end{array}\end{split}\]</div>
+<p id="zh-aux-canon"><span id="zh-arithmetic-nan"></span><span id="zh-canonical-nan"></span>A <em>警犬纳恩</em> 是一个 浮点数 价值 <span class="math notranslate nohighlight">\({\pm{\mathsf{nan}}{({{\href{../syntax/values.html#aux-canon}{\mathrm{canon}}}}_{N})}}\)</span> 地点 <span class="math notranslate nohighlight">\({{\href{../syntax/values.html#aux-canon}{\mathrm{canon}}}}_{N}\)</span> 是一个载荷,其最重要的部分是 <span class="math notranslate nohighlight">\(1\)</span> 而其他人则 <span class="math notranslate nohighlight">\(0\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{\href{../syntax/values.html#aux-canon}{\mathrm{canon}}}}_{N} &amp; = &amp; {2^{{\href{../syntax/values.html#aux-signif}{\mathrm{signif}}}(N) - 1}} \\
+\end{array}\end{split}\]</div>
+<p>一个 <em>算术 NAN</em> 是一个 浮点数 价值 <span class="math notranslate nohighlight">\({\pm{\mathsf{nan}}{(m)}}\)</span> 与 <span class="math notranslate nohighlight">\(m \geq {{\href{../syntax/values.html#aux-canon}{\mathrm{canon}}}}_{N}\)</span>,这样最重要的一点是 <span class="math notranslate nohighlight">\(1\)</span> 而其他人都是武断的。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>在那个 抽象语法,亚常态被领导者区分 <span class="math notranslate nohighlight">\(0\)</span> 标志性的。 亚正常数的表示值与普通数的最小可能表示值相同. 仅在 <a class="reference internal" href="../binary/values.html#zh-binary-float"><span class="std std-ref">二进制表示符</span></a> 一个次正常的符号的编码与任何普通数字的符号不同。</p>
+<p>此处定义的犬科纳恩概念与犬科纳恩概念无关,即: <a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754 (英语).</a> 标准段 3.5.2 定义小数交换格式。</p>
+</div>
+<section id="zh-id2">
+<h3>约定<a class="headerlink" href="values.html#zh-id2" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>元变量 <span class="math notranslate nohighlight">\(z\)</span> 宽度 浮点数 值 从上下文看很清楚</p></li>
+<li><p>在从上下文看清楚的地方,简称如下: <span class="math notranslate nohighlight">\({+1}\)</span> 表示浮动点 值 喜欢 <span class="math notranslate nohighlight">\({+(1 + 0 \cdot {2^{{-M}}}) \cdot {2^{0}}}\)</span>.</p></li>
+</ul>
+</section>
+</section>
+<section id="zh-vectors">
+<span id="zh-syntax-vecnum"></span><span id="zh-index-4"></span><h2>矢量<a class="headerlink" href="values.html#zh-vectors" title="Link to this heading">¶</a></h2>
+<p><em>数字向量</em> 为 128 位 值 处理的 向量指令 (又称: <em>锡默德</em> 指令单 指令 多数据).
+他们有代表参加 抽象语法 使用 <span class="math notranslate nohighlight">\({\mathit{u{\kern-0.1em\scriptstyle 128}}}\)</span>. 航道解释 类型 (<a class="reference internal" href="values.html#zh-syntax-int"><span class="std std-ref">整数</span></a> 或 <a class="reference internal" href="values.html#zh-syntax-float"><span class="std std-ref">浮点数</span></a> 车道大小由具体 指令 操作他们。</p>
+</section>
+<section id="zh-names">
+<span id="zh-syntax-name"></span><span id="zh-syntax-char"></span><span id="zh-index-5"></span><h2>名称<a class="headerlink" href="values.html#zh-names" title="Link to this heading">¶</a></h2>
+<p><em>名称</em> 序列为: <em>字符</em>,这些是 <em>斜线 值</em> 定义 <a class="reference external" href="https://www.unicode.org/versions/latest/">统一编码</a> (段 2.4).</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/values.html#syntax-name}{\mathit{name}}} &amp; ::= &amp; {{\href{../syntax/values.html#syntax-name}{\mathit{char}}}^\ast} &amp; \quad \mbox{if}~ {|{\href{../binary/values.html#binary-utf8}{\mathrm{utf\scriptstyle8}}}({{\href{../syntax/values.html#syntax-name}{\mathit{char}}}^\ast})|} &lt; {2^{32}} \\
+&amp; {\href{../syntax/values.html#syntax-name}{\mathit{char}}} &amp; ::= &amp; \mathrm{U{+}00} ~~|~~ \ldots ~~|~~ \mathrm{U{+}D7FF} ~~|~~ \mathrm{U{+}E000} ~~|~~ \ldots ~~|~~ \mathrm{U{+}10FFFF} \\
+\end{array}\end{split}\]</div>
+<p>受限制 <a class="reference internal" href="../binary/values.html#zh-binary-name"><span class="std std-ref">二进制格式</span></a>, (中文).
+长度 a 名称 以长度为界 <a class="reference internal" href="../binary/values.html#zh-binary-utf8"><span class="std std-ref">UTF-8 数据</span></a> 编码.</p>
+<section id="zh-convention">
+<h3>公约<a class="headerlink" href="values.html#zh-convention" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>字符(  Unicode scalar ) 值)有时与自然数互换使用 <span class="math notranslate nohighlight">\(n &lt; 1114112\)</span>.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/syntax/values.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

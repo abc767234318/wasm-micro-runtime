@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Introduction  / 导言  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="overview.html" rel="next" title="Overview"/>
+<link href="index.html" rel="prev" title="Introduction"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="introduction.html#"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="overview.html"><span class="wasm-bi-nav-en">Overview</span><span class="wasm-bi-nav-zh">概览</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/intro/introduction.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="introduction">
+<h1>Introduction<a class="headerlink" href="introduction.html#introduction" title="Link to this heading">¶</a></h1>
+<p>WebAssembly (abbreviated Wasm <a class="footnote-reference brackets" href="introduction.html#wasm" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>) is a <em>safe, portable, low-level code format</em>
+designed for efficient execution and compact representation.
+Its main goal is to enable high performance applications on the Web, but it does not make any Web-specific assumptions or provide Web-specific features, so it can be employed in other environments as well.</p>
+<p>WebAssembly is an open standard developed by a <a class="reference external" href="https://www.w3.org/community/webassembly/">W3C Community Group</a>.</p>
+<p>This document describes version 3.0 (2026-07-28) of the <a class="reference internal" href="introduction.html#scope"><span class="std std-ref">core</span></a> WebAssembly standard.
+It is intended that it will be superseded by new incremental releases with additional features in the future.</p>
+<section id="design-goals">
+<span id="goals"></span><h2>Design Goals<a class="headerlink" href="introduction.html#design-goals" title="Link to this heading">¶</a></h2>
+<p id="index-0">The design goals of WebAssembly are the following:</p>
+<ul class="simple">
+<li><p>Fast, safe, and portable <em>semantics</em>:</p>
+<ul>
+<li><p><strong>Fast</strong>: executes with near native code performance, taking advantage of capabilities common to all contemporary hardware.</p></li>
+<li><p><strong>Safe</strong>: code is validated and executes in a memory-safe <a class="footnote-reference brackets" href="introduction.html#memorysafe" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>, sandboxed environment preventing data corruption or security breaches.</p></li>
+<li><p><strong>Well-defined</strong>: fully and precisely defines valid programs and their behavior in a way that is easy to reason about informally and formally.</p></li>
+<li><p><strong>Hardware-independent</strong>: can be compiled on all modern architectures, desktop or mobile devices and embedded systems alike.</p></li>
+<li><p><strong>Language-independent</strong>: does not privilege any particular language, programming model, or object model.</p></li>
+<li><p><strong>Platform-independent</strong>: can be embedded in browsers, run as a stand-alone VM, or integrated in other environments.</p></li>
+<li><p><strong>Open</strong>: programs can interoperate with their environment in a simple and universal manner.</p></li>
+</ul>
+</li>
+<li><p>Efficient and portable <em>representation</em>:</p>
+<ul>
+<li><p><strong>Compact</strong>: has a binary format that is fast to transmit by being smaller than typical text or native code formats.</p></li>
+<li><p><strong>Modular</strong>: programs can be split up in smaller parts that can be transmitted, cached, and consumed separately.</p></li>
+<li><p><strong>Efficient</strong>: can be decoded, validated, and compiled in a fast single pass, equally with either just-in-time (JIT) or ahead-of-time (AOT) compilation.</p></li>
+<li><p><strong>Streamable</strong>: allows decoding, validation, and compilation to begin as soon as possible, before all data has been seen.</p></li>
+<li><p><strong>Parallelizable</strong>: allows decoding, validation, and compilation to be split into many independent parallel tasks.</p></li>
+<li><p><strong>Portable</strong>: makes no architectural assumptions that are not broadly supported across modern hardware.</p></li>
+</ul>
+</li>
+</ul>
+<p>WebAssembly code is also intended to be easy to inspect and debug, especially in environments like web browsers, but such features are beyond the scope of this specification.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="wasm" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="introduction.html#id1" role="doc-backlink">1</a><span class="fn-bracket">]</span></span>
+<p>A contraction of “WebAssembly”, not an acronym, hence not using all-caps.</p>
+</aside>
+<aside class="footnote brackets" id="memorysafe" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="introduction.html#id2" role="doc-backlink">2</a><span class="fn-bracket">]</span></span>
+<p>No program can break WebAssembly’s memory model. Of course, it cannot guarantee that an unsafe language compiling to WebAssembly does not corrupt its own memory layout, e.g. inside WebAssembly’s linear memory.</p>
+</aside>
+</aside>
+</section>
+<section id="scope">
+<span id="id3"></span><h2>Scope<a class="headerlink" href="introduction.html#scope" title="Link to this heading">¶</a></h2>
+<p>At its core, WebAssembly is a <em>virtual instruction set architecture (virtual ISA)</em>.
+As such, it has many use cases and can be embedded in many different environments.
+To encompass their variety and enable maximum reuse, the WebAssembly specification is split and layered into several documents.</p>
+<p>This document is concerned with the core ISA layer of WebAssembly.
+It defines the instruction set, binary encoding, validation, and execution semantics, as well as a textual representation.
+It does not, however, define how WebAssembly programs can interact with a specific environment they execute in, nor how they are invoked from such an environment.</p>
+<p>Instead, this specification is complemented by additional documents defining interfaces to specific embedding environments such as the Web.
+These will each define a WebAssembly <em>application programming interface (API)</em> suitable for a given environment.</p>
+</section>
+<section id="security-considerations">
+<span id="security"></span><span id="index-1"></span><h2>Security Considerations<a class="headerlink" href="introduction.html#security-considerations" title="Link to this heading">¶</a></h2>
+<p>WebAssembly provides no ambient access to the computing environment in which code is executed.
+Any interaction with the environment, such as I/O, access to resources, or operating system calls, can only be performed by invoking <a class="reference internal" href="overview.html#function"><span class="std std-ref">functions</span></a> provided by the <a class="reference internal" href="overview.html#embedder"><span class="std std-ref">embedder</span></a> and imported into a WebAssembly <a class="reference internal" href="overview.html#module"><span class="std std-ref">module</span></a>.
+An embedder can establish security policies suitable for a respective environment by controlling or limiting which functional capabilities it makes available for import.
+Such considerations are an embedder’s responsibility and the subject of <a class="reference internal" href="introduction.html#scope"><span class="std std-ref">API definitions</span></a> for a specific environment.</p>
+<p>Because WebAssembly is designed to be translated into machine code running directly on the host’s hardware, it is potentially vulnerable to side channel attacks on the hardware level.
+In environments where this is a concern, an embedder may have to put suitable mitigations into place to isolate WebAssembly computations.</p>
+</section>
+<section id="dependencies">
+<span id="index-2"></span><span id="id4"></span><h2>Dependencies<a class="headerlink" href="introduction.html#dependencies" title="Link to this heading">¶</a></h2>
+<p>WebAssembly depends on two existing standards:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754</a>, for the representation of <a class="reference internal" href="../syntax/values.html#syntax-float"><span class="std std-ref">floating-point data</span></a> and the semantics of respective <a class="reference internal" href="../exec/numerics.html#float-ops"><span class="std std-ref">numeric operations</span></a>.</p></li>
+<li><p><a class="reference external" href="https://www.unicode.org/versions/latest/">Unicode</a>, for the representation of import/export <a class="reference internal" href="../syntax/values.html#syntax-name"><span class="std std-ref">names</span></a> and the <a class="reference internal" href="../text/index.html#text"><span class="std std-ref">text format</span></a>.</p></li>
+</ul>
+<p>However, to make this specification self-contained, relevant aspects of the aforementioned standards are defined and formalized as part of this specification,
+such as the <a class="reference internal" href="../exec/numerics.html#aux-fbits"><span class="std std-ref">binary representation</span></a> and <a class="reference internal" href="../exec/numerics.html#aux-ieee"><span class="std std-ref">rounding</span></a> of floating-point values, and the <a class="reference internal" href="../syntax/values.html#syntax-char"><span class="std std-ref">value range</span></a> and <a class="reference internal" href="../binary/values.html#binary-utf8"><span class="std std-ref">UTF-8 encoding</span></a> of Unicode characters.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The aforementioned standards are the authoritative source of all respective definitions.
+Formalizations given in this specification are intended to match these definitions.
+Any discrepancy in the syntax or semantics described is to be considered an error.</p>
+</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/intro/introduction.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-introduction">
+<h1>导言<a class="headerlink" href="introduction.html#zh-introduction" title="Link to this heading">¶</a></h1>
+<p>WebAssembly (简称: Wasm <a class="footnote-reference brackets" href="introduction.html#zh-wasm" id="zh-id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>是一个 <em>安全、便携、低级别代码格式</em>
+设计高效率 执行 和紧凑的代表。
+其主要目标是在Web上实现高性能的应用,但是它没有提出任何针对Web的假设或提供Web的特性,因此它也可以在其它环境中使用.</p>
+<p>WebAssembly 是由 a 开发的开放标准 <a class="reference external" href="https://www.w3.org/community/webassembly/">W3C 社区小组</a>.</p>
+<p>本文介绍第3.0版(2026-07-28) <a class="reference internal" href="introduction.html#zh-scope"><span class="std std-ref">核心项目</span></a> WebAssembly 标准。
+打算用新的增量释放来取代它,并在今后增加新的特性。</p>
+<section id="zh-design-goals">
+<span id="zh-goals"></span><h2>设计目标<a class="headerlink" href="introduction.html#zh-design-goals" title="Link to this heading">¶</a></h2>
+<p id="zh-index-0">设计目标 WebAssembly 具体如下:</p>
+<ul class="simple">
+<li><p>快速、安全、便携 <em>语义</em>:</p>
+<ul>
+<li><p><strong>快点</strong>: 执行时具有接近本土的代码性能,利用所有当代硬件的共同能力.</p></li>
+<li><p><strong>保险</strong>: 代码被验证并在内存安全下执行 <a class="footnote-reference brackets" href="introduction.html#zh-memorysafe" id="zh-id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>防止数据腐败或安全漏洞。</p></li>
+<li><p><strong>定义良好</strong>:充分而精确地定义了有效的程序及其行为,其方式容易以非正式和正式的方式解释.</p></li>
+<li><p><strong>硬件独立</strong>:可以在所有现代建筑,桌面或移动设备以及嵌入式系统上编译.</p></li>
+<li><p><strong>语言独立</strong>:不特权任何特定语言,编程模型,或对象模型.</p></li>
+<li><p><strong>平台独立</strong>:可以嵌入浏览器中,作为独立的VM运行,或者在其他环境中集成.</p></li>
+<li><p><strong>打开</strong>:方案可以以简单和普遍的方式与其环境相互操作。</p></li>
+</ul>
+</li>
+<li><p>高效和便携 <em>任职人数</em>:</p>
+<ul>
+<li><p><strong>压缩</strong>: 有一个 二进制格式 以小于典型文本或本地代码格式的方式快速传输。</p></li>
+<li><p><strong>模块</strong>:程序可以分成较小的部分,可以分别传输,缓存和消耗.</p></li>
+<li><p><strong>高效</strong>:可以解码,验证,并编译为快速单行道,与正时(JIT)或前时(AOT)编译相同.</p></li>
+<li><p><strong>可流性</strong>: 允许 解码, 验证,并尽快开始汇编,在所有数据被看到之前。</p></li>
+<li><p><strong>可平行</strong>: 允许 解码, 验证,并编译成许多独立的并行任务。</p></li>
+<li><p><strong>可移植</strong>:不提出在现代硬件中得不到广泛支持的建筑假设.</p></li>
+</ul>
+</li>
+</ul>
+<p>WebAssembly 代码也是为了便于检查和调试,特别是在诸如网页浏览器这样的环境中,但这类功能超出了此范围 规范.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="zh-wasm" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="introduction.html#zh-id1" role="doc-backlink">1</a><span class="fn-bracket">]</span></span>
+<p>收缩“......WebAssembly”而不是缩写,因此没有使用全称。</p>
+</aside>
+<aside class="footnote brackets" id="zh-memorysafe" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="introduction.html#zh-id2" role="doc-backlink">2</a><span class="fn-bracket">]</span></span>
+<p>没有程序可以中断 WebAssembly记忆模式. 当然,它不能保证一种不安全的语言汇编到 WebAssembly 不损坏自己的内存布局,例如内部 WebAssembly’s 线性内存.</p>
+</aside>
+</aside>
+</section>
+<section id="zh-scope">
+<span id="zh-id3"></span><h2>范围<a class="headerlink" href="introduction.html#zh-scope" title="Link to this heading">¶</a></h2>
+<p>其核心是, WebAssembly 是一个 <em>虚拟 指令 设置架构(虚拟 ISA)</em>。 。 。
+因此,它有许多用例,可以嵌入许多不同的环境中.
+为了涵盖其种类并实现最大再利用, WebAssembly 规范 分为多个文档。</p>
+<p>本文件涉及《国际审计准则》的核心层。 WebAssembly。 。 。
+它定义了 指令 设置, 二进制 编码, 验证,以及 执行 语义,以及文字代表.
+然而,它没有界定如何 WebAssembly 程序可以与它们执行的特定环境相互作用,或者如何从这种环境中引用它们。</p>
+<p>相反,这个 规范 补充的还有界定诸如Web等特定嵌入环境界面的其他文件。
+这些将分别定义一个 WebAssembly <em>应用程序编程接口( API)</em> 适合特定环境。</p>
+</section>
+<section id="zh-security-considerations">
+<span id="zh-security"></span><span id="zh-index-1"></span><h2>安全考虑<a class="headerlink" href="introduction.html#zh-security-considerations" title="Link to this heading">¶</a></h2>
+<p>WebAssembly 没有提供环境访问执行代码的计算环境。
+与环境的任何互动,如I/O、获取资源或操作系统呼叫,只能通过援引 <a class="reference internal" href="overview.html#zh-function"><span class="std std-ref">函数</span></a> 页:1 <a class="reference internal" href="overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a> 并输入a WebAssembly <a class="reference internal" href="overview.html#zh-module"><span class="std std-ref">模块</span></a>。 。 。
+一个 嵌入器 通过控制或限制其提供哪些功能能力,可以制定适合各自环境的安全政策。 导入。 。 。
+这些考虑是: 嵌入器责任和 <a class="reference internal" href="introduction.html#zh-scope"><span class="std std-ref">API 定义</span></a> 对于特定的环境。</p>
+<p>因为 WebAssembly 被设计成直接运行在主机硬件上的机器代码, 它可能会在硬件层面受到侧通道攻击。
+在引起关注的环境中, 嵌入器 可能需要制定适当的缓解措施以隔离 WebAssembly 计算。</p>
+</section>
+<section id="zh-dependencies">
+<span id="zh-index-2"></span><span id="zh-id4"></span><h2>依赖关系<a class="headerlink" href="introduction.html#zh-dependencies" title="Link to this heading">¶</a></h2>
+<p>WebAssembly 取决于两项现有标准:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://ieeexplore.ieee.org/document/8766229">IEEE 754 (英语).</a>代表 <a class="reference internal" href="../syntax/values.html#zh-syntax-float"><span class="std std-ref">浮点数 数据</span></a> 和各自的语义 <a class="reference internal" href="../exec/numerics.html#zh-float-ops"><span class="std std-ref">数字操作</span></a>.</p></li>
+<li><p><a class="reference external" href="https://www.unicode.org/versions/latest/">统一编码</a>代表 导入/导出 <a class="reference internal" href="../syntax/values.html#zh-syntax-name"><span class="std std-ref">名称</span></a> 页:1 <a class="reference internal" href="../text/index.html#zh-text"><span class="std std-ref">文本格式</span></a>.</p></li>
+</ul>
+<p>然而,为了让 规范 界定和正式确定上述标准的自足相关方面,作为本准则的一部分 规范, (中文).
+例如, <a class="reference internal" href="../exec/numerics.html#zh-aux-fbits"><span class="std std-ref">二进制表示符</span></a> 和 <a class="reference internal" href="../exec/numerics.html#zh-aux-ieee"><span class="std std-ref">四舍五入</span></a> 页:1 浮点数 值,则 <a class="reference internal" href="../syntax/values.html#zh-syntax-char"><span class="std std-ref">值范围</span></a> 和 <a class="reference internal" href="../binary/values.html#zh-binary-utf8"><span class="std std-ref">UTF-8 数据 编码</span></a> 的Unicode字符编号。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>上述标准是所有相关定义的权威来源。
+本文中的正式表述 规范 目的是与这些定义相匹配。
+任何差异 语法 或被描述的语义被认为是一个错误。</p>
+</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/intro/introduction.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

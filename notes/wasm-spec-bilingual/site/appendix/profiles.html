@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Profiles  / 简介  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="implementation.html" rel="next" title="Implementation Limitations"/>
+<link href="embedding.html" rel="prev" title="Embedding"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="embedding.html"><span class="wasm-bi-nav-en">Embedding</span><span class="wasm-bi-nav-zh">嵌入</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="profiles.html#"><span class="wasm-bi-nav-en">Profiles</span><span class="wasm-bi-nav-zh">简介</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html"><span class="wasm-bi-nav-en">Implementation Limitations</span><span class="wasm-bi-nav-zh">执行限制</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html"><span class="wasm-bi-nav-en">Type Soundness</span><span class="wasm-bi-nav-zh">类型声音</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#type-system-properties"><span class="wasm-bi-nav-en">Type System Properties</span><span class="wasm-bi-nav-zh">类型系统属性</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html"><span class="wasm-bi-nav-en">Validation Algorithm</span><span class="wasm-bi-nav-zh">验证 算法</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom.html"><span class="wasm-bi-nav-en">Custom Sections and Annotations</span><span class="wasm-bi-nav-zh">自定义段 说明</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html"><span class="wasm-bi-nav-en">Change History</span><span class="wasm-bi-nav-zh">更改历史</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/appendix/profiles.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="profiles">
+<span id="index-0"></span><span id="id1"></span><h1>Profiles<a class="headerlink" href="profiles.html#profiles" title="Link to this heading">¶</a></h1>
+<p>To enable the use of WebAssembly in as many environments as possible, <em>profiles</em> specify coherent language subsets that fit constraints imposed by common classes of host environments.
+A host platform can thereby decide to support the language only under a restricted profile, or even the intersection of multiple profiles.</p>
+<section id="conventions">
+<h2>Conventions<a class="headerlink" href="profiles.html#conventions" title="Link to this heading">¶</a></h2>
+<p>A profile modification is specified by decorating selected rules in the main body of this specification with a <em>profile annotation</em> that defines them as conditional on the choice of profile.</p>
+<p>For that purpose, every profile defines a <em>profile marker</em>, an alphanumeric short-hand like <span class="math notranslate nohighlight">\(\def\mathdef1451#1{{\small{\mathrm{#1}}}}\mathdef1451{ABC}\)</span>.
+A profile annotation of the form <span class="math notranslate nohighlight">\(\def\mathdef1452#1{{{}^{\small{[{!}#1]}}}}\mathdef1452{\mathrm{ABC}~\mathrm{XYZ}}\)</span> on a rule indicates that this rule is <em>excluded</em> for either of the profiles whose marker is <span class="math notranslate nohighlight">\(\def\mathdef1453#1{{\small{\mathrm{#1}}}}\mathdef1453{ABC}\)</span> or <span class="math notranslate nohighlight">\(\def\mathdef1454#1{{\small{\mathrm{#1}}}}\mathdef1454{XYZ}\)</span>.</p>
+<p>There are two ways of subsetting the language in a profile:</p>
+<ul class="simple">
+<li><p><em>Syntactic</em>, by <em>omitting</em> a feature, in which case certain constructs are removed from the syntax altogether.</p></li>
+<li><p><em>Semantic</em>, by <em>restricting</em> a feature, in which case certain constructs are still present but some behaviours are ruled out.</p></li>
+</ul>
+<section id="syntax-annotations">
+<h3>Syntax Annotations<a class="headerlink" href="profiles.html#syntax-annotations" title="Link to this heading">¶</a></h3>
+<p>To omit a construct from a profile syntactically, respective productions in the grammar of the <a class="reference internal" href="../syntax/index.html#syntax"><span class="std std-ref">abstract syntax</span></a> are annotated with an associated profile marker.
+This is defined to have the following implications:</p>
+<ol class="arabic simple">
+<li><p>Any production in the <a class="reference internal" href="../binary/index.html#binary"><span class="std std-ref">binary</span></a> or <a class="reference internal" href="../text/index.html#text"><span class="std std-ref">textual</span></a> syntax that produces abstract syntax with a marked construct is omitted by extension.</p></li>
+<li><p>Any <a class="reference internal" href="../valid/index.html#valid"><span class="std std-ref">validation</span></a> or <a class="reference internal" href="../exec/index.html#exec"><span class="std std-ref">execution</span></a> rule that handles a marked construct is omitted by extension.</p></li>
+</ol>
+<p>The overall effect is that the respective construct is no longer part of the language under a respective profile.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, a “busy” profile marked <span class="math notranslate nohighlight">\(\def\mathdef1455#1{{\small{\mathrm{#1}}}}\mathdef1455{BUSY}\)</span> could rule out the <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{nop}}\)</span> instruction by marking the production for it in the abstract syntax as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{llcl}
+\def\mathdef1420#1{{}}\mathdef1420{instruction} &amp; \href{../syntax/instructions.html#syntax-instr}{\mathit{instr}} &amp;::=&amp;
+  \dots \\
+&amp; \def\mathdef1456#1{{{}^{\small{[{!}#1]}}}}\mathdef1456{\mathrm{BUSY}} &amp;|&amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{nop}} \\
+&amp;                           &amp;|&amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{unreachable}} \\
+\end{array}\end{split}\]</div>
+<p>A rule may be annotated by multiple markers, which could be the case if a construct is in the intersection of multiple features.</p>
+</div>
+</section>
+<section id="semantics-annotations">
+<h3>Semantics Annotations<a class="headerlink" href="profiles.html#semantics-annotations" title="Link to this heading">¶</a></h3>
+<p>To restrict certain behaviours in a profile, individual <a class="reference internal" href="../valid/index.html#valid"><span class="std std-ref">validation</span></a> or <a class="reference internal" href="../exec/index.html#exec"><span class="std std-ref">reduction</span></a> rules or auxiliary definitions are annotated with an associated marker.</p>
+<p>This has the consequence that the respective rule is no longer applicable under the given profile.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, an “infinite” profile marked <span class="math notranslate nohighlight">\(\def\mathdef1457#1{{\small{\mathrm{#1}}}}\mathdef1457{INF}\)</span> could define that growing memory never fails:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{llcl@{\qquad}l}
+&amp; S; F; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}.\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~n)~\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}~x &amp;\href{../exec/conventions.html#exec-notation}{\hookrightarrow}&amp; S'; F; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}.\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~\mathit{sz})
+\\&amp;&amp;&amp;
+  \begin{array}[t]{@{}r@{~}l@{}}
+  (\mathrel{\mbox{if}} &amp; F.\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}.\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{mems}}[x] = a \\
+  \wedge &amp; \mathit{sz} = |S.\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}[a].\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{datas}}|/64\,\mathrm{Ki} \\
+  \wedge &amp; S' = S \href{../syntax/conventions.html#notation-replace}{\mathrel{\mbox{with}}} \href{../exec/runtime.html#syntax-store}{\mathsf{mems}}[a] = \href{../exec/modules.html#grow-mem}{\mathrm{growmem}}(S.\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}[a], n)) \\[1ex]
+  \end{array}
+\\[1ex]
+\def\mathdef1458#1{{{}^{\small{[{!}#1]}}}}\mathdef1458{\mathrm{INF}} &amp; S; F; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}.\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~n)~\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}~x &amp;\href{../exec/conventions.html#exec-notation}{\hookrightarrow}&amp; S; F; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}.\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~\href{../exec/numerics.html#aux-signed}{\mathrm{signed}}_{32}^{-1}(-1))
+\end{array}\end{split}\]</div>
+</div>
+</section>
+<section id="properties">
+<h3>Properties<a class="headerlink" href="profiles.html#properties" title="Link to this heading">¶</a></h3>
+<p>All profiles are defined such that the following properties are preserved:</p>
+<ul class="simple">
+<li><p>All profiles represent syntactic and semantic subsets of the <a class="reference internal" href="profiles.html#profile-full"><span class="std std-ref">full profile</span></a>, i.e., they do not <em>add</em> syntax or <em>alter</em> behaviour.</p></li>
+<li><p>All profiles are mutually compatible, i.e., no two profiles subset semantic behaviour in inconsistent or ambiguous ways, and any intersection of profiles preserves the properties described here.</p></li>
+<li><p>Profiles do not violate <a class="reference internal" href="properties.html#soundness"><span class="std std-ref">soundness</span></a>, i.e., all <a class="reference internal" href="../exec/runtime.html#syntax-config"><span class="std std-ref">configurations</span></a> valid under that profile still have well-defined execution behaviour.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Tools are generally expected to handle and produce code for the full profile by default.
+In particular, producers should not generate code that <em>depends</em> on specific profiles. Instead, all code should preserve correctness when executed under the full profile.</p>
+<p>Moreover, profiles should be considered static and fixed for a given platform or ecosystem. Runtime conditioning on the “current” profile is not intended and should be avoided.</p>
+</div>
+</section>
+</section>
+<section id="defined-profiles">
+<h2>Defined Profiles<a class="headerlink" href="profiles.html#defined-profiles" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The number of defined profiles is expected to remain small in the future. Profiles are intended for broad and permanent use cases only. In particular, profiles are not intended for language versioning.</p>
+</div>
+<section id="full-profile-small-mathrm-ful">
+<span id="profile-full"></span><span id="index-1"></span><h3>Full Profile (<span class="math notranslate nohighlight">\({\small{\mathrm{FUL}}}\)</span>)<a class="headerlink" href="profiles.html#full-profile-small-mathrm-ful" title="Link to this heading">¶</a></h3>
+<p>The <em>full</em> profile contains the complete language and all possible behaviours.
+It imposes no restrictions, i.e., all rules and definitions are active.
+All other profiles define sub-languages of this profile.</p>
+</section>
+<section id="deterministic-profile-small-mathrm-det">
+<span id="profile-deterministic"></span><span id="index-2"></span><h3>Deterministic Profile (<span class="math notranslate nohighlight">\({\small{\mathrm{DET}}}\)</span>)<a class="headerlink" href="profiles.html#deterministic-profile-small-mathrm-det" title="Link to this heading">¶</a></h3>
+<p>The <em>deterministic</em> profile excludes all rules marked <span class="math notranslate nohighlight">\(\def\mathdef1459#1{{{}^{\small{[{!}#1]}}}}\mathdef1459{\href{../appendix/profiles.html#profile-deterministic}{\mathrm{DET}}}\)</span>.
+It defines a sub-language that does not exhibit any incidental non-deterministic behaviour:</p>
+<ul class="simple">
+<li><p>All <a class="reference internal" href="../syntax/values.html#syntax-nan"><span class="std std-ref">NaN</span></a> values <a class="reference internal" href="../exec/numerics.html#aux-nans"><span class="std std-ref">generated</span></a> by <a class="reference internal" href="../syntax/instructions.html#syntax-instr-numeric"><span class="std std-ref">floating-point instructions</span></a> are canonical and positive.</p></li>
+<li><p>All <a class="reference internal" href="../syntax/instructions.html#syntax-instr-vec-relaxed"><span class="std std-ref">relaxed vector instructions</span></a> have a fixed behaviour that does not depend on the implementation.</p></li>
+</ul>
+<p>Even under this profile, the <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}\)</span> and <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}grow}}\)</span> instructions technically remain <a class="reference internal" href="../exec/instructions.html#exec-memory-grow"><span class="std std-ref">non-deterministic</span></a>, in order to be able to indicate resource exhaustion.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In future versions of WebAssembly, new non-deterministic behaviour may be added to the language, such that the deterministic profile will induce additional restrictions.</p>
+</div>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/appendix/profiles.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-profiles">
+<span id="zh-index-0"></span><span id="zh-id1"></span><h1>简介<a class="headerlink" href="profiles.html#zh-profiles" title="Link to this heading">¶</a></h1>
+<p>以便能够使用 WebAssembly 在尽可能多的环境中, <em>简介</em> 指定符合共同类别主机环境限制的一致语言子集。
+因此,一个主机平台可以决定仅在限制配置下支持语言,甚至多个配置的交叉.</p>
+<section id="zh-conventions">
+<h2>约定<a class="headerlink" href="profiles.html#zh-conventions" title="Link to this heading">¶</a></h2>
+<p>通过在此正文中装饰选定规则来指定配置修改 规范 带有 <em>配置说明</em> 定义它们以配置文件的选择为条件。</p>
+<p>为此,每个简介都界定 <em>配置标记</em>,字母缩写如 <span class="math notranslate nohighlight">\(\def\mathdef1451#1{{\small{\mathrm{#1}}}}\mathdef1451{ABC}\)</span>。 。 。
+表格的配置说明 <span class="math notranslate nohighlight">\(\def\mathdef1452#1{{{}^{\small{[{!}#1]}}}}\mathdef1452{\mathrm{ABC}~\mathrm{XYZ}}\)</span> 一条规则表明, <em>不包括</em> 对于标记为 <span class="math notranslate nohighlight">\(\def\mathdef1453#1{{\small{\mathrm{#1}}}}\mathdef1453{ABC}\)</span> 或 <span class="math notranslate nohighlight">\(\def\mathdef1454#1{{\small{\mathrm{#1}}}}\mathdef1454{XYZ}\)</span>.</p>
+<p>在一个剖面图中对语言进行分解有两种方法:</p>
+<ul class="simple">
+<li><p><em>银河系</em>,通过 <em>省略</em> a 特性,在这种情况下,某些构件从 语法 完全没有。</p></li>
+<li><p><em>语义</em>,通过 <em>限制</em> 一种特征,在这种情况下,某些构象依然存在,但某些行为被排除。</p></li>
+</ul>
+<section id="zh-syntax-annotations">
+<h3>语法 说明<a class="headerlink" href="profiles.html#zh-syntax-annotations" title="Link to this heading">¶</a></h3>
+<p>从剖面图中省略一个构造, 分别 产生式 输入 语法 会 议 日 程 和 议 程 <a class="reference internal" href="../syntax/index.html#zh-syntax"><span class="std std-ref">抽象语法</span></a> 附加相关配置标记。
+其含义如下:</p>
+<ol class="arabic simple">
+<li><p>任意 产生式 输入 <a class="reference internal" href="../binary/index.html#zh-binary"><span class="std std-ref">二进制</span></a> 或 <a class="reference internal" href="../text/index.html#zh-text"><span class="std std-ref">文字</span></a> 语法 产生 抽象语法 带有标记的构造,通过扩展省略。</p></li>
+<li><p>任意 <a class="reference internal" href="../valid/index.html#zh-valid"><span class="std std-ref">验证</span></a> 或 <a class="reference internal" href="../exec/index.html#zh-exec"><span class="std std-ref">执行</span></a> 处理标记构造的规则通过扩展省略。</p></li>
+</ol>
+<p>总体效应是,相应的构造不再是各自剖面下语言的一部分.</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>例如,标记“繁忙”的剖面图 <span class="math notranslate nohighlight">\(\def\mathdef1455#1{{\small{\mathrm{#1}}}}\mathdef1455{BUSY}\)</span> 能够排除 <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-control}{\mathsf{nop}}\)</span> 指令 通过标记 产生式 因为它在 抽象语法 内容如下:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{llcl}
+\def\mathdef1420#1{{}}\mathdef1420{instruction} &amp; \href{../syntax/instructions.html#syntax-instr}{\mathit{instr}} &amp;::=&amp;
+  \dots \\
+&amp; \def\mathdef1456#1{{{}^{\small{[{!}#1]}}}}\mathdef1456{\mathrm{BUSY}} &amp;|&amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{nop}} \\
+&amp;                           &amp;|&amp; \href{../syntax/instructions.html#syntax-instr-control}{\mathsf{unreachable}} \\
+\end{array}\end{split}\]</div>
+<p>一个规则可能用多个标记来注释,如果一个构造处于多个特征的交汇处,可能就是如此.</p>
+</div>
+</section>
+<section id="zh-semantics-annotations">
+<h3>语义说明<a class="headerlink" href="profiles.html#zh-semantics-annotations" title="Link to this heading">¶</a></h3>
+<p>限制特定行为,个人 <a class="reference internal" href="../valid/index.html#zh-valid"><span class="std std-ref">验证</span></a> 或 <a class="reference internal" href="../exec/index.html#zh-exec"><span class="std std-ref">减少</span></a> 规则或辅助定义附加了相关标记。</p>
+<p>其结果是,有关规则不再适用于特定的情况。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>例如,标记“无限”概况 <span class="math notranslate nohighlight">\(\def\mathdef1457#1{{\small{\mathrm{#1}}}}\mathdef1457{INF}\)</span> 可以定义不断增长的记忆永远不会失败:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}{llcl@{\qquad}l}
+&amp; S; F; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}.\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~n)~\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}~x &amp;\href{../exec/conventions.html#exec-notation}{\hookrightarrow}&amp; S'; F; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}.\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~\mathit{sz})
+\\&amp;&amp;&amp;
+  \begin{array}[t]{@{}r@{~}l@{}}
+  (\mathrel{\mbox{if}} &amp; F.\href{../exec/runtime.html#syntax-frame}{\mathsf{module}}.\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{mems}}[x] = a \\
+  \wedge &amp; \mathit{sz} = |S.\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}[a].\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{datas}}|/64\,\mathrm{Ki} \\
+  \wedge &amp; S' = S \href{../syntax/conventions.html#notation-replace}{\mathrel{\mbox{with}}} \href{../exec/runtime.html#syntax-store}{\mathsf{mems}}[a] = \href{../exec/modules.html#grow-mem}{\mathrm{growmem}}(S.\href{../exec/runtime.html#syntax-store}{\mathsf{mems}}[a], n)) \\[1ex]
+  \end{array}
+\\[1ex]
+\def\mathdef1458#1{{{}^{\small{[{!}#1]}}}}\mathdef1458{\mathrm{INF}} &amp; S; F; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}.\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~n)~\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}~x &amp;\href{../exec/conventions.html#exec-notation}{\hookrightarrow}&amp; S; F; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}.\href{../syntax/instructions.html#syntax-instr-numeric}{\mathsf{const}}~\href{../exec/numerics.html#aux-signed}{\mathrm{signed}}_{32}^{-1}(-1))
+\end{array}\end{split}\]</div>
+</div>
+</section>
+<section id="zh-properties">
+<h3>属性<a class="headerlink" href="profiles.html#zh-properties" title="Link to this heading">¶</a></h3>
+<p>所有配置都定义为保存以下属性:</p>
+<ul class="simple">
+<li><p>所有剖面图都代表了 <a class="reference internal" href="profiles.html#zh-profile-full"><span class="std std-ref">完整简介</span></a>,即他们没有 <em>添加</em> 语法 或 <em>更改</em> 行为。</p></li>
+<li><p>所有剖面都是相互兼容的,即没有两种剖面子集语义行为以不一致或模棱两可的方式,剖面的任何交叉都保留了这里描述的属性.</p></li>
+<li><p>配置文件不违反 <a class="reference internal" href="properties.html#zh-soundness"><span class="std std-ref">声音</span></a>,即所有 <a class="reference internal" href="../exec/runtime.html#zh-syntax-config"><span class="std std-ref">配置</span></a> 在当前配置文件下有效, 仍然有明确的定义 执行 行为。</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>一般期望工具默认处理和生成完整配置文件的代码.
+特别是,生产者不应产生编码,以便 <em>取决于</em> 具体简介。 相反,所有代码在完整剖面下执行时应当保持正确性.</p>
+<p>此外,应视某一平台或生态系统的概况为静态和固定。 对“当前”概况的运行时间设定不是有意的,应当避免。</p>
+</div>
+</section>
+</section>
+<section id="zh-defined-profiles">
+<h2>定义配置文件<a class="headerlink" href="profiles.html#zh-defined-profiles" title="Link to this heading">¶</a></h2>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>预计今后界定的概况数量仍然很少。 简介仅供广泛和永久使用。 特别是,简介并非用于语言版本。</p>
+</div>
+<section id="zh-full-profile-small-mathrm-ful">
+<span id="zh-profile-full"></span><span id="zh-index-1"></span><h3>完整配置文件 (E)<span class="math notranslate nohighlight">\({\small{\mathrm{FUL}}}\)</span>)<a class="headerlink" href="profiles.html#zh-full-profile-small-mathrm-ful" title="Link to this heading">¶</a></h3>
+<p>那个 <em>满</em> 剖析包含完整的语言和所有可能的行为。
+它没有施加任何限制,即所有规则和定义都是活跃的.
+所有其他配置文件都定义了此配置文件的子语言.</p>
+</section>
+<section id="zh-deterministic-profile-small-mathrm-det">
+<span id="zh-profile-deterministic"></span><span id="zh-index-2"></span><h3>决定性简介( E)<span class="math notranslate nohighlight">\({\small{\mathrm{DET}}}\)</span>)<a class="headerlink" href="profiles.html#zh-deterministic-profile-small-mathrm-det" title="Link to this heading">¶</a></h3>
+<p>那个 <em>决定性</em> 配置排除所有标注的规则 <span class="math notranslate nohighlight">\(\def\mathdef1459#1{{{}^{\small{[{!}#1]}}}}\mathdef1459{\href{../appendix/profiles.html#profile-deterministic}{\mathrm{DET}}}\)</span>。 。 。
+它定义了一个不表现出任何附带的非决定性行为的子语言:</p>
+<ul class="simple">
+<li><p>全体 <a class="reference internal" href="../syntax/values.html#zh-syntax-nan"><span class="std std-ref">纳恩</span></a> 值 <a class="reference internal" href="../exec/numerics.html#zh-aux-nans"><span class="std std-ref">生成</span></a> 由 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-numeric"><span class="std std-ref">浮点数 指令</span></a> 和阳性。</p></li>
+<li><p>全体 <a class="reference internal" href="../syntax/instructions.html#zh-syntax-instr-vec-relaxed"><span class="std std-ref">放松点 向量指令</span></a> 具有不取决于执行的固定行为。</p></li>
+</ul>
+<p>即使在这份档案之下 <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}grow}}\)</span> 和 <span class="math notranslate nohighlight">\(\href{../syntax/instructions.html#syntax-instr-table}{\mathsf{table{.}grow}}\)</span> 指令 技术保留 <a class="reference internal" href="../exec/instructions.html#zh-exec-memory-grow"><span class="std std-ref">非决定因素</span></a>,以便表示资源耗竭。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>未来版本 WebAssembly,在语言中可以添加新的非定型行为,因此定型特征会诱发额外的限制.</p>
+</div>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/appendix/profiles.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

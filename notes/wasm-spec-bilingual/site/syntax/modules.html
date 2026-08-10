@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Modules  / 模块  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../valid/index.html" rel="next" title="Validation"/>
+<link href="instructions.html" rel="prev" title="Instructions"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conventions.html"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="modules.html#"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/syntax/modules.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="modules">
+<span id="syntax-module"></span><span id="index-0"></span><h1>Modules<a class="headerlink" href="modules.html#modules" title="Link to this heading">¶</a></h1>
+<p>WebAssembly programs are organized into <em>modules</em>,
+which are the unit of deployment, loading, and compilation.
+A module collects definitions for
+<a class="reference internal" href="modules.html#syntax-type"><span class="std std-ref">types</span></a>,
+<a class="reference internal" href="modules.html#syntax-tag"><span class="std std-ref">tags</span></a>, and
+<a class="reference internal" href="modules.html#syntax-global"><span class="std std-ref">globals</span></a>,
+<a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memories</span></a>,
+<a class="reference internal" href="modules.html#syntax-table"><span class="std std-ref">tables</span></a>,
+<a class="reference internal" href="modules.html#syntax-func"><span class="std std-ref">functions</span></a>.
+In addition, it can declare
+<a class="reference internal" href="modules.html#syntax-import"><span class="std std-ref">imports</span></a> and <a class="reference internal" href="modules.html#syntax-export"><span class="std std-ref">exports</span></a>
+and provide initialization in the form of
+<a class="reference internal" href="modules.html#syntax-data"><span class="std std-ref">data</span></a> and <a class="reference internal" href="modules.html#syntax-elem"><span class="std std-ref">element</span></a> segments,
+or a <a class="reference internal" href="modules.html#syntax-start"><span class="std std-ref">start function</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-module}{\mathit{module}}} &amp; ::= &amp; \begin{array}[t]{@{}l@{}} \href{../syntax/modules.html#syntax-module}{\mathsf{module}} \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-type}{\mathit{type}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-import}{\mathit{import}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-global}{\mathit{global}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-table}{\mathit{table}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-func}{\mathit{func}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-data}{\mathit{data}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}) \\
+  {{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?} \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-export}{\mathit{export}}}) \end{array} \\
+\end{array}\end{split}\]</div>
+<p>Each of the lists — and thus the entire module — may be empty.</p>
+<section id="indices">
+<span id="syntax-index"></span><span id="syntax-fieldidx"></span><span id="syntax-labelidx"></span><span id="syntax-localidx"></span><span id="syntax-elemidx"></span><span id="syntax-dataidx"></span><span id="syntax-funcidx"></span><span id="syntax-tableidx"></span><span id="syntax-memidx"></span><span id="syntax-globalidx"></span><span id="syntax-tagidx"></span><span id="syntax-typeidx"></span><span id="syntax-idx"></span><span id="index-1"></span><h2>Indices<a class="headerlink" href="modules.html#indices" title="Link to this heading">¶</a></h2>
+<p>Definitions are referenced with zero-based <em>indices</em>.
+Each class of definition has its own <em>index space</em>, as distinguished by the following classes.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} &amp; ::= &amp; {\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}} \\
+&amp; {\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-globalidx}{\mathit{globalidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-tagidx}{\mathit{tagidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-elemidx}{\mathit{elemidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-dataidx}{\mathit{dataidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-localidx}{\mathit{localidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-fieldidx}{\mathit{fieldidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+\end{array}\end{split}\]</div>
+<p>The index space for
+<a class="reference internal" href="modules.html#syntax-tag"><span class="std std-ref">tags</span></a>,
+<a class="reference internal" href="modules.html#syntax-global"><span class="std std-ref">globals</span></a>,
+<a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memories</span></a>,
+<a class="reference internal" href="modules.html#syntax-table"><span class="std std-ref">tables</span></a>, and
+<a class="reference internal" href="modules.html#syntax-func"><span class="std std-ref">functions</span></a>
+includes respective <a class="reference internal" href="modules.html#syntax-import"><span class="std std-ref">imports</span></a> declared in the same module.
+The indices of these imports precede the indices of other definitions in the same index space.</p>
+<p>Data indices reference <a class="reference internal" href="modules.html#syntax-data"><span class="std std-ref">data segments</span></a> and element indices reference <a class="reference internal" href="modules.html#syntax-elem"><span class="std std-ref">element segments</span></a>.</p>
+<p>The index space for <a class="reference internal" href="modules.html#syntax-local"><span class="std std-ref">locals</span></a> is only accessible inside a <a class="reference internal" href="modules.html#syntax-func"><span class="std std-ref">function</span></a> and includes the parameters of that function, which precede the local variables.</p>
+<p>Label indices reference <a class="reference internal" href="instructions.html#syntax-instr-control"><span class="std std-ref">structured control instructions</span></a> inside an instruction sequence.</p>
+<p>Each <a class="reference internal" href="types.html#syntax-aggrtype"><span class="std std-ref">aggregate type</span></a> provides an index space for its <a class="reference internal" href="types.html#syntax-fieldtype"><span class="std std-ref">fields</span></a>.</p>
+<section id="conventions">
+<h3>Conventions<a class="headerlink" href="modules.html#conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>The meta variable <span class="math notranslate nohighlight">\(l\)</span> ranges over label indices.</p></li>
+<li><p>The meta variables <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span> range over indices in any of the other index spaces.</p></li>
+</ul>
+<span id="free-fieldidx"></span><span id="free-labelidx"></span><span id="free-localidx"></span><span id="free-elemidx"></span><span id="free-dataidx"></span><span id="free-funcidx"></span><span id="free-tableidx"></span><span id="free-memidx"></span><span id="free-globalidx"></span><span id="free-tagidx"></span><span id="free-typeidx"></span><ul class="simple" id="free-index">
+<li><p>For every index space <span class="math notranslate nohighlight">\({\mathit{abcidx}}\)</span>, the notation <span class="math notranslate nohighlight">\({\mathrm{abcidx}}(A)\)</span> denotes the set of indices from that index space occurring free in <span class="math notranslate nohighlight">\(A\)</span>. Sometimes this set is reinterpreted as the <a class="reference internal" href="conventions.html#syntax-list"><span class="std std-ref">list</span></a> of its elements.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, if <span class="math notranslate nohighlight">\({{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast}\)</span> is <span class="math notranslate nohighlight">\((\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{data{.}drop}}~1)~(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}init}}~2~3)\)</span>, then <span class="math notranslate nohighlight">\({\mathrm{dataidx}}_{\mathit{instrs}}({{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast}) = 1~3\)</span>, or equivalently, the set <span class="math notranslate nohighlight">\(\{ 1, 3 \}\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="types">
+<span id="syntax-typedef"></span><span id="syntax-type"></span><span id="index-2"></span><h2>Types<a class="headerlink" href="modules.html#types" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-type}{\mathit{type}}}\)</span> section of a module defines a list of <a class="reference internal" href="types.html#syntax-rectype"><span class="std std-ref">recursive types</span></a>, each consisting of a list of <a class="reference internal" href="types.html#syntax-subtype"><span class="std std-ref">sub types</span></a> referenced by individual <a class="reference internal" href="modules.html#syntax-typeidx"><span class="std std-ref">type indices</span></a>.
+All <a class="reference internal" href="types.html#syntax-functype"><span class="std std-ref">function</span></a>, <a class="reference internal" href="types.html#syntax-structtype"><span class="std std-ref">structure</span></a>, or <a class="reference internal" href="types.html#syntax-arraytype"><span class="std std-ref">array</span></a> types used in a module must be defined in this section.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-type}{\mathit{type}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-type}{\mathsf{type}}~{\href{../syntax/types.html#syntax-rectype}{\mathit{rectype}}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="tags">
+<span id="syntax-tag"></span><span id="index-3"></span><h2>Tags<a class="headerlink" href="modules.html#tags" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}\)</span> section of a module defines a list of <em>tags</em>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-tag}{\mathsf{tag}}~{\href{../syntax/types.html#syntax-tagtype}{\mathit{tagtype}}} \\
+\end{array}\end{split}\]</div>
+<p>The <a class="reference internal" href="modules.html#syntax-typeidx"><span class="std std-ref">type index</span></a> of a tag must refer to a <a class="reference internal" href="types.html#syntax-functype"><span class="std std-ref">function type</span></a> that declares its <a class="reference internal" href="types.html#syntax-tagtype"><span class="std std-ref">tag type</span></a>.</p>
+<p>Tags are referenced through <a class="reference internal" href="modules.html#syntax-tagidx"><span class="std std-ref">tag indices</span></a>,
+starting with the smallest index not referencing a tag <a class="reference internal" href="modules.html#syntax-import"><span class="std std-ref">import</span></a>.</p>
+</section>
+<section id="globals">
+<span id="syntax-global"></span><span id="index-4"></span><h2>Globals<a class="headerlink" href="modules.html#globals" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-global}{\mathit{global}}}\)</span> section of a module defines a list of <em>global variables</em> (or <em>globals</em> for short):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-global}{\mathit{global}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-global}{\mathsf{global}}~{\href{../syntax/types.html#syntax-globaltype}{\mathit{globaltype}}}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} \\
+\end{array}\end{split}\]</div>
+<p>Each global stores a single value of the type specified in the <a class="reference internal" href="types.html#syntax-globaltype"><span class="std std-ref">global type</span></a>.
+It also specifies whether a global is immutable or mutable.
+Moreover, each global is initialized with a value given by a <a class="reference internal" href="../valid/instructions.html#valid-constant"><span class="std std-ref">constant</span></a> initializer <a class="reference internal" href="instructions.html#syntax-expr"><span class="std std-ref">expression</span></a>.</p>
+<p>Globals are referenced through <a class="reference internal" href="modules.html#syntax-globalidx"><span class="std std-ref">global indices</span></a>,
+starting with the smallest index not referencing a global <a class="reference internal" href="modules.html#syntax-import"><span class="std std-ref">import</span></a>.</p>
+</section>
+<section id="memories">
+<span id="syntax-mem"></span><span id="index-5"></span><h2>Memories<a class="headerlink" href="modules.html#memories" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}\)</span> section of a module defines a list of <em>linear memories</em> (or <em>memories</em> for short) as described by their <a class="reference internal" href="types.html#syntax-memtype"><span class="std std-ref">memory type</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-mem}{\mathsf{memory}}~{\href{../syntax/types.html#syntax-memtype}{\mathit{memtype}}} \\
+\end{array}\end{split}\]</div>
+<p>A memory is a list of raw uninterpreted bytes.
+The minimum size in the <a class="reference internal" href="types.html#syntax-limits"><span class="std std-ref">limits</span></a> of its <a class="reference internal" href="types.html#syntax-memtype"><span class="std std-ref">memory type</span></a> specifies the initial size of that memory, while its maximum, if present, restricts the size to which it can grow later.
+Both are in units of <a class="reference internal" href="../exec/runtime.html#page-size"><span class="std std-ref">page size</span></a>.</p>
+<p>Memories can be initialized through <a class="reference internal" href="modules.html#syntax-data"><span class="std std-ref">data segments</span></a>.</p>
+<p>Memories are referenced through <a class="reference internal" href="modules.html#syntax-memidx"><span class="std std-ref">memory indices</span></a>,
+starting with the smallest index not referencing a memory <a class="reference internal" href="modules.html#syntax-import"><span class="std std-ref">import</span></a>.
+Most constructs implicitly reference memory index <span class="math notranslate nohighlight">\(0\)</span>.</p>
+</section>
+<section id="tables">
+<span id="syntax-table"></span><span id="index-6"></span><h2>Tables<a class="headerlink" href="modules.html#tables" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-table}{\mathit{table}}}\)</span> section of a module defines a list of <em>tables</em> described by their <a class="reference internal" href="types.html#syntax-tabletype"><span class="std std-ref">table type</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-table}{\mathit{table}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-table}{\mathsf{table}}~{\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} \\
+\end{array}\end{split}\]</div>
+<p>A table is an array of opaque values of a particular <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> that is specified by the <a class="reference internal" href="types.html#syntax-tabletype"><span class="std std-ref">table type</span></a>.
+Each table slot is initialized with a value given by a <a class="reference internal" href="../valid/instructions.html#valid-constant"><span class="std std-ref">constant</span></a> initializer <a class="reference internal" href="instructions.html#syntax-expr"><span class="std std-ref">expression</span></a>.
+Tables can further be initialized through <a class="reference internal" href="modules.html#syntax-elem"><span class="std std-ref">element segments</span></a>.</p>
+<p>The minimum size in the <a class="reference internal" href="types.html#syntax-limits"><span class="std std-ref">limits</span></a> of the table type specifies the initial size of that table, while its maximum restricts the size to which it can grow later.</p>
+<p>Tables are referenced through <a class="reference internal" href="modules.html#syntax-tableidx"><span class="std std-ref">table indices</span></a>,
+starting with the smallest index not referencing a table <a class="reference internal" href="modules.html#syntax-import"><span class="std std-ref">import</span></a>.
+Most constructs implicitly reference table index <span class="math notranslate nohighlight">\(0\)</span>.</p>
+</section>
+<section id="functions">
+<span id="syntax-func"></span><span id="syntax-local"></span><span id="index-7"></span><h2>Functions<a class="headerlink" href="modules.html#functions" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-func}{\mathit{func}}}\)</span> section of a module defines a list of <em>functions</em> with the following structure:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-func}{\mathit{func}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-func}{\mathsf{func}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{{\href{../syntax/modules.html#syntax-local}{\mathit{local}}}^\ast}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} \\
+&amp; {\href{../syntax/modules.html#syntax-local}{\mathit{local}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-local}{\mathsf{local}}~{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}} \\
+\end{array}\end{split}\]</div>
+<p>The <a class="reference internal" href="modules.html#syntax-typeidx"><span class="std std-ref">type index</span></a> of a function declares its signature by reference to a <a class="reference internal" href="types.html#syntax-functype"><span class="std std-ref">function type</span></a> defined in the module.
+The parameters of the function are referenced through 0-based <a class="reference internal" href="modules.html#syntax-localidx"><span class="std std-ref">local indices</span></a> in the function’s body; they are mutable.</p>
+<p>The locals declare a list of mutable local variables and their types.
+These variables are referenced through <a class="reference internal" href="modules.html#syntax-localidx"><span class="std std-ref">local indices</span></a> in the function’s body.
+The index of the first local is the smallest index not referencing a parameter.</p>
+<p>A function’s <a class="reference internal" href="instructions.html#syntax-expr"><span class="std std-ref">expression</span></a> is an <a class="reference internal" href="instructions.html#syntax-instr"><span class="std std-ref">instruction</span></a> sequence that represents the body of the function.
+Upon termination it must produce a stack matching the function type’s <a class="reference internal" href="types.html#syntax-resulttype"><span class="std std-ref">result type</span></a>.</p>
+<p>Functions are referenced through <a class="reference internal" href="modules.html#syntax-funcidx"><span class="std std-ref">function indices</span></a>,
+starting with the smallest index not referencing a function <a class="reference internal" href="modules.html#syntax-import"><span class="std std-ref">import</span></a>.</p>
+</section>
+<section id="data-segments">
+<span id="syntax-datamode"></span><span id="syntax-data"></span><span id="index-8"></span><h2>Data Segments<a class="headerlink" href="modules.html#data-segments" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-data}{\mathit{data}}}\)</span> section of a module defines a list of <em>data segments</em>,
+which can be used to initialize a range of memory from a static <a class="reference internal" href="conventions.html#syntax-list"><span class="std std-ref">list</span></a> of <a class="reference internal" href="values.html#syntax-byte"><span class="std std-ref">bytes</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-data}{\mathit{data}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-data}{\mathsf{data}}~{{\href{../syntax/values.html#syntax-byte}{\mathit{byte}}}^\ast}~{\href{../syntax/modules.html#syntax-datamode}{\mathit{datamode}}} \\
+&amp; {\href{../syntax/modules.html#syntax-datamode}{\mathit{datamode}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-datamode}{\mathsf{active}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} ~~|~~ \href{../syntax/modules.html#syntax-datamode}{\mathsf{passive}} \\
+\end{array}\end{split}\]</div>
+<p>Similar to element segments, data segments have a mode that identifies them as either <em>active</em> or <em>passive</em>.
+A passive data segment’s contents can be copied into a memory using the <span class="math notranslate nohighlight">\(\mathsf{memory{.}init}\)</span> instruction.
+An active data segment copies its contents into a memory during <a class="reference internal" href="../exec/modules.html#exec-instantiation"><span class="std std-ref">instantiation</span></a>, as specified by a <a class="reference internal" href="modules.html#syntax-memidx"><span class="std std-ref">memory index</span></a> and a <a class="reference internal" href="../valid/instructions.html#valid-constant"><span class="std std-ref">constant</span></a> <a class="reference internal" href="instructions.html#syntax-expr"><span class="std std-ref">expression</span></a> defining an offset into that memory.</p>
+<p>Data segments are referenced through <a class="reference internal" href="modules.html#syntax-dataidx"><span class="std std-ref">data indices</span></a>.</p>
+</section>
+<section id="element-segments">
+<span id="syntax-elemmode"></span><span id="syntax-elem"></span><span id="index-9"></span><h2>Element Segments<a class="headerlink" href="modules.html#element-segments" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}\)</span> section of a module defines a list of <em>element segments</em>,
+which can be used to initialize a subrange of a table from a static <a class="reference internal" href="conventions.html#syntax-list"><span class="std std-ref">list</span></a> of elements.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}}~{{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}}^\ast}~{\href{../syntax/modules.html#syntax-elemmode}{\mathit{elemmode}}} \\
+&amp; {\href{../syntax/modules.html#syntax-elemmode}{\mathit{elemmode}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-elemmode}{\mathsf{active}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} ~~|~~ \href{../syntax/modules.html#syntax-elemmode}{\mathsf{passive}} ~~|~~ \href{../syntax/modules.html#syntax-elemmode}{\mathsf{declare}} \\
+\end{array}\end{split}\]</div>
+<p>Each element segment defines a <a class="reference internal" href="types.html#syntax-reftype"><span class="std std-ref">reference type</span></a> and a corresponding list of <a class="reference internal" href="../valid/instructions.html#valid-constant"><span class="std std-ref">constant</span></a> element <a class="reference internal" href="instructions.html#syntax-expr"><span class="std std-ref">expressions</span></a>.</p>
+<p>Element segments have a mode that identifies them as either <em>active</em>, <em>passive</em>, or <em>declarative</em>.
+A passive element segment’s elements can be copied to a table using the <span class="math notranslate nohighlight">\(\mathsf{table{.}init}\)</span> instruction.
+An active element segment copies its elements into a table during <a class="reference internal" href="../exec/modules.html#exec-instantiation"><span class="std std-ref">instantiation</span></a>, as specified by a <a class="reference internal" href="modules.html#syntax-tableidx"><span class="std std-ref">table index</span></a> and a <a class="reference internal" href="../valid/instructions.html#valid-constant"><span class="std std-ref">constant</span></a> <a class="reference internal" href="instructions.html#syntax-expr"><span class="std std-ref">expression</span></a> defining an offset into that table.
+A declarative element segment is not available at runtime but merely serves to forward-declare references that are formed in code with instructions like <span class="math notranslate nohighlight">\(\mathsf{ref{.}func}\)</span>.
+The offset is given by another <a class="reference internal" href="../valid/instructions.html#valid-constant"><span class="std std-ref">constant</span></a> <a class="reference internal" href="instructions.html#syntax-expr"><span class="std std-ref">expression</span></a>.</p>
+<p>Element segments are referenced through <a class="reference internal" href="modules.html#syntax-elemidx"><span class="std std-ref">element indices</span></a>.</p>
+</section>
+<section id="start-function">
+<span id="syntax-start"></span><span id="index-10"></span><h2>Start Function<a class="headerlink" href="modules.html#start-function" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-start}{\mathit{start}}}\)</span> section of a module declares the <a class="reference internal" href="modules.html#syntax-funcidx"><span class="std std-ref">function index</span></a> of a <em>start function</em> that is automatically invoked when the module is <a class="reference internal" href="../exec/modules.html#exec-instantiation"><span class="std std-ref">instantiated</span></a>, after <a class="reference internal" href="modules.html#syntax-table"><span class="std std-ref">tables</span></a> and <a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memories</span></a> have been initialized.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-start}{\mathit{start}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-start}{\mathsf{start}}~{\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The start function is intended for initializing the state of a module.
+The module and its exports are not accessible externally before this initialization has completed.</p>
+</div>
+</section>
+<section id="imports">
+<span id="syntax-import"></span><span id="syntax-importdesc"></span><span id="index-11"></span><h2>Imports<a class="headerlink" href="modules.html#imports" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-import}{\mathit{import}}}\)</span> section of a module defines a set of <em>imports</em> that are required for <a class="reference internal" href="../exec/modules.html#exec-instantiation"><span class="std std-ref">instantiation</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-import}{\mathit{import}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-import}{\mathsf{import}}~{\href{../syntax/values.html#syntax-name}{\mathit{name}}}~{\href{../syntax/values.html#syntax-name}{\mathit{name}}}~{\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}} \\
+\end{array}\end{split}\]</div>
+<p>Each import is labeled by a two-level <a class="reference internal" href="values.html#syntax-name"><span class="std std-ref">name</span></a> space, consisting of a <em>module name</em> and an <em>item name</em> for an entity within that module.
+Importable definitions are
+<a class="reference internal" href="modules.html#syntax-tag"><span class="std std-ref">tags</span></a>,
+<a class="reference internal" href="modules.html#syntax-global"><span class="std std-ref">globals</span></a>,
+<a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memories</span></a>,
+<a class="reference internal" href="modules.html#syntax-table"><span class="std std-ref">tables</span></a>, and
+<a class="reference internal" href="modules.html#syntax-func"><span class="std std-ref">functions</span></a>.
+Each import is specified by a respective <a class="reference internal" href="types.html#syntax-externtype"><span class="std std-ref">external type</span></a> that a definition provided during instantiation is required to match.</p>
+<p>Every import defines an index in the respective <a class="reference internal" href="modules.html#syntax-index"><span class="std std-ref">index space</span></a>.
+In each index space, the indices of imports go before the first index of any definition contained in the module itself.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unlike export names, import names are not necessarily unique.
+It is possible to import the same module/item name pair multiple times;
+such imports may even have different type descriptions, including different kinds of entities.
+A module with such imports can still be instantiated depending on the specifics of how an <a class="reference internal" href="../intro/overview.html#embedder"><span class="std std-ref">embedder</span></a> allows resolving and supplying imports.
+However, embedders are not required to support such overloading,
+and a WebAssembly module itself cannot implement an overloaded name.</p>
+</div>
+</section>
+<section id="exports">
+<span id="syntax-externidx"></span><span id="syntax-export"></span><span id="syntax-exportdesc"></span><span id="index-12"></span><h2>Exports<a class="headerlink" href="modules.html#exports" title="Link to this heading">¶</a></h2>
+<p>The <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-export}{\mathit{export}}}\)</span> section of a module defines a set of <em>exports</em> that become accessible to the host environment once the module has been <a class="reference internal" href="../exec/modules.html#exec-instantiation"><span class="std std-ref">instantiated</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-export}{\mathit{export}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-export}{\mathsf{export}}~{\href{../syntax/values.html#syntax-name}{\mathit{name}}}~{\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}} \\[0.8ex]
+&amp; {\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{func}}~{\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} ~~|~~ \href{../syntax/modules.html#syntax-externidx}{\mathsf{global}}~{\href{../syntax/modules.html#syntax-globalidx}{\mathit{globalidx}}} ~~|~~ \href{../syntax/modules.html#syntax-externidx}{\mathsf{table}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} ~~|~~ \href{../syntax/modules.html#syntax-externidx}{\mathsf{memory}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} ~~|~~ \href{../syntax/modules.html#syntax-externidx}{\mathsf{tag}}~{\href{../syntax/modules.html#syntax-tagidx}{\mathit{tagidx}}} \\
+\end{array}\end{split}\]</div>
+<p>Each export is labeled by a unique <a class="reference internal" href="values.html#syntax-name"><span class="std std-ref">name</span></a>.
+Exportable definitions are
+<a class="reference internal" href="modules.html#syntax-tag"><span class="std std-ref">tags</span></a>,
+<a class="reference internal" href="modules.html#syntax-global"><span class="std std-ref">globals</span></a>,
+<a class="reference internal" href="modules.html#syntax-mem"><span class="std std-ref">memories</span></a>,
+<a class="reference internal" href="modules.html#syntax-table"><span class="std std-ref">tables</span></a>, and
+<a class="reference internal" href="modules.html#syntax-func"><span class="std std-ref">functions</span></a>,
+which are referenced through a respective index.</p>
+<section id="id1">
+<h3>Conventions<a class="headerlink" href="modules.html#id1" title="Link to this heading">¶</a></h3>
+<p>The following auxiliary notation is defined for sequences of exports, filtering out indices of a specific kind in an order-preserving fashion:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{funcs}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{funcs}}}((\href{../syntax/modules.html#syntax-externidx}{\mathsf{func}}~x)~{{\mathit{xx}}^\ast}) &amp; = &amp; x~{\href{../syntax/modules.html#syntax-externidx}{\mathrm{funcs}}}({{\mathit{xx}}^\ast}) \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{funcs}}}({\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}}~{{\mathit{xx}}^\ast}) &amp; = &amp; {\href{../syntax/modules.html#syntax-externidx}{\mathrm{funcs}}}({{\mathit{xx}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tables}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tables}}}((\href{../syntax/modules.html#syntax-externidx}{\mathsf{table}}~x)~{{\mathit{xx}}^\ast}) &amp; = &amp; x~{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tables}}}({{\mathit{xx}}^\ast}) \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tables}}}({\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}}~{{\mathit{xx}}^\ast}) &amp; = &amp; {\href{../syntax/modules.html#syntax-externidx}{\mathrm{tables}}}({{\mathit{xx}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{mems}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{mems}}}((\href{../syntax/modules.html#syntax-externidx}{\mathsf{memory}}~x)~{{\mathit{xx}}^\ast}) &amp; = &amp; x~{\href{../syntax/modules.html#syntax-externidx}{\mathrm{mems}}}({{\mathit{xx}}^\ast}) \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{mems}}}({\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}}~{{\mathit{xx}}^\ast}) &amp; = &amp; {\href{../syntax/modules.html#syntax-externidx}{\mathrm{mems}}}({{\mathit{xx}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{globals}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{globals}}}((\href{../syntax/modules.html#syntax-externidx}{\mathsf{global}}~x)~{{\mathit{xx}}^\ast}) &amp; = &amp; x~{\href{../syntax/modules.html#syntax-externidx}{\mathrm{globals}}}({{\mathit{xx}}^\ast}) \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{globals}}}({\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}}~{{\mathit{xx}}^\ast}) &amp; = &amp; {\href{../syntax/modules.html#syntax-externidx}{\mathrm{globals}}}({{\mathit{xx}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tags}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tags}}}((\href{../syntax/modules.html#syntax-externidx}{\mathsf{tag}}~x)~{{\mathit{xx}}^\ast}) &amp; = &amp; x~{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tags}}}({{\mathit{xx}}^\ast}) \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tags}}}({\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}}~{{\mathit{xx}}^\ast}) &amp; = &amp; {\href{../syntax/modules.html#syntax-externidx}{\mathrm{tags}}}({{\mathit{xx}}^\ast}) &amp; \quad \mbox{otherwise} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/syntax/modules.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-modules">
+<span id="zh-syntax-module"></span><span id="zh-index-0"></span><h1>模块<a class="headerlink" href="modules.html#zh-modules" title="Link to this heading">¶</a></h1>
+<p>WebAssembly 将方案组织为: <em>模块</em>, (中文).
+是部署、装填和汇编的单位。
+页:1 模块 收集定义
+<a class="reference internal" href="modules.html#zh-syntax-type"><span class="std std-ref">类型</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-tag"><span class="std std-ref">标记</span></a>,以及
+<a class="reference internal" href="modules.html#zh-syntax-global"><span class="std std-ref">全球</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a>。 。 。
+此外,它还可以宣布
+<a class="reference internal" href="modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a> 和 <a class="reference internal" href="modules.html#zh-syntax-export"><span class="std std-ref">导出</span></a>
+并且以下列形式提供初始化:
+<a class="reference internal" href="modules.html#zh-syntax-data"><span class="std std-ref">数据</span></a> 和 <a class="reference internal" href="modules.html#zh-syntax-elem"><span class="std std-ref">元素</span></a> 部分,
+或一个 <a class="reference internal" href="modules.html#zh-syntax-start"><span class="std std-ref">启动函数</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-module}{\mathit{module}}} &amp; ::= &amp; \begin{array}[t]{@{}l@{}} \href{../syntax/modules.html#syntax-module}{\mathsf{module}} \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-type}{\mathit{type}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-import}{\mathit{import}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-global}{\mathit{global}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-table}{\mathit{table}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-func}{\mathit{func}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-data}{\mathit{data}}}) \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}) \\
+  {{\href{../syntax/modules.html#syntax-start}{\mathit{start}}}^?} \\
+  {\href{../syntax/conventions.html#syntax-list}{\mathit{list}}}({\href{../syntax/modules.html#syntax-export}{\mathit{export}}}) \end{array} \\
+\end{array}\end{split}\]</div>
+<p>每一个清单——从而包括整个清单。 模块 - 也许是空的</p>
+<section id="zh-indices">
+<span id="zh-syntax-index"></span><span id="zh-syntax-fieldidx"></span><span id="zh-syntax-labelidx"></span><span id="zh-syntax-localidx"></span><span id="zh-syntax-elemidx"></span><span id="zh-syntax-dataidx"></span><span id="zh-syntax-funcidx"></span><span id="zh-syntax-tableidx"></span><span id="zh-syntax-memidx"></span><span id="zh-syntax-globalidx"></span><span id="zh-syntax-tagidx"></span><span id="zh-syntax-typeidx"></span><span id="zh-syntax-idx"></span><span id="zh-index-1"></span><h2>指数<a class="headerlink" href="modules.html#zh-indices" title="Link to this heading">¶</a></h2>
+<p>以零为基础引用定义 <em>指数</em>。 。 。
+每一类定义都有自己的 <em>索引空间</em>,以以下类别区分。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} &amp; ::= &amp; {\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em32}}} \\
+&amp; {\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-globalidx}{\mathit{globalidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-tagidx}{\mathit{tagidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-elemidx}{\mathit{elemidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-dataidx}{\mathit{dataidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-labelidx}{\mathit{labelidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-localidx}{\mathit{localidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+&amp; {\href{../syntax/modules.html#syntax-fieldidx}{\mathit{fieldidx}}} &amp; ::= &amp; {\href{../syntax/modules.html#syntax-idx}{\mathit{idx}}} \\
+\end{array}\end{split}\]</div>
+<p>那个 索引空间 (单位:千美元)
+<a class="reference internal" href="modules.html#zh-syntax-tag"><span class="std std-ref">标记</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-global"><span class="std std-ref">全球</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a>,以及
+<a class="reference internal" href="modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a>
+包括各自 <a class="reference internal" href="modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a> 以相同方式申报 模块。 。 。
+这些指数 导入 在同类其他定义索引之前 索引空间.</p>
+<p>数据指数参考 <a class="reference internal" href="modules.html#zh-syntax-data"><span class="std std-ref">数据段</span></a> 和要素指数参考 <a class="reference internal" href="modules.html#zh-syntax-elem"><span class="std std-ref">元素段</span></a>.</p>
+<p>那个 索引空间 (单位:千美元) <a class="reference internal" href="modules.html#zh-syntax-local"><span class="std std-ref">当地人</span></a> 仅可进入 a <a class="reference internal" href="modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a> 并包括该函数的参数,在本地变量之前。</p>
+<p>标签 指数参考 <a class="reference internal" href="instructions.html#zh-syntax-instr-control"><span class="std std-ref">结构化 控制指令</span></a> 在一个 指令 顺序。</p>
+<p>每个 <a class="reference internal" href="types.html#zh-syntax-aggrtype"><span class="std std-ref">总计类型</span></a> 提供 索引空间 联合国 <a class="reference internal" href="types.html#zh-syntax-fieldtype"><span class="std std-ref">字段</span></a>.</p>
+<section id="zh-conventions">
+<h3>约定<a class="headerlink" href="modules.html#zh-conventions" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>元变量 <span class="math notranslate nohighlight">\(l\)</span> 宽度 标签 指数。</p></li>
+<li><p>元变量 <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span> 在任何其他索引空格中,指向索引的区域。</p></li>
+</ul>
+<span id="zh-free-fieldidx"></span><span id="zh-free-labelidx"></span><span id="zh-free-localidx"></span><span id="zh-free-elemidx"></span><span id="zh-free-dataidx"></span><span id="zh-free-funcidx"></span><span id="zh-free-tableidx"></span><span id="zh-free-memidx"></span><span id="zh-free-globalidx"></span><span id="zh-free-tagidx"></span><span id="zh-free-typeidx"></span><ul class="simple" id="zh-free-index">
+<li><p>每笔 索引空间 <span class="math notranslate nohighlight">\({\mathit{abcidx}}\)</span>,标记 <span class="math notranslate nohighlight">\({\mathrm{abcidx}}(A)\)</span> 表示该指数组 索引空间 免费在 <span class="math notranslate nohighlight">\(A\)</span>。有时,本集会被重新解释为 <a class="reference internal" href="conventions.html#zh-syntax-list"><span class="std std-ref">列表</span></a> 内容。</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>例如,如果 <span class="math notranslate nohighlight">\({{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast}\)</span> 这是 <span class="math notranslate nohighlight">\((\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{data{.}drop}}~1)~(\href{../syntax/instructions.html#syntax-instr-memory}{\mathsf{memory{.}init}}~2~3)\)</span>,则 <span class="math notranslate nohighlight">\({\mathrm{dataidx}}_{\mathit{instrs}}({{\href{../syntax/instructions.html#syntax-instr}{\mathit{instr}}}^\ast}) = 1~3\)</span>,或等同,该套 <span class="math notranslate nohighlight">\(\{ 1, 3 \}\)</span>.</p>
+</div>
+</section>
+</section>
+<section id="zh-types">
+<span id="zh-syntax-typedef"></span><span id="zh-syntax-type"></span><span id="zh-index-2"></span><h2>类型<a class="headerlink" href="modules.html#zh-types" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-type}{\mathit{type}}}\)</span> 段 页:1 模块 定义列表 <a class="reference internal" href="types.html#zh-syntax-rectype"><span class="std std-ref">递归 类型</span></a>,每个清单包括: <a class="reference internal" href="types.html#zh-syntax-subtype"><span class="std std-ref">次级 类型</span></a> 个人参考 <a class="reference internal" href="modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a>。 。 。
+全体 <a class="reference internal" href="types.html#zh-syntax-functype"><span class="std std-ref">函数</span></a>, <a class="reference internal" href="types.html#zh-syntax-structtype"><span class="std std-ref">结构</span></a>,或 <a class="reference internal" href="types.html#zh-syntax-arraytype"><span class="std std-ref">数组</span></a> 类型 用于 a 模块 必须在此处定义 段.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-type}{\mathit{type}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-type}{\mathsf{type}}~{\href{../syntax/types.html#syntax-rectype}{\mathit{rectype}}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-tags">
+<span id="zh-syntax-tag"></span><span id="zh-index-3"></span><h2>标记<a class="headerlink" href="modules.html#zh-tags" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}}\)</span> 段 页:1 模块 定义列表 <em>标记</em>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-tag}{\mathit{tag}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-tag}{\mathsf{tag}}~{\href{../syntax/types.html#syntax-tagtype}{\mathit{tagtype}}} \\
+\end{array}\end{split}\]</div>
+<p>那个 <a class="reference internal" href="modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a> 标记必须指 <a class="reference internal" href="types.html#zh-syntax-functype"><span class="std std-ref">函数类型</span></a> 宣布其 <a class="reference internal" href="types.html#zh-syntax-tagtype"><span class="std std-ref">标记类型</span></a>.</p>
+<p>标记通过 <a class="reference internal" href="modules.html#zh-syntax-tagidx"><span class="std std-ref">标签索引</span></a>, (中文).
+从最小索引开始, 不引用标签 <a class="reference internal" href="modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a>.</p>
+</section>
+<section id="zh-globals">
+<span id="zh-syntax-global"></span><span id="zh-index-4"></span><h2>全球<a class="headerlink" href="modules.html#zh-globals" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-global}{\mathit{global}}}\)</span> 段 页:1 模块 定义列表 <em>全球变量</em> (或 <em>全球</em> 简称:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-global}{\mathit{global}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-global}{\mathsf{global}}~{\href{../syntax/types.html#syntax-globaltype}{\mathit{globaltype}}}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} \\
+\end{array}\end{split}\]</div>
+<p>每个全局存储一个在 <a class="reference internal" href="types.html#zh-syntax-globaltype"><span class="std std-ref">全局类型</span></a>。 。 。
+它还具体说明一个全球是不可改变的还是可变的。
+此外,每个全局初始化的数值是: <a class="reference internal" href="../valid/instructions.html#zh-valid-constant"><span class="std std-ref">常数</span></a> 初始化器 <a class="reference internal" href="instructions.html#zh-syntax-expr"><span class="std std-ref">表达式</span></a>.</p>
+<p>全球通过 <a class="reference internal" href="modules.html#zh-syntax-globalidx"><span class="std std-ref">全球指数</span></a>, (中文).
+从最小指数开始,不参考全局 <a class="reference internal" href="modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a>.</p>
+</section>
+<section id="zh-memories">
+<span id="zh-syntax-mem"></span><span id="zh-index-5"></span><h2>回忆<a class="headerlink" href="modules.html#zh-memories" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}}\)</span> 段 页:1 模块 定义列表 <em>线性记忆</em> (或 <em>回忆</em> 简而言之) <a class="reference internal" href="types.html#zh-syntax-memtype"><span class="std std-ref">内存类型</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-mem}{\mathit{mem}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-mem}{\mathsf{memory}}~{\href{../syntax/types.html#syntax-memtype}{\mathit{memtype}}} \\
+\end{array}\end{split}\]</div>
+<p>一个记忆是一个原始的列表, 未经解释 字节。 。 。
+最小尺寸在 <a class="reference internal" href="types.html#zh-syntax-limits"><span class="std std-ref">限制</span></a> 联 合 国 <a class="reference internal" href="types.html#zh-syntax-memtype"><span class="std std-ref">内存类型</span></a> 指定该内存的初始大小,而其最大(如果存在)则限制其以后可以生长的大小。
+两者的单位是: <a class="reference internal" href="../exec/runtime.html#zh-page-size"><span class="std std-ref">页面大小</span></a>.</p>
+<p>记忆可以通过 <a class="reference internal" href="modules.html#zh-syntax-data"><span class="std std-ref">数据段</span></a>.</p>
+<p>记忆通过 <a class="reference internal" href="modules.html#zh-syntax-memidx"><span class="std std-ref">内存指数</span></a>, (中文).
+从最小索引开始, 不引用内存 <a class="reference internal" href="modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a>。 。 。
+大多数构造默认引用内存索引 <span class="math notranslate nohighlight">\(0\)</span>.</p>
+</section>
+<section id="zh-tables">
+<span id="zh-syntax-table"></span><span id="zh-index-6"></span><h2>表格<a class="headerlink" href="modules.html#zh-tables" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-table}{\mathit{table}}}\)</span> 段 页:1 模块 定义列表 <em>图表</em> 说明 <a class="reference internal" href="types.html#zh-syntax-tabletype"><span class="std std-ref">表类型</span></a>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-table}{\mathit{table}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-table}{\mathsf{table}}~{\href{../syntax/types.html#syntax-tabletype}{\mathit{tabletype}}}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} \\
+\end{array}\end{split}\]</div>
+<p>表格是一系列不透明的 值 特定国家 <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> 由 <a class="reference internal" href="types.html#zh-syntax-tabletype"><span class="std std-ref">表类型</span></a>。 。 。
+每个表段的初始值为: <a class="reference internal" href="../valid/instructions.html#zh-valid-constant"><span class="std std-ref">常数</span></a> 初始化器 <a class="reference internal" href="instructions.html#zh-syntax-expr"><span class="std std-ref">表达式</span></a>。 。 。
+表格可通过 <a class="reference internal" href="modules.html#zh-syntax-elem"><span class="std std-ref">元素段</span></a>.</p>
+<p>最小尺寸在 <a class="reference internal" href="types.html#zh-syntax-limits"><span class="std std-ref">限制</span></a> 会 议 日 程 和 议 程 表类型 指定该表的初始大小,而其最大限制其以后可生长的大小。</p>
+<p>表格通过 <a class="reference internal" href="modules.html#zh-syntax-tableidx"><span class="std std-ref">表格索引</span></a>, (中文).
+以最小索引开头, 不引用表格 <a class="reference internal" href="modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a>。 。 。
+大多数构造隐含参考表索引 <span class="math notranslate nohighlight">\(0\)</span>.</p>
+</section>
+<section id="zh-functions">
+<span id="zh-syntax-func"></span><span id="zh-syntax-local"></span><span id="zh-index-7"></span><h2>职能<a class="headerlink" href="modules.html#zh-functions" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-func}{\mathit{func}}}\)</span> 段 页:1 模块 定义列表 <em>函数</em> 结构如下:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-func}{\mathit{func}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-func}{\mathsf{func}}~{\href{../syntax/modules.html#syntax-typeidx}{\mathit{typeidx}}}~{{\href{../syntax/modules.html#syntax-local}{\mathit{local}}}^\ast}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} \\
+&amp; {\href{../syntax/modules.html#syntax-local}{\mathit{local}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-local}{\mathsf{local}}~{\href{../syntax/types.html#syntax-valtype}{\mathit{valtype}}} \\
+\end{array}\end{split}\]</div>
+<p>那个 <a class="reference internal" href="modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a> 函数通过提及 <a class="reference internal" href="types.html#zh-syntax-functype"><span class="std std-ref">函数类型</span></a> 定义 模块。 。 。
+该函数的参数通过基于 0 的引用 <a class="reference internal" href="modules.html#zh-syntax-localidx"><span class="std std-ref">当地指数</span></a> (b) 具有可变性。</p>
+<p>本地人声明可变本地变量列表及其 类型。 。 。
+这些变量通过 <a class="reference internal" href="modules.html#zh-syntax-localidx"><span class="std std-ref">当地指数</span></a> 在函数体内。
+第一个本地索引是最小的索引,没有引用一个参数。</p>
+<p>函数 <a class="reference internal" href="instructions.html#zh-syntax-expr"><span class="std std-ref">表达式</span></a> 是一个 <a class="reference internal" href="instructions.html#zh-syntax-instr"><span class="std std-ref">指令</span></a> 表示函数正文的序列。
+终止时必须产生 栈 匹配 联合国 函数类型’s <a class="reference internal" href="types.html#zh-syntax-resulttype"><span class="std std-ref">结果类型</span></a>.</p>
+<p>函数通过 <a class="reference internal" href="modules.html#zh-syntax-funcidx"><span class="std std-ref">函数索引</span></a>, (中文).
+以最小索引开头, 不引用函数 <a class="reference internal" href="modules.html#zh-syntax-import"><span class="std std-ref">导入</span></a>.</p>
+</section>
+<section id="zh-data-segments">
+<span id="zh-syntax-datamode"></span><span id="zh-syntax-data"></span><span id="zh-index-8"></span><h2>数据段<a class="headerlink" href="modules.html#zh-data-segments" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-data}{\mathit{data}}}\)</span> 段 页:1 模块 定义列表 <em>数据段</em>, (中文).
+它可用于从静态中初始化一系列内存 <a class="reference internal" href="conventions.html#zh-syntax-list"><span class="std std-ref">列表</span></a> 页:1 <a class="reference internal" href="values.html#zh-syntax-byte"><span class="std std-ref">字节</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-data}{\mathit{data}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-data}{\mathsf{data}}~{{\href{../syntax/values.html#syntax-byte}{\mathit{byte}}}^\ast}~{\href{../syntax/modules.html#syntax-datamode}{\mathit{datamode}}} \\
+&amp; {\href{../syntax/modules.html#syntax-datamode}{\mathit{datamode}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-datamode}{\mathsf{active}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} ~~|~~ \href{../syntax/modules.html#syntax-datamode}{\mathsf{passive}} \\
+\end{array}\end{split}\]</div>
+<p>类似 元素段, 数据段 具有一种模式,可以识别它们中的任意一种 <em>活动</em> 或 <em>被动</em>。 。 。
+一个被动 数据段其内容可以使用 <span class="math notranslate nohighlight">\(\mathsf{memory{.}init}\)</span> 指令。 。 。
+活动 数据段 将其内容复制到内存中 <a class="reference internal" href="../exec/modules.html#zh-exec-instantiation"><span class="std std-ref">即时</span></a>,按 <a class="reference internal" href="modules.html#zh-syntax-memidx"><span class="std std-ref">内存索引</span></a> (单位:千美元) <a class="reference internal" href="../valid/instructions.html#zh-valid-constant"><span class="std std-ref">常数</span></a> <a class="reference internal" href="instructions.html#zh-syntax-expr"><span class="std std-ref">表达式</span></a> 定义该内存中的偏移。</p>
+<p>数据段 通过 <a class="reference internal" href="modules.html#zh-syntax-dataidx"><span class="std std-ref">数据指数</span></a>.</p>
+</section>
+<section id="zh-element-segments">
+<span id="zh-syntax-elemmode"></span><span id="zh-syntax-elem"></span><span id="zh-index-9"></span><h2>元素段<a class="headerlink" href="modules.html#zh-element-segments" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}}\)</span> 段 页:1 模块 定义列表 <em>元素段</em>, (中文).
+用于从静态中初始化表格的子序列 <a class="reference internal" href="conventions.html#zh-syntax-list"><span class="std std-ref">列表</span></a> 内容。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-elem}{\mathit{elem}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-elem}{\mathsf{elem}}~{\href{../syntax/types.html#syntax-reftype}{\mathit{reftype}}}~{{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}}^\ast}~{\href{../syntax/modules.html#syntax-elemmode}{\mathit{elemmode}}} \\
+&amp; {\href{../syntax/modules.html#syntax-elemmode}{\mathit{elemmode}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-elemmode}{\mathsf{active}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}}~{\href{../syntax/instructions.html#syntax-expr}{\mathit{expr}}} ~~|~~ \href{../syntax/modules.html#syntax-elemmode}{\mathsf{passive}} ~~|~~ \href{../syntax/modules.html#syntax-elemmode}{\mathsf{declare}} \\
+\end{array}\end{split}\]</div>
+<p>每个 元素段 定义 a <a class="reference internal" href="types.html#zh-syntax-reftype"><span class="std std-ref">引用类型</span></a> 和相应的清单 <a class="reference internal" href="../valid/instructions.html#zh-valid-constant"><span class="std std-ref">常数</span></a> 元素 <a class="reference internal" href="instructions.html#zh-syntax-expr"><span class="std std-ref">表达式</span></a>.</p>
+<p>元素段 具有一种模式,可以识别它们中的任意一种 <em>活动</em>, <em>被动</em>,或 <em>声明</em>。 。 。
+一个被动 元素段其元素可以使用 <span class="math notranslate nohighlight">\(\mathsf{table{.}init}\)</span> 指令。 。 。
+活动 元素段 将其元素复制到表格中 <a class="reference internal" href="../exec/modules.html#zh-exec-instantiation"><span class="std std-ref">即时</span></a>,按 <a class="reference internal" href="modules.html#zh-syntax-tableidx"><span class="std std-ref">表格索引</span></a> (单位:千美元) <a class="reference internal" href="../valid/instructions.html#zh-valid-constant"><span class="std std-ref">常数</span></a> <a class="reference internal" href="instructions.html#zh-syntax-expr"><span class="std std-ref">表达式</span></a> 页:1
+声明 元素段 无法在运行时提供,而只是用来预先宣布编码中与 指令 喜欢 <span class="math notranslate nohighlight">\(\mathsf{ref{.}func}\)</span>。 。 。
+抵消额由另一个 <a class="reference internal" href="../valid/instructions.html#zh-valid-constant"><span class="std std-ref">常数</span></a> <a class="reference internal" href="instructions.html#zh-syntax-expr"><span class="std std-ref">表达式</span></a>.</p>
+<p>元素段 通过 <a class="reference internal" href="modules.html#zh-syntax-elemidx"><span class="std std-ref">要素指数</span></a>.</p>
+</section>
+<section id="zh-start-function">
+<span id="zh-syntax-start"></span><span id="zh-index-10"></span><h2>启动函数<a class="headerlink" href="modules.html#zh-start-function" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-start}{\mathit{start}}}\)</span> 段 页:1 模块 声明 <a class="reference internal" href="modules.html#zh-syntax-funcidx"><span class="std std-ref">函数索引</span></a> 页:1 <em>启动函数</em> 自动引用 模块 这是 <a class="reference internal" href="../exec/modules.html#zh-exec-instantiation"><span class="std std-ref">即时</span></a>之后, <a class="reference internal" href="modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a> 和 <a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a> 已经初始化。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-start}{\mathit{start}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-start}{\mathsf{start}}~{\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>启动功能旨在初始化 a 状态 模块。 。 。
+那个 模块 联 合 国 导出 在初始化完成之前,外部无法访问。</p>
+</div>
+</section>
+<section id="zh-imports">
+<span id="zh-syntax-import"></span><span id="zh-syntax-importdesc"></span><span id="zh-index-11"></span><h2>导入<a class="headerlink" href="modules.html#zh-imports" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-import}{\mathit{import}}}\)</span> 段 页:1 模块 定义一组 <em>导入</em> 用于 <a class="reference internal" href="../exec/modules.html#zh-exec-instantiation"><span class="std std-ref">即时</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-import}{\mathit{import}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-import}{\mathsf{import}}~{\href{../syntax/values.html#syntax-name}{\mathit{name}}}~{\href{../syntax/values.html#syntax-name}{\mathit{name}}}~{\href{../syntax/types.html#syntax-externtype}{\mathit{externtype}}} \\
+\end{array}\end{split}\]</div>
+<p>每个 导入 标签为双层 <a class="reference internal" href="values.html#zh-syntax-name"><span class="std std-ref">名称</span></a> 空间,包括 <em>模块 名称</em> 一个 <em>项目 名称</em> 适用于其中某一实体 模块。 。 。
+可导入定义为:
+<a class="reference internal" href="modules.html#zh-syntax-tag"><span class="std std-ref">标记</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-global"><span class="std std-ref">全球</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a>,以及
+<a class="reference internal" href="modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a>。 。 。
+每个 导入 由各自指定 <a class="reference internal" href="types.html#zh-syntax-externtype"><span class="std std-ref">外部类型</span></a> 在即时处理中提供的定义必须匹配。</p>
+<p>每个 导入 定义相应的索引 <a class="reference internal" href="modules.html#zh-syntax-index"><span class="std std-ref">索引空间</span></a>。 。 。
+每笔 索引空间指数 导入 ưμ㼯A 模块 它本身。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>与 导出 名称, 导入 名称 不一定是独一无二的。
+这是可能的 导入 同样的 模块/项目 名称 双倍;
+此类 导入 甚至可能有不同的类型描述,包括不同类型的实体。
+页:1 模块 有这样的 导入 仍可视具体情况进行即决 <a class="reference internal" href="../intro/overview.html#zh-embedder"><span class="std std-ref">嵌入器</span></a> 允许解析和供应 导入。 。 。
+然而,不要求嵌入器支持这种超载,
+(单位:千美元) WebAssembly 模块 无法执行超载 名称.</p>
+</div>
+</section>
+<section id="zh-exports">
+<span id="zh-syntax-externidx"></span><span id="zh-syntax-export"></span><span id="zh-syntax-exportdesc"></span><span id="zh-index-12"></span><h2>导出<a class="headerlink" href="modules.html#zh-exports" title="Link to this heading">¶</a></h2>
+<p>那个 <span class="math notranslate nohighlight">\({\href{../syntax/modules.html#syntax-export}{\mathit{export}}}\)</span> 段 页:1 模块 定义一组 <em>导出</em> 一旦进入,就可进入主机环境 模块 已经是 <a class="reference internal" href="../exec/modules.html#zh-exec-instantiation"><span class="std std-ref">即时</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}}
+&amp; {\href{../syntax/modules.html#syntax-export}{\mathit{export}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-export}{\mathsf{export}}~{\href{../syntax/values.html#syntax-name}{\mathit{name}}}~{\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}} \\[0.8ex]
+&amp; {\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}} &amp; ::= &amp; \href{../syntax/modules.html#syntax-externidx}{\mathsf{func}}~{\href{../syntax/modules.html#syntax-funcidx}{\mathit{funcidx}}} ~~|~~ \href{../syntax/modules.html#syntax-externidx}{\mathsf{global}}~{\href{../syntax/modules.html#syntax-globalidx}{\mathit{globalidx}}} ~~|~~ \href{../syntax/modules.html#syntax-externidx}{\mathsf{table}}~{\href{../syntax/modules.html#syntax-tableidx}{\mathit{tableidx}}} ~~|~~ \href{../syntax/modules.html#syntax-externidx}{\mathsf{memory}}~{\href{../syntax/modules.html#syntax-memidx}{\mathit{memidx}}} ~~|~~ \href{../syntax/modules.html#syntax-externidx}{\mathsf{tag}}~{\href{../syntax/modules.html#syntax-tagidx}{\mathit{tagidx}}} \\
+\end{array}\end{split}\]</div>
+<p>每个 导出 被一个独特的标签 <a class="reference internal" href="values.html#zh-syntax-name"><span class="std std-ref">名称</span></a>。 。 。
+可导定义为:
+<a class="reference internal" href="modules.html#zh-syntax-tag"><span class="std std-ref">标记</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-global"><span class="std std-ref">全球</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-mem"><span class="std std-ref">回忆</span></a>,
+<a class="reference internal" href="modules.html#zh-syntax-table"><span class="std std-ref">图表</span></a>,以及
+<a class="reference internal" href="modules.html#zh-syntax-func"><span class="std std-ref">函数</span></a>, (中文).
+,通过相应的索引引用。</p>
+<section id="zh-id1">
+<h3>约定<a class="headerlink" href="modules.html#zh-id1" title="Link to this heading">¶</a></h3>
+<p>以下辅助标记的定义是: 导出,以保持顺序的方式筛选出特定类型的指数:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{funcs}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{funcs}}}((\href{../syntax/modules.html#syntax-externidx}{\mathsf{func}}~x)~{{\mathit{xx}}^\ast}) &amp; = &amp; x~{\href{../syntax/modules.html#syntax-externidx}{\mathrm{funcs}}}({{\mathit{xx}}^\ast}) \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{funcs}}}({\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}}~{{\mathit{xx}}^\ast}) &amp; = &amp; {\href{../syntax/modules.html#syntax-externidx}{\mathrm{funcs}}}({{\mathit{xx}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tables}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tables}}}((\href{../syntax/modules.html#syntax-externidx}{\mathsf{table}}~x)~{{\mathit{xx}}^\ast}) &amp; = &amp; x~{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tables}}}({{\mathit{xx}}^\ast}) \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tables}}}({\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}}~{{\mathit{xx}}^\ast}) &amp; = &amp; {\href{../syntax/modules.html#syntax-externidx}{\mathrm{tables}}}({{\mathit{xx}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{mems}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{mems}}}((\href{../syntax/modules.html#syntax-externidx}{\mathsf{memory}}~x)~{{\mathit{xx}}^\ast}) &amp; = &amp; x~{\href{../syntax/modules.html#syntax-externidx}{\mathrm{mems}}}({{\mathit{xx}}^\ast}) \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{mems}}}({\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}}~{{\mathit{xx}}^\ast}) &amp; = &amp; {\href{../syntax/modules.html#syntax-externidx}{\mathrm{mems}}}({{\mathit{xx}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{globals}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{globals}}}((\href{../syntax/modules.html#syntax-externidx}{\mathsf{global}}~x)~{{\mathit{xx}}^\ast}) &amp; = &amp; x~{\href{../syntax/modules.html#syntax-externidx}{\mathrm{globals}}}({{\mathit{xx}}^\ast}) \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{globals}}}({\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}}~{{\mathit{xx}}^\ast}) &amp; = &amp; {\href{../syntax/modules.html#syntax-externidx}{\mathrm{globals}}}({{\mathit{xx}}^\ast}) &amp; \quad \mbox{otherwise} \\[0.8ex]
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tags}}}(\epsilon) &amp; = &amp; \epsilon \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tags}}}((\href{../syntax/modules.html#syntax-externidx}{\mathsf{tag}}~x)~{{\mathit{xx}}^\ast}) &amp; = &amp; x~{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tags}}}({{\mathit{xx}}^\ast}) \\
+{\href{../syntax/modules.html#syntax-externidx}{\mathrm{tags}}}({\href{../syntax/modules.html#syntax-externidx}{\mathit{externidx}}}~{{\mathit{xx}}^\ast}) &amp; = &amp; {\href{../syntax/modules.html#syntax-externidx}{\mathrm{tags}}}({{\mathit{xx}}^\ast}) &amp; \quad \mbox{otherwise} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/syntax/modules.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

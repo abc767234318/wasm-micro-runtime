@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Appendix  / 附 录  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="embedding.html" rel="next" title="Embedding"/>
+<link href="../text/modules.html" rel="prev" title="Modules"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="index.html#"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html"><span class="wasm-bi-nav-en">Embedding</span><span class="wasm-bi-nav-zh">嵌入</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles.html"><span class="wasm-bi-nav-en">Profiles</span><span class="wasm-bi-nav-zh">简介</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html"><span class="wasm-bi-nav-en">Implementation Limitations</span><span class="wasm-bi-nav-zh">执行限制</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html"><span class="wasm-bi-nav-en">Type Soundness</span><span class="wasm-bi-nav-zh">类型声音</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#type-system-properties"><span class="wasm-bi-nav-en">Type System Properties</span><span class="wasm-bi-nav-zh">类型系统属性</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html"><span class="wasm-bi-nav-en">Validation Algorithm</span><span class="wasm-bi-nav-zh">验证 算法</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom.html"><span class="wasm-bi-nav-en">Custom Sections and Annotations</span><span class="wasm-bi-nav-zh">自定义段 说明</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html"><span class="wasm-bi-nav-en">Change History</span><span class="wasm-bi-nav-zh">更改历史</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/appendix/index.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="appendix">
+<span id="id1"></span><h1>Appendix<a class="headerlink" href="index.html#appendix" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="embedding.html">Embedding</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#booleans">Booleans</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#exceptions-and-errors">Exceptions and Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#pre-and-post-conditions">Pre- and Post-Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#store">Store</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#modules">Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#module-instances">Module Instances</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#tables">Tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#memories">Memories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#tags">Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#exceptions">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#globals">Globals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#values">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#matching">Matching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="profiles.html">Profiles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="profiles.html#conventions">Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles.html#defined-profiles">Defined Profiles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation Limitations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#syntactic-limits">Syntactic Limits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#validation">Validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#execution">Execution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="properties.html">Type Soundness</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#contexts">Contexts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#subtyping">Subtyping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#results">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#store-validity">Store Validity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#configuration-validity">Configuration Validity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#administrative-instructions">Administrative Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#store-extension">Store Extension</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#theorems">Theorems</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="properties.html#type-system-properties">Type System Properties</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#principal-types">Principal Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#type-lattice">Type Lattice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#compositionality">Compositionality</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithm.html">Validation Algorithm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#data-structures">Data Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#validation-of-opcode-sequences">Validation of Opcode Sequences</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom.html">Custom Sections and Annotations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="custom.html#name-section">Name Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom.html#name-annotations">Name Annotations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom.html#custom-annotations">Custom Annotations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">Change History</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#release-2-0">Release 2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#release-3-0">Release 3.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index-types.html">Index of Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-instructions.html">Index of Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-rules.html">Index of Semantic Rules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#well-formedness-of-types">Well-formedness of Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#typing-of-static-constructs">Typing of Static Constructs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#typing-of-runtime-constructs">Typing of Runtime Constructs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#constantness">Constantness</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#matching">Matching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#store-extension">Store Extension</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#execution">Execution</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/appendix/index.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-appendix">
+<span id="zh-id1"></span><h1>附 录<a class="headerlink" href="index.html#zh-appendix" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="embedding.html">嵌入</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-types">类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-booleans">布尔</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-exceptions-and-errors">例外和错误</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-pre-and-post-conditions">条件前和条件后</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-store">存储</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-modules">模块</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-module-instances">模块 实例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-functions">职能</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-tables">表格</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-memories">回忆</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-tags">标记</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-exceptions">例外</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-globals">全球</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-values">值</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#zh-matching">匹配</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="profiles.html">简介</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="profiles.html#zh-conventions">约定</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiles.html#zh-defined-profiles">定义配置文件</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">执行限制</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#zh-syntactic-limits">银河限制</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#zh-validation">验证</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#zh-execution">执行</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="properties.html">类型声音</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-contexts">背景情况</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-types">类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-subtyping">子类型关系</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-results">结果</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-store-validity">存储 有效性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-configuration-validity">配置有效性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-administrative-instructions">管理指令</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-store-extension">存储 延长</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-theorems">定理</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="properties.html#zh-type-system-properties">类型系统属性</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-principal-types">校长 类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-type-lattice">类型 Lattice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="properties.html#zh-compositionality">组成</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algorithm.html">验证 算法</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#zh-data-structures">数据结构</a></li>
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html#zh-validation-of-opcode-sequences">验证 图标序列</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="custom.html">自定义段 说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="custom.html#zh-name-section">名称 段</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom.html#zh-name-annotations">名称 说明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom.html#zh-custom-annotations">自定义说明</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changes.html">更改历史</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#zh-release-2-0">发布 2.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html#zh-release-3-0">发布 3.0</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index-types.html">指数 类型</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-instructions.html">指数 指令</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index-rules.html">指数 语义规则</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#zh-well-formedness-of-types">结构良好 类型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#zh-typing-of-static-constructs">静态构造的打字</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#zh-typing-of-runtime-constructs">运行时构造的打字</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#zh-constantness">恒定性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#zh-matching">匹配</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#zh-store-extension">存储 延长</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index-rules.html#zh-execution">执行</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/appendix/index.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

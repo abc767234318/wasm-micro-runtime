@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Types  / 类型  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="values.html" rel="next" title="Values"/>
+<link href="numerics.html" rel="prev" title="Numerics"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conventions.html"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="runtime.html"><span class="wasm-bi-nav-en">Runtime Structure</span><span class="wasm-bi-nav-zh">运行时结构</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="numerics.html"><span class="wasm-bi-nav-en">Numerics</span><span class="wasm-bi-nav-zh">数字</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="types.html#"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/exec/types.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="types">
+<span id="exec-type"></span><span id="index-0"></span><h1>Types<a class="headerlink" href="types.html#types" title="Link to this heading">¶</a></h1>
+<p>Execution has to check and compare <a class="reference internal" href="../syntax/modules.html#syntax-type"><span class="std std-ref">types</span></a> in a few places, such as <a class="reference internal" href="instructions.html#exec-call-indirect"><span class="std std-ref">executing</span></a> <span class="math notranslate nohighlight">\(\mathsf{call\_indirect}\)</span> or <a class="reference internal" href="modules.html#exec-instantiation"><span class="std std-ref">instantiating</span></a> <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">modules</span></a>.</p>
+<p>It is an invariant of the semantics that all types occurring during execution are <a class="reference internal" href="../valid/conventions.html#type-closed"><span class="std std-ref">closed</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Runtime type checks generally involve types from multiple modules or types not defined by a module at all,
+such that any module-local <a class="reference internal" href="../syntax/modules.html#syntax-typeidx"><span class="std std-ref">type indices</span></a> occurring inside them would not generally be meaningful.</p>
+</div>
+<section id="instantiation">
+<span id="type-inst"></span><span id="index-1"></span><h2>Instantiation<a class="headerlink" href="types.html#instantiation" title="Link to this heading">¶</a></h2>
+<p>Any form of <a class="reference internal" href="../syntax/modules.html#syntax-type"><span class="std std-ref">type</span></a> can be <em>instantiated</em> into a <a class="reference internal" href="../valid/conventions.html#type-closed"><span class="std std-ref">closed</span></a> type inside a <a class="reference internal" href="runtime.html#syntax-moduleinst"><span class="std std-ref">module instance</span></a> by <a class="reference internal" href="../valid/conventions.html#notation-subst"><span class="std std-ref">substituting</span></a> each <a class="reference internal" href="../syntax/modules.html#syntax-typeidx"><span class="std std-ref">type index</span></a> <span class="math notranslate nohighlight">\(x\)</span> occurring in it with the corresponding <a class="reference internal" href="../valid/conventions.html#syntax-deftype"><span class="std std-ref">defined type</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{types}}{}[x]\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{\href{../exec/types.html#type-inst}{\mathrm{clos}}}}_{{\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}}}(t) &amp; = &amp; {t}{{}[ {\href{../valid/conventions.html#notation-subst}{\mathrel{:=}}}\, {\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{types}} ]} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the runtime equivalent to <a class="reference internal" href="../valid/conventions.html#type-closure"><span class="std std-ref">type closure</span></a>, which is applied at validation time.</p>
+</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/exec/types.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-types">
+<span id="zh-exec-type"></span><span id="zh-index-0"></span><h1>类型<a class="headerlink" href="types.html#zh-types" title="Link to this heading">¶</a></h1>
+<p>执行 需要检查和比较 <a class="reference internal" href="../syntax/modules.html#zh-syntax-type"><span class="std std-ref">类型</span></a> 在一些地方,例如: <a class="reference internal" href="instructions.html#zh-exec-call-indirect"><span class="std std-ref">执行</span></a> <span class="math notranslate nohighlight">\(\mathsf{call\_indirect}\)</span> 或 <a class="reference internal" href="modules.html#zh-exec-instantiation"><span class="std std-ref">即时</span></a> <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">模块</span></a>.</p>
+<p>这是语义学的不常变体,所有 类型 发生于 执行 已经 <a class="reference internal" href="../valid/conventions.html#zh-type-closed"><span class="std std-ref">关闭</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>运行时间类型检查一般涉及 类型 从多个 模块 或 类型 未由 a 定义 模块 其实
+因此,任何 模块- 当地 <a class="reference internal" href="../syntax/modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a> 一般来说,在它们内部发生的并不有意义。</p>
+</div>
+<section id="zh-instantiation">
+<span id="zh-type-inst"></span><span id="zh-index-1"></span><h2>证据<a class="headerlink" href="types.html#zh-instantiation" title="Link to this heading">¶</a></h2>
+<p>任何形式 <a class="reference internal" href="../syntax/modules.html#zh-syntax-type"><span class="std std-ref">类型</span></a> 可能会是 <em>即时</em> 改为 a <a class="reference internal" href="../valid/conventions.html#zh-type-closed"><span class="std std-ref">关闭</span></a> 类型 a <a class="reference internal" href="runtime.html#zh-syntax-moduleinst"><span class="std std-ref">模块实例</span></a> 由 <a class="reference internal" href="../valid/conventions.html#zh-notation-subst"><span class="std std-ref">替换</span></a> 每个 <a class="reference internal" href="../syntax/modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a> <span class="math notranslate nohighlight">\(x\)</span> 和相应的, <a class="reference internal" href="../valid/conventions.html#zh-syntax-deftype"><span class="std std-ref">定义类型</span></a> <span class="math notranslate nohighlight">\({\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{types}}{}[x]\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}lcl@{}l@{}}
+{{\href{../exec/types.html#type-inst}{\mathrm{clos}}}}_{{\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}}}(t) &amp; = &amp; {t}{{}[ {\href{../valid/conventions.html#notation-subst}{\mathrel{:=}}}\, {\href{../exec/runtime.html#syntax-moduleinst}{\mathit{moduleinst}}}{.}\href{../exec/runtime.html#syntax-moduleinst}{\mathsf{types}} ]} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>此运行时间相当于 <a class="reference internal" href="../valid/conventions.html#zh-type-closure"><span class="std std-ref">类型关闭</span></a>,应用于 验证 时间。</p>
+</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/exec/types.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

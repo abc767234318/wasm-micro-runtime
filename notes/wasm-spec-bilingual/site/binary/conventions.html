@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Conventions  / 约定  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="values.html" rel="next" title="Values"/>
+<link href="index.html" rel="prev" title="Binary Format"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="conventions.html#"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../text/index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/binary/conventions.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="conventions">
+<span id="index-0"></span><h1>Conventions<a class="headerlink" href="conventions.html#conventions" title="Link to this heading">¶</a></h1>
+<p>The binary format for WebAssembly <a class="reference internal" href="../intro/overview.html#module"><span class="std std-ref">modules</span></a> is a dense linear <em>encoding</em> of their <a class="reference internal" href="../syntax/modules.html#syntax-module"><span class="std std-ref">abstract syntax</span></a>.
+<a class="footnote-reference brackets" href="conventions.html#compression" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p>The format is defined by an <em>attribute grammar</em> whose only terminal symbols are <a class="reference internal" href="../syntax/values.html#syntax-byte"><span class="std std-ref">bytes</span></a>.
+A byte sequence is a well-formed encoding of a module if and only if it is generated by the grammar.</p>
+<p>Each production of this grammar has exactly one synthesized attribute: the abstract syntax that the respective byte sequence encodes.
+Thus, the attribute grammar implicitly defines a <em>decoding</em> function
+(i.e., a parsing function for the binary format).</p>
+<p>Except for a few exceptions, the binary grammar closely mirrors the grammar of the abstract syntax.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some phrases of abstract syntax have multiple possible encodings in the binary format.
+For example, numbers may be encoded as if they had optional leading zeros.
+Implementations of decoders must support all possible alternatives;
+implementations of encoders can pick any allowed encoding.</p>
+</div>
+<p>The recommended extension for files containing WebAssembly modules in binary format is “<span class="math notranslate nohighlight">\(\mathtt{.wasm}\)</span>”
+and the recommended <a class="reference external" href="https://www.iana.org/assignments/media-types/media-types.xhtml">Media Type</a> is “<span class="math notranslate nohighlight">\(\mathtt{application/wasm}\)</span>”.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="compression" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="conventions.html#id1" role="doc-backlink">1</a><span class="fn-bracket">]</span></span>
+<p>Additional encoding layers – for example, introducing compression – may be defined on top of the basic representation defined here.
+However, such layers are outside the scope of the current specification.</p>
+</aside>
+</aside>
+<section id="grammar">
+<span id="binary-grammar"></span><span id="index-1"></span><h2>Grammar<a class="headerlink" href="conventions.html#grammar" title="Link to this heading">¶</a></h2>
+<p>The following conventions are adopted in defining grammar rules for the binary format.
+They mirror the conventions used for <a class="reference internal" href="../syntax/conventions.html#grammar"><span class="std std-ref">abstract syntax</span></a>.
+In order to distinguish symbols of the binary syntax from symbols of the abstract syntax, <span class="math notranslate nohighlight">\({\mathtt{typewriter}}\)</span> font is adopted for the former.</p>
+<ul class="simple">
+<li><p>Terminal symbols are <a class="reference internal" href="../syntax/values.html#syntax-byte"><span class="std std-ref">bytes</span></a> expressed in hexadecimal notation: <span class="math notranslate nohighlight">\(\mathtt{0x0F}\)</span>.</p></li>
+<li><p>Nonterminal symbols are written in typewriter font: <span class="math notranslate nohighlight">\({\href{../binary/types.html#binary-valtype}{\mathtt{valtype}}}\)</span>, <span class="math notranslate nohighlight">\({\href{../binary/instructions.html#binary-instr}{\mathtt{instr}}}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({B^{n}}\)</span> is a sequence of <span class="math notranslate nohighlight">\(n \geq 0\)</span> iterations of <span class="math notranslate nohighlight">\(B\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({B^\ast}\)</span> is a possibly empty sequence of iterations of <span class="math notranslate nohighlight">\(B\)</span>.
+(This is a shorthand for <span class="math notranslate nohighlight">\({B^{n}}\)</span> used where <span class="math notranslate nohighlight">\(n\)</span> is not relevant.)</p></li>
+<li><p><span class="math notranslate nohighlight">\({B^?}\)</span> is an optional occurrence of <span class="math notranslate nohighlight">\(B\)</span>.
+(This is a shorthand for <span class="math notranslate nohighlight">\({B^{n}}\)</span> where <span class="math notranslate nohighlight">\(n \leq 1\)</span>.)</p></li>
+<li><p><span class="math notranslate nohighlight">\(x{:}B\)</span> denotes the same language as the nonterminal <span class="math notranslate nohighlight">\(B\)</span>, but also binds the variable <span class="math notranslate nohighlight">\(x\)</span> to the attribute synthesized for <span class="math notranslate nohighlight">\(B\)</span>.
+A pattern may also be used instead of a variable, e.g., <span class="math notranslate nohighlight">\(7{:}B\)</span>.</p></li>
+<li><p>Productions are written <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; B_1 ~\Rightarrow~ A_1 ~~|~~ \ldots ~~|~~ B_n ~\Rightarrow~ A_n \\ \end{array}\)</span>, where each <span class="math notranslate nohighlight">\(A_i\)</span> is the attribute that is synthesized for <span class="math notranslate nohighlight">\({\mathtt{sym}}\)</span> in the given case, usually from attribute variables bound in <span class="math notranslate nohighlight">\(B_i\)</span>.</p></li>
+<li><p>Large productions may be split into multiple definitions, indicated by ending the first one with explicit ellipses, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; B_1 \\ \end{array}\)</span>, and starting continuations with ellipses, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; \dots ~~|~~ B_2 \\ \end{array}\)</span>.</p></li>
+<li><p>Some productions are augmented by side conditions in parentheses, which restrict the applicability of the production. They provide a shorthand for a combinatorial expansion of the production into many separate cases.</p></li>
+<li><p>If the same meta variable or non-terminal symbol appears multiple times in a production (in the syntax or in an attribute), then all those occurrences must have the same instantiation.
+(This is a shorthand for a side condition requiring multiple different variables to be equal.)</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For example, the <a class="reference internal" href="types.html#binary-numtype"><span class="std std-ref">binary grammar</span></a> for <a class="reference internal" href="../syntax/types.html#syntax-numtype"><span class="std std-ref">number types</span></a> is given as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/types.html#binary-numtype}{\mathtt{numtype}}} &amp; ::= &amp; \mathtt{0x7C} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} \\
+&amp; &amp; | &amp; \mathtt{0x7D} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle32}} \\
+&amp; &amp; | &amp; \mathtt{0x7E} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} \\
+&amp; &amp; | &amp; \mathtt{0x7F} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} \\
+\end{array}\end{split}\]</div>
+<p>Consequently, the byte <span class="math notranslate nohighlight">\(\mathtt{0x7F}\)</span> encodes the type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}\)</span>,
+<span class="math notranslate nohighlight">\(\mathtt{0x7E}\)</span> encodes the type <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}}\)</span>, and so forth.
+No other byte value is allowed as the encoding of a number type.</p>
+<p>The <a class="reference internal" href="types.html#binary-limits"><span class="std std-ref">binary grammar</span></a> for <a class="reference internal" href="../syntax/types.html#syntax-limits"><span class="std std-ref">limits</span></a> is defined as follows:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/types.html#binary-limits}{\mathtt{limits}}} &amp; ::= &amp; \mathtt{0x00}~~n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}, {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} \epsilon ]) \\
+&amp; &amp; | &amp; \mathtt{0x01}~~n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}}~~m{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}, {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} m ]) \\
+&amp; &amp; | &amp; \mathtt{0x04}~~n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}}, {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} \epsilon ]) \\
+&amp; &amp; | &amp; \mathtt{0x05}~~n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}}~~m{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}}, {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} m ]) \\
+\end{array}\end{split}\]</div>
+<p>That is, a limits pair is encoded as either the byte <span class="math notranslate nohighlight">\(\mathtt{0x00}\)</span> followed by the encoding of a <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em64}}}\)</span> value,
+or the byte <span class="math notranslate nohighlight">\(\mathtt{0x01}\)</span> followed by two such encodings.
+The variables <span class="math notranslate nohighlight">\(n\)</span> and <span class="math notranslate nohighlight">\(m\)</span> name the attributes of the respective <span class="math notranslate nohighlight">\({\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}}\)</span> nonterminals, which in this case are the actual <a class="reference internal" href="../syntax/values.html#syntax-uint"><span class="std std-ref">unsigned integers</span></a> those decode into.
+The attribute of the complete production then is the abstract syntax for the limit, expressed in terms of the former values.</p>
+</div>
+</section>
+<section id="auxiliary-notation">
+<span id="binary-notation"></span><h2>Auxiliary Notation<a class="headerlink" href="conventions.html#auxiliary-notation" title="Link to this heading">¶</a></h2>
+<p>When dealing with binary encodings the following notation is also used:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span> denotes the empty byte sequence.</p></li>
+<li><p><span class="math notranslate nohighlight">\(||{\mathtt{B}}||\)</span> is the length of the byte sequence generated from the production <span class="math notranslate nohighlight">\({\mathtt{B}}\)</span> in a derivation.</p></li>
+</ul>
+</section>
+<section id="lists">
+<span id="binary-list"></span><span id="index-2"></span><h2>Lists<a class="headerlink" href="conventions.html#lists" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="../syntax/conventions.html#syntax-list"><span class="std std-ref">Lists</span></a> are encoded with their <span class="math notranslate nohighlight">\({\href{../binary/values.html#binary-int}{\def\mathdef1498#1{{\mathtt{u}#1}}\mathdef1498{\mathtt{32}}}}\)</span> length followed by the encoding of their element sequence.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\mathtt{X}}) &amp; ::= &amp; n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1498#1{{\mathtt{u}#1}}\mathdef1498{\mathtt{32}}}}~~{({\mathit{el}}{:}{\mathtt{X}})^{n}} &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{el}}^{n}} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/binary/conventions.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-conventions">
+<span id="zh-index-0"></span><h1>约定<a class="headerlink" href="conventions.html#zh-conventions" title="Link to this heading">¶</a></h1>
+<p>那个 二进制格式 (单位:千美元) WebAssembly <a class="reference internal" href="../intro/overview.html#zh-module"><span class="std std-ref">模块</span></a> 是一个密集的线性 <em>编码</em> 联合国 <a class="reference internal" href="../syntax/modules.html#zh-syntax-module"><span class="std std-ref">抽象语法</span></a>.
+<a class="footnote-reference brackets" href="conventions.html#zh-compression" id="zh-id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p>格式由 <em>属性语法</em> 其唯一的终端符号是 <a class="reference internal" href="../syntax/values.html#zh-syntax-byte"><span class="std std-ref">字节</span></a>.
+A 字节序列 是一个很好的形状 编码 页:1 模块 如果并且只有在由 语法.</p>
+<p>每个 产生式 这个 语法 具有一个精确的合成属性: 抽象语法 双方 字节序列 编码
+因此, 属性语法 隐含定义 a <em>解码</em> 函数
+(即分析功能,用于 二进制格式).</p>
+<p>除了几个例外,二进制 语法 近距离反射 语法 会 议 日 程 和 议 程 抽象语法.</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>一些短语: 抽象语法 在 二进制格式。 。 。
+例如,数字可能被编码为它们有可选的领先零.
+解码器的实施必须支持所有可能的替代品;
+执行编码器可以选择任何允许的 编码.</p>
+</div>
+<p>建议的文件扩展名 WebAssembly 模块 输入 二进制格式 “<span class="math notranslate nohighlight">\(\mathtt{.wasm}\)</span>“
+建议赔偿额 <a class="reference external" href="https://www.iana.org/assignments/media-types/media-types.xhtml">媒体类型</a> “<span class="math notranslate nohighlight">\(\mathtt{application/wasm}\)</span>”.</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="zh-compression" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a href="conventions.html#zh-id1" role="doc-backlink">1</a><span class="fn-bracket">]</span></span>
+<p>额外 编码 层——例如引入压缩——可以在此处定义的基本表示值之上定义。
+然而,这种层层不属于目前的范围。 规范.</p>
+</aside>
+</aside>
+<section id="zh-grammar">
+<span id="zh-binary-grammar"></span><span id="zh-index-1"></span><h2>语法<a class="headerlink" href="conventions.html#zh-grammar" title="Link to this heading">¶</a></h2>
+<p>以下是: 约定 用于定义 语法 规则 二进制格式。 。 。
+他们照镜子 约定 用于 <a class="reference internal" href="../syntax/conventions.html#zh-grammar"><span class="std std-ref">抽象语法</span></a>。 。 。
+为了区分二进制符号 语法 从编号 抽象语法, <span class="math notranslate nohighlight">\({\mathtt{typewriter}}\)</span> 为前者采用字体。</p>
+<ul class="simple">
+<li><p>终端符号是 <a class="reference internal" href="../syntax/values.html#zh-syntax-byte"><span class="std std-ref">字节</span></a> 以十六进制符号表示: <span class="math notranslate nohighlight">\(\mathtt{0x0F}\)</span>.</p></li>
+<li><p>非绝对符号用打字机字体写: <span class="math notranslate nohighlight">\({\href{../binary/types.html#binary-valtype}{\mathtt{valtype}}}\)</span>, <span class="math notranslate nohighlight">\({\href{../binary/instructions.html#binary-instr}{\mathtt{instr}}}\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({B^{n}}\)</span> 是一个序列 <span class="math notranslate nohighlight">\(n \geq 0\)</span> 重复次数 <span class="math notranslate nohighlight">\(B\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\({B^\ast}\)</span> 可能是重复的空序数 <span class="math notranslate nohighlight">\(B\)</span>。 。 。
+(此简称为 <span class="math notranslate nohighlight">\({B^{n}}\)</span> 用于何处 <span class="math notranslate nohighlight">\(n\)</span> 无关。 )</p></li>
+<li><p><span class="math notranslate nohighlight">\({B^?}\)</span> 是可选发生的 <span class="math notranslate nohighlight">\(B\)</span>。 。 。
+(此简称为 <span class="math notranslate nohighlight">\({B^{n}}\)</span> 地点 <span class="math notranslate nohighlight">\(n \leq 1\)</span>.)</p></li>
+<li><p><span class="math notranslate nohighlight">\(x{:}B\)</span> 表示与非绝对语言相同的语言 <span class="math notranslate nohighlight">\(B\)</span>,但也会绑定变量 <span class="math notranslate nohighlight">\(x\)</span> 的属性 <span class="math notranslate nohighlight">\(B\)</span>。 。 。
+也可以使用一个图案代替变量,例如, <span class="math notranslate nohighlight">\(7{:}B\)</span>.</p></li>
+<li><p>产生式 已写入 <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; B_1 ~\Rightarrow~ A_1 ~~|~~ \ldots ~~|~~ B_n ~\Rightarrow~ A_n \\ \end{array}\)</span>时, <span class="math notranslate nohighlight">\(A_i\)</span> 是用于合成的属性 <span class="math notranslate nohighlight">\({\mathtt{sym}}\)</span> 在给定的情况下,通常从绑定在 <span class="math notranslate nohighlight">\(B_i\)</span>.</p></li>
+<li><p>大块 产生式 可分为多个定义,以第一个定义结尾处有明确的椭圆表示, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; B_1 \\ \end{array}\)</span>,然后用椭圆开始继续, <span class="math notranslate nohighlight">\(\begin{array}[t]{@{}l@{}r@{~}r@{~}l@{}l@{}l@{}l@{}} &amp; {\mathtt{sym}} &amp; ::= &amp; \dots ~~|~~ B_2 \\ \end{array}\)</span>.</p></li>
+<li><p>有点 产生式 括号内附加条件,限制适用 产生式它们为组合式扩大 产生式 在很多不同的情况下</p></li>
+<li><p>如果同一元变量或非绝对符号在a中多次出现 产生式 (单位:千美元) 语法 因此,所有这些事件都必须具有同样的即时性。
+(这是一个侧式条件的缩写,要求多个不同的变量是相等的. )</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>例如, <a class="reference internal" href="types.html#zh-binary-numtype"><span class="std std-ref">二进制 语法</span></a> (单位:千美元) <a class="reference internal" href="../syntax/types.html#zh-syntax-numtype"><span class="std std-ref">编号 类型</span></a> 现将情况说明如下:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/types.html#binary-numtype}{\mathtt{numtype}}} &amp; ::= &amp; \mathtt{0x7C} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} \\
+&amp; &amp; | &amp; \mathtt{0x7D} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle32}} \\
+&amp; &amp; | &amp; \mathtt{0x7E} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} \\
+&amp; &amp; | &amp; \mathtt{0x7F} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} \\
+\end{array}\end{split}\]</div>
+<p>因此,字节 <span class="math notranslate nohighlight">\(\mathtt{0x7F}\)</span> 编码类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}\)</span>,
+<span class="math notranslate nohighlight">\(\mathtt{0x7E}\)</span> 编码类型 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}}\)</span>,还有其他的。
+不允许有其他字节值作为 编码 数字类型。</p>
+<p>那个 <a class="reference internal" href="types.html#zh-binary-limits"><span class="std std-ref">二进制 语法</span></a> (单位:千美元) <a class="reference internal" href="../syntax/types.html#zh-syntax-limits"><span class="std std-ref">限制</span></a> 定义如下:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/types.html#binary-limits}{\mathtt{limits}}} &amp; ::= &amp; \mathtt{0x00}~~n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}, {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} \epsilon ]) \\
+&amp; &amp; | &amp; \mathtt{0x01}~~n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}}~~m{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}, {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} m ]) \\
+&amp; &amp; | &amp; \mathtt{0x04}~~n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}}, {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} \epsilon ]) \\
+&amp; &amp; | &amp; \mathtt{0x05}~~n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}}~~m{:}{\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}}, {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} m ]) \\
+\end{array}\end{split}\]</div>
+<p>也就是说,限制对被编码为字节 <span class="math notranslate nohighlight">\(\mathtt{0x00}\)</span> 接下来是 编码 页:1 <span class="math notranslate nohighlight">\({\href{../syntax/values.html#syntax-int}{\mathit{u\scriptstyle\kern-0.1em64}}}\)</span> 数值,
+或字节 <span class="math notranslate nohighlight">\(\mathtt{0x01}\)</span> 然后是两个这样的编码。
+变量 <span class="math notranslate nohighlight">\(n\)</span> 和 <span class="math notranslate nohighlight">\(m\)</span> 名称 各自的属性 <span class="math notranslate nohighlight">\({\href{../binary/values.html#binary-int}{\def\mathdef1499#1{{\mathtt{u}#1}}\mathdef1499{\mathtt{64}}}}\)</span> 非定数,在这种情况下是实际的 <a class="reference internal" href="../syntax/values.html#zh-syntax-uint"><span class="std std-ref">未签名 整数</span></a> 那些解码为。
+完整的属性 产生式 那么这是 抽象语法 限值,以前者表示 值.</p>
+</div>
+</section>
+<section id="zh-auxiliary-notation">
+<span id="zh-binary-notation"></span><h2>辅助标记<a class="headerlink" href="conventions.html#zh-auxiliary-notation" title="Link to this heading">¶</a></h2>
+<p>在处理二进制编码时,也使用下列标记:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span> 表示空 字节序列.</p></li>
+<li><p><span class="math notranslate nohighlight">\(||{\mathtt{B}}||\)</span> 表示 字节序列 生成于 产生式 <span class="math notranslate nohighlight">\({\mathtt{B}}\)</span> 在一个推论中。</p></li>
+</ul>
+</section>
+<section id="zh-lists">
+<span id="zh-binary-list"></span><span id="zh-index-2"></span><h2>列表<a class="headerlink" href="conventions.html#zh-lists" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="../syntax/conventions.html#zh-syntax-list"><span class="std std-ref">列表</span></a> 被编码为他们的 <span class="math notranslate nohighlight">\({\href{../binary/values.html#binary-int}{\def\mathdef1498#1{{\mathtt{u}#1}}\mathdef1498{\mathtt{32}}}}\)</span> 长度,然后是 编码 他们的元素序列。</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../binary/conventions.html#binary-list}{\mathtt{list}}}({\mathtt{X}}) &amp; ::= &amp; n{:}{\href{../binary/values.html#binary-int}{\def\mathdef1498#1{{\mathtt{u}#1}}\mathdef1498{\mathtt{32}}}}~~{({\mathit{el}}{:}{\mathtt{X}})^{n}} &amp; \quad\Rightarrow\quad{} &amp; {{\mathit{el}}^{n}} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/binary/conventions.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>

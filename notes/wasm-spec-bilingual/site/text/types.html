@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html class="wasm-bi-active" data-bi-root="../" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Types  / 类型  — Wasm Spec 中英对照</title>
+<link href="../_static/pygments.css%3Fv=03e43079.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/basic.css%3Fv=686e5160.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/alabaster.css%3Fv=057308f9.css" rel="stylesheet" type="text/css"/>
+<script src="../_static/documentation_options.js%3Fv=0169130b"></script>
+<script src="../_static/doctools.js%3Fv=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js%3Fv=dc90522c"></script>
+<script>window.MathJax = {"tex": {"maxBuffer": 30720, "macros": {"multicolumn": ["", 2]}}, "options": {"menuOptions": {"settings": {"enrich": false}}}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="instructions.html" rel="next" title="Instructions"/>
+<link href="values.html" rel="prev" title="Values"/>
+<link href="../_static/custom.css" rel="stylesheet" type="text/css"/>
+<link href="../_bilingual/bilingual.css" rel="stylesheet"/><script defer="True" src="../_bilingual/bilingual.js"></script></head><body>
+<div class="document">
+<div aria-label="Main" class="sphinxsidebar" role="navigation">
+<div class="sphinxsidebarwrapper">
+<p class="logo"><a href="../index.html">
+<img alt="Logo of WebAssembly" class="logo" src="../_static/webassembly.png"/>
+</a></p><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro/index.html"><span class="wasm-bi-nav-en">Introduction</span><span class="wasm-bi-nav-zh">导言</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../syntax/index.html"><span class="wasm-bi-nav-en">Structure</span><span class="wasm-bi-nav-zh">结构</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../valid/index.html"><span class="wasm-bi-nav-en">Validation</span><span class="wasm-bi-nav-zh">验证</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../exec/index.html"><span class="wasm-bi-nav-en">Execution</span><span class="wasm-bi-nav-zh">执行</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../binary/index.html"><span class="wasm-bi-nav-en">Binary Format</span><span class="wasm-bi-nav-zh">二进制格式</span></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html"><span class="wasm-bi-nav-en">Text Format</span><span class="wasm-bi-nav-zh">文本格式</span></a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conventions.html"><span class="wasm-bi-nav-en">Conventions</span><span class="wasm-bi-nav-zh">约定</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="lexical.html"><span class="wasm-bi-nav-en">Lexical Format</span><span class="wasm-bi-nav-zh">词法格式</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html"><span class="wasm-bi-nav-en">Values</span><span class="wasm-bi-nav-zh">值</span></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="types.html#"><span class="wasm-bi-nav-en">Types</span><span class="wasm-bi-nav-zh">类型</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="instructions.html"><span class="wasm-bi-nav-en">Instructions</span><span class="wasm-bi-nav-zh">指令</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html"><span class="wasm-bi-nav-en">Modules</span><span class="wasm-bi-nav-zh">模块</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index.html"><span class="wasm-bi-nav-en">Appendix</span><span class="wasm-bi-nav-zh">附 录</span></a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-types.html"><span class="wasm-bi-nav-en">Index of Types</span><span class="wasm-bi-nav-zh">指数 类型</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-instructions.html"><span class="wasm-bi-nav-en">Index of Instructions</span><span class="wasm-bi-nav-zh">指数 指令</span></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appendix/index-rules.html"><span class="wasm-bi-nav-en">Index of Semantic Rules</span><span class="wasm-bi-nav-zh">指数 语义规则</span></a></li>
+</ul>
+<hr/>
+<ul>
+<li class="toctree-l1"><a href="../genindex.html"><span class="wasm-bi-nav-en">Index</span><span class="wasm-bi-nav-zh">指数</span></a></li>
+<li class="toctree-l1"><a href="../_download/WebAssembly.pdf"><span class="wasm-bi-nav-en">Download as PDF</span><span class="wasm-bi-nav-zh">下载为 PDF</span></a></li>
+</ul>
+<search id="searchbox" role="search" style="display: none">
+<h3 id="searchlabel">Quick search</h3>
+<div class="searchformwrapper">
+<form action="../search.html" class="search" method="get">
+<input aria-labelledby="searchlabel" autocapitalize="off" autocomplete="off" autocorrect="off" name="q" spellcheck="false" type="text"/>
+<input type="submit" value="Go"/>
+</form>
+</div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+</div>
+</div>
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body" role="main"><div aria-label="Bilingual reading controls" class="wasm-bi-toolbar" role="region">
+<div class="wasm-bi-brand">Wasm Spec 中英对照<small>English is normative · 英文原文为准</small></div>
+<div aria-label="Language view" class="wasm-bi-controls" role="group">
+<button class="wasm-bi-button" data-bi-view-button="both" type="button">中英</button>
+<button class="wasm-bi-button" data-bi-view-button="en" type="button">EN</button>
+<button class="wasm-bi-button" data-bi-view-button="zh" type="button">ZH</button>
+<button class="wasm-bi-button" data-bi-sync="" type="button"></button>
+</div>
+<div class="wasm-bi-search-wrap">
+<input aria-label="Search specification" class="wasm-bi-search" data-bi-search="" placeholder="搜索中英文章节 / Search" type="search"/>
+<div class="wasm-bi-results" data-bi-results="" role="listbox"></div>
+</div>
+<a class="wasm-bi-button" href="https://webassembly.github.io/spec/core/text/types.html" rel="external">Official</a>
+</div><div class="wasm-bi-columns"><article class="wasm-bi-panel wasm-bi-panel-en" lang="en"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">English · 官方原文</div>
+<section id="types">
+<span id="text-type"></span><span id="index-0"></span><h1>Types<a class="headerlink" href="types.html#types" title="Link to this heading">¶</a></h1>
+<section id="number-types">
+<span id="text-numtype"></span><span id="index-1"></span><h2>Number Types<a class="headerlink" href="types.html#number-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-numtype}{\mathtt{numtype}}} &amp; ::= &amp; \mbox{‘\texttt{i32}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i64}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{f32}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle32}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{f64}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="vector-types">
+<span id="text-vectype"></span><span id="index-2"></span><h2>Vector Types<a class="headerlink" href="types.html#vector-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-vectype}{\mathtt{vectype}}} &amp; ::= &amp; \mbox{‘\texttt{v128}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-vectype}{\mathsf{v\scriptstyle128}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="heap-types">
+<span id="text-absheaptype"></span><span id="text-heaptype"></span><span id="index-3"></span><h2>Heap Types<a class="headerlink" href="types.html#heap-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-absheaptype}{\mathtt{absheaptype}}} &amp; ::= &amp; \mbox{‘\texttt{any}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{any}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{eq}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{eq}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i31}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{struct}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{struct}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{array}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{array}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{none}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{none}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{func}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{func}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{nofunc}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{nofunc}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{exn}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{noexn}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{noexn}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{extern}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{noextern}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{noextern}} \\[0.8ex]
+&amp; {{\href{../text/types.html#text-heaptype}{\mathtt{heaptype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; {\mathit{ht}}{:}{\href{../text/types.html#text-absheaptype}{\mathtt{absheaptype}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{ht}} \\
+&amp; &amp; | &amp; x{:}{{\href{../text/modules.html#text-typeidx}{\mathtt{typeidx}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="reference-types">
+<span id="text-null"></span><span id="text-reftype"></span><span id="index-4"></span><h2>Reference Types<a class="headerlink" href="types.html#reference-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-null}{\mathtt{null}}} &amp; ::= &amp; \mbox{‘\texttt{null}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-reftype}{\mathsf{null}} \\[0.8ex]
+&amp; {{\href{../text/types.html#text-reftype}{\mathtt{reftype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~{\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}^?}{:}{{\href{../text/types.html#text-null}{\mathtt{null}}}^?}~~{\mathit{ht}}{:}{{\href{../text/types.html#text-heaptype}{\mathtt{heaptype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}^?}~{\mathit{ht}} \\
+\end{array}\end{split}\]</div>
+<section id="abbreviations">
+<h3>Abbreviations<a class="headerlink" href="types.html#abbreviations" title="Link to this heading">¶</a></h3>
+<p>There are shorthands for references to abstract heap types.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-reftype}{\mathtt{reftype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \mbox{‘\texttt{anyref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{any}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{eqref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{eq}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i31ref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{i31}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{structref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{struct}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{arrayref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{array}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{nullref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{none}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{funcref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{func}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{nullfuncref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{nofunc}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{exnref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{exn}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{nullexnref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{noexn}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{externref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{extern}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{nullexternref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{noextern}’}~~\mbox{‘\texttt{{)}}’} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="value-types">
+<span id="text-valtype"></span><span id="index-5"></span><h2>Value Types<a class="headerlink" href="types.html#value-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; {\mathit{nt}}{:}{\href{../text/types.html#text-numtype}{\mathtt{numtype}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{nt}} \\
+&amp; &amp; | &amp; {\mathit{vt}}{:}{\href{../text/types.html#text-vectype}{\mathtt{vectype}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{vt}} \\
+&amp; &amp; | &amp; {\mathit{rt}}{:}{{\href{../text/types.html#text-reftype}{\mathtt{reftype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{rt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="composite-types">
+<span id="text-packtype"></span><span id="text-storagetype"></span><span id="text-fieldtype"></span><span id="text-result"></span><span id="text-param"></span><span id="text-functype"></span><span id="text-arraytype"></span><span id="text-structtype"></span><span id="text-aggrtype"></span><span id="text-comptype"></span><span id="index-6"></span><h2>Composite Types<a class="headerlink" href="types.html#composite-types" title="Link to this heading">¶</a></h2>
+<p>Composite types are parsed into their respective abstract representation,
+paired with the local <a class="reference internal" href="conventions.html#text-context"><span class="std std-ref">identifier context</span></a> generated by their bound field or parameter identifiers:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{comptype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{struct}’}~~{({\mathit{ft}}, {{\mathit{id}}^?})^\ast}{:}{\href{../text/conventions.html#text-list}{\mathtt{list}}}({{\href{../text/types.html#text-comptype}{\mathtt{field}}}}_{{\href{../text/conventions.html#text-context}{I}}})~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-comptype}{\mathsf{struct}}~{{\mathit{ft}}^\ast}, \{ \href{../text/conventions.html#text-context}{\mathsf{fields}}~({({{\mathit{id}}^?})^\ast}) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{array}’}~~{\mathit{ft}}{:}{{\href{../text/types.html#text-fieldtype}{\mathtt{fieldtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-comptype}{\mathsf{array}}~{\mathit{ft}}, \{ \href{../text/conventions.html#text-context}{\mathsf{fields}}~(\epsilon) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{func}’}~~{(t_1, {{\mathit{id}}^?})^\ast}{:}{\href{../text/conventions.html#text-list}{\mathtt{list}}}({{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}})~~{t_2^\ast}{:}{\href{../text/conventions.html#text-list}{\mathtt{list}}}({{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}})~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast}, \{ \href{../text/conventions.html#text-context}{\mathsf{fields}}~(\epsilon) \}) \\[0.8ex]
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{field}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{field}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~{\mathit{ft}}{:}{{\href{../text/types.html#text-fieldtype}{\mathtt{fieldtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; ({\mathit{ft}}, {{\mathit{id}}^?}) \\
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{param}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~t{:}{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (t, {{\mathit{id}}^?}) \\
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{result}’}~~t{:}{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; t \\[0.8ex]
+&amp; {{\href{../text/types.html#text-fieldtype}{\mathtt{fieldtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; {\mathit{zt}}{:}{{\href{../text/types.html#text-storagetype}{\mathtt{storagetype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{zt}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{mut}’}~~{\mathit{zt}}{:}{{\href{../text/types.html#text-storagetype}{\mathtt{storagetype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-mut}{\mathsf{mut}}~{\mathit{zt}} \\[0.8ex]
+&amp; {{\href{../text/types.html#text-storagetype}{\mathtt{storagetype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; t{:}{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; t \\
+&amp; &amp; | &amp; {\mathit{pt}}{:}{\href{../text/types.html#text-packtype}{\mathtt{packtype}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{pt}} \\[0.8ex]
+&amp; {\href{../text/types.html#text-packtype}{\mathtt{packtype}}} &amp; ::= &amp; \mbox{‘\texttt{i8}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle8}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i16}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle16}} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The optional identifier names for parameters in a function type only have documentation purpose.
+They cannot be referenced from anywhere.</p>
+</div>
+<section id="id1">
+<h3>Abbreviations<a class="headerlink" href="types.html#id1" title="Link to this heading">¶</a></h3>
+<p>Multiple anonymous structure fields or parameters or multiple results may be combined into a single declaration:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{field}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{field}’}~~{{{\href{../text/types.html#text-fieldtype}{\mathtt{fieldtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~\mbox{‘\texttt{{)}}’} &amp; \quad\equiv\quad{} &amp; {(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{field}’}~~{{\href{../text/types.html#text-fieldtype}{\mathtt{fieldtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’})^\ast} \\
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{param}’}~~{{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~\mbox{‘\texttt{{)}}’} &amp; \quad\equiv\quad{} &amp; {(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{param}’}~~{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’})^\ast} \\
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{result}’}~~{{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~\mbox{‘\texttt{{)}}’} &amp; \quad\equiv\quad{} &amp; {(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{result}’}~~{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’})^\ast} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="recursive-types">
+<span id="text-final"></span><span id="text-typedef"></span><span id="text-subtype"></span><span id="text-rectype"></span><span id="index-7"></span><h2>Recursive Types<a class="headerlink" href="types.html#recursive-types" title="Link to this heading">¶</a></h2>
+<p>Recursive types are parsed into their respective abstract representation,
+paired with the <a class="reference internal" href="conventions.html#text-context"><span class="std std-ref">identifier context</span></a> generated by their bound identifiers:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-final}{\mathtt{final}}} &amp; ::= &amp; \mbox{‘\texttt{final}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-subtype}{\mathsf{final}} \\[0.8ex]
+&amp; {{\href{../text/types.html#text-subtype}{\mathtt{subtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{sub}’}~~{{\mathit{fin}}^?}{:}{{\href{../text/types.html#text-final}{\mathtt{final}}}^?}~~{x^\ast}{:}{\href{../text/conventions.html#text-list}{\mathtt{list}}}({{\href{../text/modules.html#text-typeidx}{\mathtt{typeidx}}}}_{{\href{../text/conventions.html#text-context}{I}}})~~({\mathit{ct}}, {\href{../text/conventions.html#text-context}{I}'}){:}{{\href{../text/types.html#text-comptype}{\mathtt{comptype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~{{\mathit{fin}}^?}~{x^\ast}~{\mathit{ct}}, {\href{../text/conventions.html#text-context}{I}'}) \\[0.8ex]
+&amp; {{\href{../text/types.html#text-typedef}{\mathtt{typedef}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{type}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~({\mathit{st}}, {\href{../text/conventions.html#text-context}{I}'}){:}{{\href{../text/types.html#text-subtype}{\mathtt{subtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; ({\mathit{st}}, {\href{../text/conventions.html#text-context}{I}'} \oplus \{ \href{../text/conventions.html#text-context}{\mathsf{types}}~({{\mathit{id}}^?}) \}) \\[0.8ex]
+&amp; {{\href{../text/types.html#text-rectype}{\mathtt{rectype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{rec}’}~~{({\mathit{st}}, {\href{../text/conventions.html#text-context}{I}'})^\ast}{:}{\href{../text/conventions.html#text-list}{\mathtt{list}}}({{\href{../text/types.html#text-typedef}{\mathtt{typedef}}}}_{{\href{../text/conventions.html#text-context}{I}}})~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~{{\mathit{st}}^\ast}, {\href{../syntax/conventions.html#notation-concat}{\bigoplus}}\, {{\href{../text/conventions.html#text-context}{I}'}^\ast}) \\
+\end{array}\end{split}\]</div>
+<section id="id2">
+<h3>Abbreviations<a class="headerlink" href="types.html#id2" title="Link to this heading">¶</a></h3>
+<p>Final sub types with no super-types can omit the <span class="math notranslate nohighlight">\(\mbox{‘\texttt{sub}’}\)</span> keyword and its arguments:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-subtype}{\mathtt{subtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ {{\href{../text/types.html#text-comptype}{\mathtt{comptype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{sub}’}~~\mbox{‘\texttt{final}’}~~{{\href{../text/types.html#text-comptype}{\mathtt{comptype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} \\
+\end{array}\end{split}\]</div>
+<p>Similarly, singular recursive types can omit the <span class="math notranslate nohighlight">\(\mbox{‘\texttt{rec}’}\)</span> keyword:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-rectype}{\mathtt{rectype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ {{\href{../text/types.html#text-typedef}{\mathtt{typedef}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{rec}’}~~{{\href{../text/types.html#text-typedef}{\mathtt{typedef}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="address-types">
+<span id="text-addrtype"></span><span id="index-8"></span><h2>Address Types<a class="headerlink" href="types.html#address-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-addrtype}{\mathtt{addrtype}}} &amp; ::= &amp; \mbox{‘\texttt{i32}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i64}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} \\
+\end{array}\end{split}\]</div>
+<section id="id3">
+<h3>Abbreviations<a class="headerlink" href="types.html#id3" title="Link to this heading">¶</a></h3>
+<p>The address type can be omitted, in which case it defaults <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-addrtype}{\mathtt{addrtype}}} &amp; ::= &amp; \dots ~~|~~ \epsilon &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{i32}’} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="limits">
+<span id="text-limits"></span><span id="index-9"></span><h2>Limits<a class="headerlink" href="types.html#limits" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-limits}{\mathtt{limits}}} &amp; ::= &amp; n{:}{\href{../text/values.html#text-int}{\mathtt{u64}}} &amp; \quad\Rightarrow\quad{} &amp; {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} \epsilon ] \\
+&amp; &amp; | &amp; n{:}{\href{../text/values.html#text-int}{\mathtt{u64}}}~~m{:}{\href{../text/values.html#text-int}{\mathtt{u64}}} &amp; \quad\Rightarrow\quad{} &amp; {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} m ] \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="tag-types">
+<span id="text-tagtype"></span><span id="index-10"></span><h2>Tag Types<a class="headerlink" href="types.html#tag-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-tagtype}{\mathtt{tagtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; (x, {\href{../text/conventions.html#text-context}{I}'}){:}{{\href{../text/types.html#text-typeuse}{\mathtt{typeuse}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="global-types">
+<span id="text-globaltype"></span><span id="index-11"></span><h2>Global Types<a class="headerlink" href="types.html#global-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-globaltype}{\mathtt{globaltype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; t{:}{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; t \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{mut}’}~~t{:}{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-mut}{\mathsf{mut}}~t \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="memory-types">
+<span id="text-memtype"></span><span id="index-12"></span><h2>Memory Types<a class="headerlink" href="types.html#memory-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-memtype}{\mathtt{memtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; {\mathit{at}}{:}{\href{../text/types.html#text-addrtype}{\mathtt{addrtype}}}~~{\mathit{lim}}{:}{\href{../text/types.html#text-limits}{\mathtt{limits}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{at}}~{\mathit{lim}}~\href{../syntax/types.html#syntax-memtype}{\mathsf{page}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="table-types">
+<span id="text-tabletype"></span><span id="index-13"></span><h2>Table Types<a class="headerlink" href="types.html#table-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-tabletype}{\mathtt{tabletype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; {\mathit{at}}{:}{\href{../text/types.html#text-addrtype}{\mathtt{addrtype}}}~~{\mathit{lim}}{:}{\href{../text/types.html#text-limits}{\mathtt{limits}}}~~{\mathit{rt}}{:}{{\href{../text/types.html#text-reftype}{\mathtt{reftype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{at}}~{\mathit{lim}}~{\mathit{rt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="external-types">
+<span id="text-externtype"></span><span id="index-14"></span><h2>External Types<a class="headerlink" href="types.html#external-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-externtype}{\mathtt{externtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{tag}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~{\mathit{jt}}{:}{{\href{../text/types.html#text-tagtype}{\mathtt{tagtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-externtype}{\mathsf{tag}}~{\mathit{jt}}, \{ \href{../text/conventions.html#text-context}{\mathsf{tags}}~({{\mathit{id}}^?}) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{global}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~{\mathit{gt}}{:}{{\href{../text/types.html#text-globaltype}{\mathtt{globaltype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-externtype}{\mathsf{global}}~{\mathit{gt}}, \{ \href{../text/conventions.html#text-context}{\mathsf{globals}}~({{\mathit{id}}^?}) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{memory}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~{\mathit{mt}}{:}{{\href{../text/types.html#text-memtype}{\mathtt{memtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-externtype}{\mathsf{mem}}~{\mathit{mt}}, \{ \href{../text/conventions.html#text-context}{\mathsf{mems}}~({{\mathit{id}}^?}) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{table}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~{\mathit{tt}}{:}{{\href{../text/types.html#text-tabletype}{\mathtt{tabletype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-externtype}{\mathsf{table}}~{\mathit{tt}}, \{ \href{../text/conventions.html#text-context}{\mathsf{tables}}~({{\mathit{id}}^?}) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{func}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~(x, {\href{../text/conventions.html#text-context}{I}'}){:}{{\href{../text/types.html#text-typeuse}{\mathtt{typeuse}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-externtype}{\mathsf{func}}~x, \{ \href{../text/conventions.html#text-context}{\mathsf{funcs}}~({{\mathit{id}}^?}) \}) \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="type-uses">
+<span id="text-typeuse"></span><span id="index-15"></span><h2>Type Uses<a class="headerlink" href="types.html#type-uses" title="Link to this heading">¶</a></h2>
+<p>A <em>type use</em> is a reference to a <a class="reference internal" href="types.html#text-type"><span class="std std-ref">type definition</span></a>.
+Where it is required to reference a <a class="reference internal" href="types.html#text-functype"><span class="std std-ref">function type</span></a>,
+it may optionally be augmented by explicit inlined <a class="reference internal" href="types.html#text-param"><span class="std std-ref">parameter</span></a> and <a class="reference internal" href="types.html#text-result"><span class="std std-ref">result</span></a> declarations.
+That allows binding symbolic <a class="reference internal" href="values.html#text-id"><span class="std std-ref">identifiers</span></a> to name the <a class="reference internal" href="modules.html#text-localidx"><span class="std std-ref">local indices</span></a> of parameters.
+If inline declarations are given, then their types must match the referenced <a class="reference internal" href="types.html#text-type"><span class="std std-ref">function type</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-typeuse}{\mathtt{typeuse}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{type}’}~~x{:}{{\href{../text/modules.html#text-typeidx}{\mathtt{typeidx}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (x, {\href{../text/conventions.html#text-context}{I}'}) &amp;  \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\quad
+\begin{array}[t]{@{}l@{}}
+\mbox{if}~ {\href{../text/conventions.html#text-context}{I}}{.}\href{../text/conventions.html#text-context}{\mathsf{typedefs}}{}[x] = (\href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~{{\mathit{st}}^\ast}) {.} i \\
+{\land}~ {{\mathit{st}}^\ast}{}[i] = \href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~\href{../syntax/types.html#syntax-subtype}{\mathsf{final}}~(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast}) \\
+{\land}~ {\href{../text/conventions.html#text-context}{I}'} = \{ \href{../text/conventions.html#text-context}{\mathsf{locals}}~{(\epsilon)^{{|{t_1^\ast}|}}} \} \\
+\end{array}
+} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{type}’}~~x{:}{{\href{../text/modules.html#text-typeidx}{\mathtt{typeidx}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’}~~{(t_1, {{\mathit{id}}^?})^\ast}{:}{{{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~{t_2^\ast}{:}{{{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast} &amp; \quad\Rightarrow\quad{} &amp; (x, {\href{../text/conventions.html#text-context}{I}'}) &amp;  \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\quad
+\begin{array}[t]{@{}l@{}}
+\mbox{if}~ {\href{../text/conventions.html#text-context}{I}}{.}\href{../text/conventions.html#text-context}{\mathsf{typedefs}}{}[x] = (\href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~{{\mathit{st}}^\ast}) {.} i \\
+{\land}~ {{\mathit{st}}^\ast}{}[i] = \href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~\href{../syntax/types.html#syntax-subtype}{\mathsf{final}}~(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast}) \\
+{\land}~ {\href{../text/conventions.html#text-context}{I}'} = \{ \href{../text/conventions.html#text-context}{\mathsf{locals}}~{({{\mathit{id}}^?})^\ast} \} \\
+{\land}~ {\vdash}\, {\href{../text/conventions.html#text-context}{I}'} : \mathsf{ok} \\
+\end{array}
+} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If inline declarations are given, their types must be <em>syntactically</em> equal to the types from the indexed definition;
+possible type <a class="reference internal" href="../valid/conventions.html#notation-subst"><span class="std std-ref">substitutions</span></a> from other definitions that might make them equal are not taken into account.
+This is to simplify syntactic pre-processing.</p>
+</div>
+<p>The synthesized attribute of a <span class="math notranslate nohighlight">\({\mathtt{typeuse}}\)</span> is a pair consisting of both the used <a class="reference internal" href="../syntax/modules.html#syntax-typeidx"><span class="std std-ref">type index</span></a> and the local <a class="reference internal" href="conventions.html#text-context"><span class="std std-ref">identifier context</span></a> containing possible parameter identifiers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Both productions overlap for the case that the function type is <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~\epsilon \href{../syntax/types.html#syntax-comptype}{\rightarrow} \epsilon\)</span>.
+However, in that case, they also produce the same results, so that the choice is immaterial.</p>
+<p>The <a class="reference internal" href="conventions.html#text-context-wf"><span class="std std-ref">well-formedness</span></a> condition on <span class="math notranslate nohighlight">\({\href{../text/conventions.html#text-context}{I}'}\)</span> ensures that the parameters do not contain duplicate identifiers.</p>
+</div>
+<section id="text-typeuse-abbrev">
+<span id="id4"></span><h3>Abbreviations<a class="headerlink" href="types.html#text-typeuse-abbrev" title="Link to this heading">¶</a></h3>
+<p>A type use may also be replaced entirely by inline <a class="reference internal" href="types.html#text-param"><span class="std std-ref">parameter</span></a> and <a class="reference internal" href="types.html#text-result"><span class="std std-ref">result</span></a> declarations.
+In that case, a <a class="reference internal" href="../syntax/modules.html#syntax-typeidx"><span class="std std-ref">type index</span></a> is automatically inserted:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-typeuse}{\mathtt{typeuse}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ {(t_1, {{\mathit{id}}^?})^\ast}{:}{{{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~{t_2^\ast}{:}{{{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{type}’}~~x{:}{{\href{../text/modules.html#text-typeidx}{\mathtt{typeidx}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’}~~{{{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~{{{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast} &amp;  \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\quad
+\begin{array}[t]{@{}l@{}}
+\mbox{if}~ {\href{../text/conventions.html#text-context}{I}}{.}\href{../text/conventions.html#text-context}{\mathsf{typedefs}}{}[x] = (\href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~(\href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~\href{../syntax/types.html#syntax-subtype}{\mathsf{final}}~(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast}))) {.} 0 \\
+{\land}~ ({\href{../text/conventions.html#text-context}{I}}{.}\href{../text/conventions.html#text-context}{\mathsf{typedefs}}{}[i] \neq (\href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~(\href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~\href{../syntax/types.html#syntax-subtype}{\mathsf{final}}~(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast}))) {.} 0)^{i&lt;x} \\
+\end{array}
+} \\
+\end{array}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(x\)</span> is the smallest existing <a class="reference internal" href="../syntax/modules.html#syntax-typeidx"><span class="std std-ref">type index</span></a> whose <a class="reference internal" href="../syntax/types.html#syntax-rectype"><span class="std std-ref">recursive type</span></a> definition parses into a singular, final <a class="reference internal" href="../syntax/types.html#syntax-functype"><span class="std std-ref">function type</span></a> with the same parameters and results.
+If no such index exists, then a new <a class="reference internal" href="types.html#text-rectype"><span class="std std-ref">recursive type</span></a> of the same form is inserted at the end of the module.</p>
+<p>Abbreviations are expanded in the order they appear, such that previously inserted type definitions are reused by consecutive expansions.</p>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/text/types.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article><article class="wasm-bi-panel wasm-bi-panel-zh" lang="zh-CN"><div class="wasm-bi-panel-inner"><div class="wasm-bi-language-label">中文 · 学习译文</div>
+<section id="zh-types">
+<span id="zh-text-type"></span><span id="zh-index-0"></span><h1>类型<a class="headerlink" href="types.html#zh-types" title="Link to this heading">¶</a></h1>
+<section id="zh-number-types">
+<span id="zh-text-numtype"></span><span id="zh-index-1"></span><h2>数目 类型<a class="headerlink" href="types.html#zh-number-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-numtype}{\mathtt{numtype}}} &amp; ::= &amp; \mbox{‘\texttt{i32}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i64}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{f32}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle32}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{f64}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{f\scriptstyle64}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-vector-types">
+<span id="zh-text-vectype"></span><span id="zh-index-2"></span><h2>矢量 类型<a class="headerlink" href="types.html#zh-vector-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-vectype}{\mathtt{vectype}}} &amp; ::= &amp; \mbox{‘\texttt{v128}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-vectype}{\mathsf{v\scriptstyle128}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-heap-types">
+<span id="zh-text-absheaptype"></span><span id="zh-text-heaptype"></span><span id="zh-index-3"></span><h2>堆积 类型<a class="headerlink" href="types.html#zh-heap-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-absheaptype}{\mathtt{absheaptype}}} &amp; ::= &amp; \mbox{‘\texttt{any}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{any}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{eq}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{eq}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i31}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{i\scriptstyle31}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{struct}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{struct}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{array}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{array}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{none}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{none}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{func}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{func}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{nofunc}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{nofunc}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{exn}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{exn}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{noexn}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{noexn}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{extern}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{extern}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{noextern}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-heaptype}{\mathsf{noextern}} \\[0.8ex]
+&amp; {{\href{../text/types.html#text-heaptype}{\mathtt{heaptype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; {\mathit{ht}}{:}{\href{../text/types.html#text-absheaptype}{\mathtt{absheaptype}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{ht}} \\
+&amp; &amp; | &amp; x{:}{{\href{../text/modules.html#text-typeidx}{\mathtt{typeidx}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-reference-types">
+<span id="zh-text-null"></span><span id="zh-text-reftype"></span><span id="zh-index-4"></span><h2>参考 类型<a class="headerlink" href="types.html#zh-reference-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-null}{\mathtt{null}}} &amp; ::= &amp; \mbox{‘\texttt{null}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-reftype}{\mathsf{null}} \\[0.8ex]
+&amp; {{\href{../text/types.html#text-reftype}{\mathtt{reftype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~{\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}^?}{:}{{\href{../text/types.html#text-null}{\mathtt{null}}}^?}~~{\mathit{ht}}{:}{{\href{../text/types.html#text-heaptype}{\mathtt{heaptype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-reftype}{\mathsf{ref}}~{\href{../syntax/types.html#syntax-reftype}{\mathsf{null}}^?}~{\mathit{ht}} \\
+\end{array}\end{split}\]</div>
+<section id="zh-abbreviations">
+<h3>简称<a class="headerlink" href="types.html#zh-abbreviations" title="Link to this heading">¶</a></h3>
+<p>抽象组合的引用有简写 类型.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-reftype}{\mathtt{reftype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots \\
+&amp; &amp; | &amp; \mbox{‘\texttt{anyref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{any}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{eqref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{eq}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i31ref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{i31}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{structref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{struct}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{arrayref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{array}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{nullref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{none}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{funcref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{func}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{nullfuncref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{nofunc}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{exnref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{exn}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{nullexnref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{noexn}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{externref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{extern}’}~~\mbox{‘\texttt{{)}}’} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{nullexternref}’} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{ref}’}~~\mbox{‘\texttt{null}’}~~\mbox{‘\texttt{noextern}’}~~\mbox{‘\texttt{{)}}’} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="zh-value-types">
+<span id="zh-text-valtype"></span><span id="zh-index-5"></span><h2>数值 类型<a class="headerlink" href="types.html#zh-value-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; {\mathit{nt}}{:}{\href{../text/types.html#text-numtype}{\mathtt{numtype}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{nt}} \\
+&amp; &amp; | &amp; {\mathit{vt}}{:}{\href{../text/types.html#text-vectype}{\mathtt{vectype}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{vt}} \\
+&amp; &amp; | &amp; {\mathit{rt}}{:}{{\href{../text/types.html#text-reftype}{\mathtt{reftype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{rt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-composite-types">
+<span id="zh-text-packtype"></span><span id="zh-text-storagetype"></span><span id="zh-text-fieldtype"></span><span id="zh-text-result"></span><span id="zh-text-param"></span><span id="zh-text-functype"></span><span id="zh-text-arraytype"></span><span id="zh-text-structtype"></span><span id="zh-text-aggrtype"></span><span id="zh-text-comptype"></span><span id="zh-index-6"></span><h2>复合 类型<a class="headerlink" href="types.html#zh-composite-types" title="Link to this heading">¶</a></h2>
+<p>复合 类型 被解析为各自的抽象代表,
+与当地对齐 <a class="reference internal" href="conventions.html#zh-text-context"><span class="std std-ref">标识符上下文</span></a> 由其绑定字段或参数标识符生成:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{comptype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{struct}’}~~{({\mathit{ft}}, {{\mathit{id}}^?})^\ast}{:}{\href{../text/conventions.html#text-list}{\mathtt{list}}}({{\href{../text/types.html#text-comptype}{\mathtt{field}}}}_{{\href{../text/conventions.html#text-context}{I}}})~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-comptype}{\mathsf{struct}}~{{\mathit{ft}}^\ast}, \{ \href{../text/conventions.html#text-context}{\mathsf{fields}}~({({{\mathit{id}}^?})^\ast}) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{array}’}~~{\mathit{ft}}{:}{{\href{../text/types.html#text-fieldtype}{\mathtt{fieldtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-comptype}{\mathsf{array}}~{\mathit{ft}}, \{ \href{../text/conventions.html#text-context}{\mathsf{fields}}~(\epsilon) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{func}’}~~{(t_1, {{\mathit{id}}^?})^\ast}{:}{\href{../text/conventions.html#text-list}{\mathtt{list}}}({{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}})~~{t_2^\ast}{:}{\href{../text/conventions.html#text-list}{\mathtt{list}}}({{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}})~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast}, \{ \href{../text/conventions.html#text-context}{\mathsf{fields}}~(\epsilon) \}) \\[0.8ex]
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{field}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{field}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~{\mathit{ft}}{:}{{\href{../text/types.html#text-fieldtype}{\mathtt{fieldtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; ({\mathit{ft}}, {{\mathit{id}}^?}) \\
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{param}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~t{:}{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (t, {{\mathit{id}}^?}) \\
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{result}’}~~t{:}{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; t \\[0.8ex]
+&amp; {{\href{../text/types.html#text-fieldtype}{\mathtt{fieldtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; {\mathit{zt}}{:}{{\href{../text/types.html#text-storagetype}{\mathtt{storagetype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{zt}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{mut}’}~~{\mathit{zt}}{:}{{\href{../text/types.html#text-storagetype}{\mathtt{storagetype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-mut}{\mathsf{mut}}~{\mathit{zt}} \\[0.8ex]
+&amp; {{\href{../text/types.html#text-storagetype}{\mathtt{storagetype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; t{:}{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; t \\
+&amp; &amp; | &amp; {\mathit{pt}}{:}{\href{../text/types.html#text-packtype}{\mathtt{packtype}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{pt}} \\[0.8ex]
+&amp; {\href{../text/types.html#text-packtype}{\mathtt{packtype}}} &amp; ::= &amp; \mbox{‘\texttt{i8}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle8}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i16}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-storagetype}{\mathsf{i\scriptstyle16}} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>可选标识符 名称 a 中的参数 函数类型 仅具有文件目的。
+它们不能从任何地方引用。</p>
+</div>
+<section id="zh-id1">
+<h3>简称<a class="headerlink" href="types.html#zh-id1" title="Link to this heading">¶</a></h3>
+<p>多个匿名结构字段或参数或多个结果可以合并为单一声明:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{field}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{field}’}~~{{{\href{../text/types.html#text-fieldtype}{\mathtt{fieldtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~\mbox{‘\texttt{{)}}’} &amp; \quad\equiv\quad{} &amp; {(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{field}’}~~{{\href{../text/types.html#text-fieldtype}{\mathtt{fieldtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’})^\ast} \\
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{param}’}~~{{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~\mbox{‘\texttt{{)}}’} &amp; \quad\equiv\quad{} &amp; {(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{param}’}~~{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’})^\ast} \\
+&amp; {{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{result}’}~~{{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~\mbox{‘\texttt{{)}}’} &amp; \quad\equiv\quad{} &amp; {(\mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{result}’}~~{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’})^\ast} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="zh-recursive-types">
+<span id="zh-text-final"></span><span id="zh-text-typedef"></span><span id="zh-text-subtype"></span><span id="zh-text-rectype"></span><span id="zh-index-7"></span><h2>递归 类型<a class="headerlink" href="types.html#zh-recursive-types" title="Link to this heading">¶</a></h2>
+<p>递归 类型 被解析为各自的抽象代表,
+与 <a class="reference internal" href="conventions.html#zh-text-context"><span class="std std-ref">标识符上下文</span></a> 由它们绑定的标识符生成:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-final}{\mathtt{final}}} &amp; ::= &amp; \mbox{‘\texttt{final}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-subtype}{\mathsf{final}} \\[0.8ex]
+&amp; {{\href{../text/types.html#text-subtype}{\mathtt{subtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{sub}’}~~{{\mathit{fin}}^?}{:}{{\href{../text/types.html#text-final}{\mathtt{final}}}^?}~~{x^\ast}{:}{\href{../text/conventions.html#text-list}{\mathtt{list}}}({{\href{../text/modules.html#text-typeidx}{\mathtt{typeidx}}}}_{{\href{../text/conventions.html#text-context}{I}}})~~({\mathit{ct}}, {\href{../text/conventions.html#text-context}{I}'}){:}{{\href{../text/types.html#text-comptype}{\mathtt{comptype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~{{\mathit{fin}}^?}~{x^\ast}~{\mathit{ct}}, {\href{../text/conventions.html#text-context}{I}'}) \\[0.8ex]
+&amp; {{\href{../text/types.html#text-typedef}{\mathtt{typedef}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{type}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~({\mathit{st}}, {\href{../text/conventions.html#text-context}{I}'}){:}{{\href{../text/types.html#text-subtype}{\mathtt{subtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; ({\mathit{st}}, {\href{../text/conventions.html#text-context}{I}'} \oplus \{ \href{../text/conventions.html#text-context}{\mathsf{types}}~({{\mathit{id}}^?}) \}) \\[0.8ex]
+&amp; {{\href{../text/types.html#text-rectype}{\mathtt{rectype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{rec}’}~~{({\mathit{st}}, {\href{../text/conventions.html#text-context}{I}'})^\ast}{:}{\href{../text/conventions.html#text-list}{\mathtt{list}}}({{\href{../text/types.html#text-typedef}{\mathtt{typedef}}}}_{{\href{../text/conventions.html#text-context}{I}}})~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~{{\mathit{st}}^\ast}, {\href{../syntax/conventions.html#notation-concat}{\bigoplus}}\, {{\href{../text/conventions.html#text-context}{I}'}^\ast}) \\
+\end{array}\end{split}\]</div>
+<section id="zh-id2">
+<h3>简称<a class="headerlink" href="types.html#zh-id2" title="Link to this heading">¶</a></h3>
+<p>最后一个子 类型 没有超级...类型 能够省略 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{sub}’}\)</span> 关键词及其参数:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-subtype}{\mathtt{subtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ {{\href{../text/types.html#text-comptype}{\mathtt{comptype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{sub}’}~~\mbox{‘\texttt{final}’}~~{{\href{../text/types.html#text-comptype}{\mathtt{comptype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} \\
+\end{array}\end{split}\]</div>
+<p>同样,单数递归 类型 能够省略 <span class="math notranslate nohighlight">\(\mbox{‘\texttt{rec}’}\)</span> 关键字 :</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-rectype}{\mathtt{rectype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ {{\href{../text/types.html#text-typedef}{\mathtt{typedef}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{rec}’}~~{{\href{../text/types.html#text-typedef}{\mathtt{typedef}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="zh-address-types">
+<span id="zh-text-addrtype"></span><span id="zh-index-8"></span><h2>地址 类型<a class="headerlink" href="types.html#zh-address-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-addrtype}{\mathtt{addrtype}}} &amp; ::= &amp; \mbox{‘\texttt{i32}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{i64}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle64}} \\
+\end{array}\end{split}\]</div>
+<section id="zh-id3">
+<h3>简称<a class="headerlink" href="types.html#zh-id3" title="Link to this heading">¶</a></h3>
+<p>那个 地址 类型可以省略,在这种情况下它默认 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-numtype}{\mathsf{i\scriptstyle32}}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-addrtype}{\mathtt{addrtype}}} &amp; ::= &amp; \dots ~~|~~ \epsilon &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{i32}’} \\
+\end{array}\end{split}\]</div>
+</section>
+</section>
+<section id="zh-limits">
+<span id="zh-text-limits"></span><span id="zh-index-9"></span><h2>限制<a class="headerlink" href="types.html#zh-limits" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {\href{../text/types.html#text-limits}{\mathtt{limits}}} &amp; ::= &amp; n{:}{\href{../text/values.html#text-int}{\mathtt{u64}}} &amp; \quad\Rightarrow\quad{} &amp; {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} \epsilon ] \\
+&amp; &amp; | &amp; n{:}{\href{../text/values.html#text-int}{\mathtt{u64}}}~~m{:}{\href{../text/values.html#text-int}{\mathtt{u64}}} &amp; \quad\Rightarrow\quad{} &amp; {}[ n \href{../syntax/types.html#syntax-limits}{\,{..}\,} m ] \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-tag-types">
+<span id="zh-text-tagtype"></span><span id="zh-index-10"></span><h2>标记 类型<a class="headerlink" href="types.html#zh-tag-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-tagtype}{\mathtt{tagtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; (x, {\href{../text/conventions.html#text-context}{I}'}){:}{{\href{../text/types.html#text-typeuse}{\mathtt{typeuse}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; x \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-global-types">
+<span id="zh-text-globaltype"></span><span id="zh-index-11"></span><h2>全球 类型<a class="headerlink" href="types.html#zh-global-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-globaltype}{\mathtt{globaltype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; t{:}{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; t \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{mut}’}~~t{:}{{\href{../text/types.html#text-valtype}{\mathtt{valtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; \href{../syntax/types.html#syntax-mut}{\mathsf{mut}}~t \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-memory-types">
+<span id="zh-text-memtype"></span><span id="zh-index-12"></span><h2>内存 类型<a class="headerlink" href="types.html#zh-memory-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-memtype}{\mathtt{memtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; {\mathit{at}}{:}{\href{../text/types.html#text-addrtype}{\mathtt{addrtype}}}~~{\mathit{lim}}{:}{\href{../text/types.html#text-limits}{\mathtt{limits}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{at}}~{\mathit{lim}}~\href{../syntax/types.html#syntax-memtype}{\mathsf{page}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-table-types">
+<span id="zh-text-tabletype"></span><span id="zh-index-13"></span><h2>图表 类型<a class="headerlink" href="types.html#zh-table-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-tabletype}{\mathtt{tabletype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; {\mathit{at}}{:}{\href{../text/types.html#text-addrtype}{\mathtt{addrtype}}}~~{\mathit{lim}}{:}{\href{../text/types.html#text-limits}{\mathtt{limits}}}~~{\mathit{rt}}{:}{{\href{../text/types.html#text-reftype}{\mathtt{reftype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; \quad\Rightarrow\quad{} &amp; {\mathit{at}}~{\mathit{lim}}~{\mathit{rt}} \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-external-types">
+<span id="zh-text-externtype"></span><span id="zh-index-14"></span><h2>外部 类型<a class="headerlink" href="types.html#zh-external-types" title="Link to this heading">¶</a></h2>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-externtype}{\mathtt{externtype}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{tag}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~{\mathit{jt}}{:}{{\href{../text/types.html#text-tagtype}{\mathtt{tagtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-externtype}{\mathsf{tag}}~{\mathit{jt}}, \{ \href{../text/conventions.html#text-context}{\mathsf{tags}}~({{\mathit{id}}^?}) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{global}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~{\mathit{gt}}{:}{{\href{../text/types.html#text-globaltype}{\mathtt{globaltype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-externtype}{\mathsf{global}}~{\mathit{gt}}, \{ \href{../text/conventions.html#text-context}{\mathsf{globals}}~({{\mathit{id}}^?}) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{memory}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~{\mathit{mt}}{:}{{\href{../text/types.html#text-memtype}{\mathtt{memtype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-externtype}{\mathsf{mem}}~{\mathit{mt}}, \{ \href{../text/conventions.html#text-context}{\mathsf{mems}}~({{\mathit{id}}^?}) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{table}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~{\mathit{tt}}{:}{{\href{../text/types.html#text-tabletype}{\mathtt{tabletype}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-externtype}{\mathsf{table}}~{\mathit{tt}}, \{ \href{../text/conventions.html#text-context}{\mathsf{tables}}~({{\mathit{id}}^?}) \}) \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{func}’}~~{{\mathit{id}}^?}{:}{{\href{../text/values.html#text-id}{\mathtt{id}}}^?}~~(x, {\href{../text/conventions.html#text-context}{I}'}){:}{{\href{../text/types.html#text-typeuse}{\mathtt{typeuse}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (\href{../syntax/types.html#syntax-externtype}{\mathsf{func}}~x, \{ \href{../text/conventions.html#text-context}{\mathsf{funcs}}~({{\mathit{id}}^?}) \}) \\
+\end{array}\end{split}\]</div>
+</section>
+<section id="zh-type-uses">
+<span id="zh-text-typeuse"></span><span id="zh-index-15"></span><h2>类型用途<a class="headerlink" href="types.html#zh-type-uses" title="Link to this heading">¶</a></h2>
+<p>A <em>类型使用</em> 是指一个 <a class="reference internal" href="types.html#zh-text-type"><span class="std std-ref">类型定义</span></a>。 。 。
+需要参考的 <a class="reference internal" href="types.html#zh-text-functype"><span class="std std-ref">函数类型</span></a>, (中文).
+可选择通过明示的内含方式加以扩充。 <a class="reference internal" href="types.html#zh-text-param"><span class="std std-ref">参数</span></a> 和 <a class="reference internal" href="types.html#zh-text-result"><span class="std std-ref">结果</span></a> 声明。
+那样可以有约束力 <a class="reference internal" href="values.html#zh-text-id"><span class="std std-ref">标识符</span></a> 改为: 名称 联合国 <a class="reference internal" href="modules.html#zh-text-localidx"><span class="std std-ref">当地指数</span></a> 参数。
+如果内含声明,则 类型 必须匹配引用 <a class="reference internal" href="types.html#zh-text-type"><span class="std std-ref">函数类型</span></a>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-typeuse}{\mathtt{typeuse}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{type}’}~~x{:}{{\href{../text/modules.html#text-typeidx}{\mathtt{typeidx}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’} &amp; \quad\Rightarrow\quad{} &amp; (x, {\href{../text/conventions.html#text-context}{I}'}) &amp;  \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\quad
+\begin{array}[t]{@{}l@{}}
+\mbox{if}~ {\href{../text/conventions.html#text-context}{I}}{.}\href{../text/conventions.html#text-context}{\mathsf{typedefs}}{}[x] = (\href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~{{\mathit{st}}^\ast}) {.} i \\
+{\land}~ {{\mathit{st}}^\ast}{}[i] = \href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~\href{../syntax/types.html#syntax-subtype}{\mathsf{final}}~(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast}) \\
+{\land}~ {\href{../text/conventions.html#text-context}{I}'} = \{ \href{../text/conventions.html#text-context}{\mathsf{locals}}~{(\epsilon)^{{|{t_1^\ast}|}}} \} \\
+\end{array}
+} \\
+&amp; &amp; | &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{type}’}~~x{:}{{\href{../text/modules.html#text-typeidx}{\mathtt{typeidx}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’}~~{(t_1, {{\mathit{id}}^?})^\ast}{:}{{{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~{t_2^\ast}{:}{{{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast} &amp; \quad\Rightarrow\quad{} &amp; (x, {\href{../text/conventions.html#text-context}{I}'}) &amp;  \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\quad
+\begin{array}[t]{@{}l@{}}
+\mbox{if}~ {\href{../text/conventions.html#text-context}{I}}{.}\href{../text/conventions.html#text-context}{\mathsf{typedefs}}{}[x] = (\href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~{{\mathit{st}}^\ast}) {.} i \\
+{\land}~ {{\mathit{st}}^\ast}{}[i] = \href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~\href{../syntax/types.html#syntax-subtype}{\mathsf{final}}~(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast}) \\
+{\land}~ {\href{../text/conventions.html#text-context}{I}'} = \{ \href{../text/conventions.html#text-context}{\mathsf{locals}}~{({{\mathit{id}}^?})^\ast} \} \\
+{\land}~ {\vdash}\, {\href{../text/conventions.html#text-context}{I}'} : \mathsf{ok} \\
+\end{array}
+} \\
+\end{array}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>如果给出了内含声明,则 类型 必须是 <em>战术</em> 等于 类型 从索引定义;
+可能的类型 <a class="reference internal" href="../valid/conventions.html#zh-notation-subst"><span class="std std-ref">替换</span></a> 不考虑其他可能使其平等的定义。
+这是为简化协同预处理.</p>
+</div>
+<p>a的合成属性 <span class="math notranslate nohighlight">\({\mathtt{typeuse}}\)</span> 是一对由两个使用的 <a class="reference internal" href="../syntax/modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a> 和当地 <a class="reference internal" href="conventions.html#zh-text-context"><span class="std std-ref">标识符上下文</span></a> 包含可能的参数标识符。</p>
+<div class="admonition note">
+<p class="admonition-title">说明</p>
+<p>两者 产生式 的重叠 函数类型 这是 <span class="math notranslate nohighlight">\(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~\epsilon \href{../syntax/types.html#syntax-comptype}{\rightarrow} \epsilon\)</span>。 。 。
+然而,在这种情况下,它们也产生同样的结果,因此选择无关紧要。</p>
+<p>那个 <a class="reference internal" href="conventions.html#zh-text-context-wf"><span class="std std-ref">结构良好</span></a> 条件 <span class="math notranslate nohighlight">\({\href{../text/conventions.html#text-context}{I}'}\)</span> 确保参数不包含重复标识符。</p>
+</div>
+<section id="zh-text-typeuse-abbrev">
+<span id="zh-id4"></span><h3>简称<a class="headerlink" href="types.html#zh-text-typeuse-abbrev" title="Link to this heading">¶</a></h3>
+<p>类型用途也可以完全由内置替换 <a class="reference internal" href="types.html#zh-text-param"><span class="std std-ref">参数</span></a> 和 <a class="reference internal" href="types.html#zh-text-result"><span class="std std-ref">结果</span></a> 声明。
+在这种情况下,a <a class="reference internal" href="../syntax/modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a> 自动插入:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{array}[t]{@{}l@{}rrl@{}l@{}l@{}l@{}}
+&amp; {{\href{../text/types.html#text-typeuse}{\mathtt{typeuse}}}}_{{\href{../text/conventions.html#text-context}{I}}} &amp; ::= &amp; \dots ~~|~~ {(t_1, {{\mathit{id}}^?})^\ast}{:}{{{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~{t_2^\ast}{:}{{{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast} &amp; \quad\equiv\quad{} &amp; \mbox{‘\texttt{{(}}’}~~\mbox{‘\texttt{type}’}~~x{:}{{\href{../text/modules.html#text-typeidx}{\mathtt{typeidx}}}}_{{\href{../text/conventions.html#text-context}{I}}}~~\mbox{‘\texttt{{)}}’}~~{{{\href{../text/types.html#text-comptype}{\mathtt{param}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast}~~{{{\href{../text/types.html#text-comptype}{\mathtt{result}}}}_{{\href{../text/conventions.html#text-context}{I}}}^\ast} &amp;  \\
+&amp;&amp;&amp; \multicolumn{4}{@{}l@{}}{\quad
+\quad
+\begin{array}[t]{@{}l@{}}
+\mbox{if}~ {\href{../text/conventions.html#text-context}{I}}{.}\href{../text/conventions.html#text-context}{\mathsf{typedefs}}{}[x] = (\href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~(\href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~\href{../syntax/types.html#syntax-subtype}{\mathsf{final}}~(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast}))) {.} 0 \\
+{\land}~ ({\href{../text/conventions.html#text-context}{I}}{.}\href{../text/conventions.html#text-context}{\mathsf{typedefs}}{}[i] \neq (\href{../syntax/types.html#syntax-rectype}{\mathsf{rec}}~(\href{../syntax/types.html#syntax-subtype}{\mathsf{sub}}~\href{../syntax/types.html#syntax-subtype}{\mathsf{final}}~(\href{../syntax/types.html#syntax-comptype}{\mathsf{func}}~{t_1^\ast} \href{../syntax/types.html#syntax-comptype}{\rightarrow} {t_2^\ast}))) {.} 0)^{i&lt;x} \\
+\end{array}
+} \\
+\end{array}\end{split}\]</div>
+<p>地点 <span class="math notranslate nohighlight">\(x\)</span> 是最小的现有 <a class="reference internal" href="../syntax/modules.html#zh-syntax-typeidx"><span class="std std-ref">类型索引</span></a> 谁 <a class="reference internal" href="../syntax/types.html#zh-syntax-rectype"><span class="std std-ref">递归类型</span></a> 定义向单数, 最终 <a class="reference internal" href="../syntax/types.html#zh-syntax-functype"><span class="std std-ref">函数类型</span></a> 参数和结果相同。
+如果没有这样的指数,那么新的 <a class="reference internal" href="types.html#zh-text-rectype"><span class="std std-ref">递归类型</span></a> 中,在表格末尾插入同一种表格。 模块.</p>
+<p>缩略语按其出现顺序扩充,这样之前插入的类型定义就被连续的扩充重用.</p>
+</section>
+</section>
+</section>
+<p class="wasm-bi-disclaimer"><a href="https://webassembly.github.io/spec/core/text/types.html">WebAssembly Community Group 官方原文</a> · <a href="https://www.w3.org/copyright/software-license/">W3C Software and Document License</a> · 中文为非官方学习译文。</p></div></article></div></div>
+</div>
+</div>
+<div class="clearer"></div>
+</div>
+<div class="footer">
+      ©2017-2025, WebAssembly Community Group.
+
+    </div>
+</body>
+</html>
